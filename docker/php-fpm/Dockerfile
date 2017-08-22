@@ -14,7 +14,7 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &&
     php composer-setup.php --install-dir=/usr/local/bin && mv /usr/local/bin/composer.phar /usr/local/bin/composer && \
     php -r "unlink('composer-setup.php');"
 
-RUN wget https://phar.phpunit.de/phpunit-6.2.phar && chmod +x phpunit-6.2.phar && mv phpunit-6.2.phar /usr/bin/phpunit
+RUN wget https://phar.phpunit.de/phpunit-6.3.phar && chmod +x phpunit-6.3.phar && mv phpunit-6.3.phar /usr/bin/phpunit
 
 CMD ["/bin/bash", "/start.sh"]
 
