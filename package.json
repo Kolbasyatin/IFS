@@ -1,10 +1,33 @@
 {
+  "name": "ifs",
+  "version": "0.0.1",
+  "description": "IFS ========== Infinite flight ship.",
+  "main": "webpack.config.js",
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kolbasyatin/IFS.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Kolbasyatin/IFS/issues"
+  },
+  "homepage": "https://github.com/Kolbasyatin/IFS#readme",
   "devDependencies": {
     "@symfony/webpack-encore": "^0.14.0",
+    "@types/jquery": "^3.2.12",
+    "@types/moment": "^2.13.0",
+    "jquery": "^3.2.1",
+    "jsdom": "^11.2.0",
     "ts-loader": "^2.3.3",
     "typescript": "^2.4.2"
   },
+  "dependencies": {},
   "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
     "dev-server": "./node_modules/.bin/encore dev-server",
     "dev": "./node_modules/.bin/encore dev",
     "watch": "./node_modules/.bin/encore dev --watch",

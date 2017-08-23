@@ -1,6 +1,14 @@
 import User from "./User";
+import * as $ from "jquery";
 
-let user = new User("Zalex");
-console.log(user.getName());
+console.log($("#sample"));
+
+let user = new User("Zalex"),
+    name = user.getName();
+
+console.log('asfd');
+
+
+
 
 
