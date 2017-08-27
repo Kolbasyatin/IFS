@@ -19,18 +19,28 @@
   "devDependencies": {
     "@symfony/webpack-encore": "^0.14.0",
     "@types/jquery": "^3.2.12",
+    "@types/jqueryui": "^1.11.36",
+    "@types/mcustomscrollbar": "^2.8.32",
     "@types/moment": "^2.13.0",
     "jquery": "^3.2.1",
+    "jquery-mousewheel": "^3.1.13",
+    "jquery-ui": "^1.12.1",
     "jsdom": "^11.2.0",
+    "malihu-custom-scrollbar-plugin": "^3.1.5",
     "ts-loader": "^2.3.3",
     "typescript": "^2.4.2"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@types/mustache": "^0.8.30",
+    "jplayer": "^2.9.2",
+    "mustache": "^2.3.0",
+    "typings": "^2.1.1"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev-server": "./node_modules/.bin/encore dev-server",
-    "dev": "./node_modules/.bin/encore dev",
+    "dev": "./node_modules/.bin/encore dev --display-modules --verbose",
     "watch": "./node_modules/.bin/encore dev --watch",
-    "build": "./node_modules/.bin/encore production"
+    "build": "./node_modules/.bin/encore production --verbose"
   }
 }

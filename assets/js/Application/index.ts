@@ -1,14 +1,4 @@
-import User from "./User";
-import * as $ from "jquery";
+import {Application} from "./Application";
 
-console.log($("#sample"));
-
-let user = new User("Zalex"),
-    name = user.getName();
-
-console.log('asfd');
-
-
-
-
-
+let application = new Application();
+application.start();
