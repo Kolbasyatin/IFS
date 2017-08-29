@@ -1,8 +1,8 @@
 {% extends '::base.html.twig' %}
-{% block  javascripts%}
+{% block stylesheets %}
     {{ parent() }}
-    <script src="{{ asset('build/app.js') }}"></script>
-{% endblock javascripts %}
+    <link rel="stylesheet" href="{{ asset('build/css/app.css') }}">
+{% endblock stylesheets %}
 {% block body %}
     <div class="init">
         Shalom!
@@ -15,4 +15,11 @@
     <span id="song"></span>
     <div id="comments"></div>
     <div id="jp">Player</div>
+    <div id="vk_groups"></div>
 {% endblock %}
+
+{% block  javascripts%}
+    {{ parent() }}
+    <script src="{{ asset('build/js/vendor.js') }}"></script>
+    <script src="{{ asset('build/js/app.js') }}"></script>
+{% endblock javascripts %}

@@ -1,4 +1,4 @@
-var Encore = require("@symfony/webpack-encore"),
+const Encore = require("@symfony/webpack-encore"),
     webpack = require("webpack");
 
 Encore
@@ -6,7 +6,8 @@ Encore
     .setPublicPath('/build')
     .cleanupOutputBeforeBuild()
     // read main.js     -> output as web/build/app.js
-    .addEntry('app', './assets/js/Application/index.ts')
+    .addEntry('js/app', './assets/js/Application/index.ts')
+    .addEntry('js/vendor', ["mustache", "jquery", "jquery-slider"])
 
     .enableTypeScriptLoader(function (typeScriptConfigOptions) {
         typeScriptConfigOptions.transpileOnly = true;
@@ -17,21 +18,29 @@ Encore
             /node_modules\/moment\/locale/, /ru|en-gb/
         )
     )
-
+    // .addPlugin(new webpack.optimize.CommonsChunkPlugin(
+    //     "js/vendor"
+    // ))
     // read global.scss -> output as web/build/global.css
-    /*.addStyleEntry('global', './assets/css/global.scss')*/
+    .addStyleEntry('css/app', './assets/css/style.less')
 
     // enable features!
-    // .enableSassLoader()
+    .enableLessLoader()
     .autoProvidejQuery()
-    // .autoProvideVariables({
-    //     "window.jQuery": "jquery"
-    //     /*"jQuery.tagsinput": "bootstrap-tagsinput"*/
-    // })
+    .autoProvideVariables({
+        "window.jQuery": "jquery",
+        "$.jPlayer": "jplayer"
+        /*"$script": "scriptjs"*/
+        //     /*"jQuery.tagsinput": "bootstrap-tagsinput"*/
+    })
     // .enableReactPreset()
     .enableSourceMaps(!Encore.isProduction())
-    .enableVersioning()
-;
+    .enableVersioning();
 
-module.exports = Encore.getWebpackConfig();
+let config = Encore.getWebpackConfig();
+config.resolve.alias = {
+    'jquery-slider': ('jquery-ui/ui/widgets/slider')
+};
+
+module.exports = config;
 

@@ -1,4 +1,4 @@
-require('jplayer');
+import 'jplayer';
 
 export class Player {
     private _isReady: boolean;

@@ -1,3 +1,4 @@
+import 'jquery-slider';
 import {Player} from "../Player/Player";
 
 export class ControlManagement {
@@ -52,6 +53,7 @@ export class ControlManagement {
         this.bindHandlers();
         //Из за непонятного глюка (не работает event onpause когда вызывается через класс) приходится костыль делать для проверки кнопок паузы.
     }
+
     private bindHandlers(): void {
 
         this._player.addOnPlayHandler(() => {
@@ -75,7 +77,7 @@ export class ControlManagement {
         this._$pauseButton.on('click', (e) => {
             e.preventDefault();
             let lastSrc = this._player.pause();
-            if(lastSrc) {
+            if (lastSrc) {
                 this.linkPaused(lastSrc);
             }
 
