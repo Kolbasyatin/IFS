@@ -23,9 +23,11 @@
     "@types/mcustomscrollbar": "^2.8.32",
     "@types/moment": "^2.13.0",
     "@types/scriptjs": "^0.0.2",
+    "copy-webpack-plugin": "^4.0.1",
     "jquery": "^3.2.1",
     "jquery-mousewheel": "^3.1.13",
     "jquery-ui": "^1.12.1",
+    "jquery-ui-themes": "^1.12.0",
     "jsdom": "^11.2.0",
     "less": "^2.7.2",
     "less-loader": "^4.0.5",
@@ -44,7 +46,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev-server": "./node_modules/.bin/encore dev-server",
-    "dev": "./node_modules/.bin/encore dev --display-modules --verbose",
+    "dev": "./node_modules/.bin/encore dev --display-modules",
     "watch": "./node_modules/.bin/encore dev --watch",
     "build": "./node_modules/.bin/encore production --verbose"
   }

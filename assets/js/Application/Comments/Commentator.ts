@@ -4,7 +4,7 @@ export class Commentator {
 
     constructor() {
         this._$form = $("#dialog-form");
-        this._$comm_button = $("#comm_add");
+        this._$comm_button = $("#comment_add");
     }
 
     private showCommentButton():void {

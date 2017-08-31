@@ -1,5 +1,6 @@
 const Encore = require("@symfony/webpack-encore"),
     webpack = require("webpack");
+let CopyWebpackPlugin = require('copy-webpack-plugin');
 
 Encore
     .setOutputPath('web/build/')
@@ -41,6 +42,11 @@ let config = Encore.getWebpackConfig();
 config.resolve.alias = {
     'jquery-slider': ('jquery-ui/ui/widgets/slider')
 };
-
+config.plugins.unshift(
+    new CopyWebpackPlugin([{
+        from: __dirname + '/assets/images',
+        to: __dirname+ '/web/assets'
+    }])
+);
 module.exports = config;
 
