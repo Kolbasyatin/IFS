@@ -1,5 +1,7 @@
 {% extends '::base.html.twig' %}
 {% block body %}
+    {#<script src="{{ asset('bundles/goswebsocket/js/vendor/autobahn.min.js') }}"></script>
+    <script src="{{ asset('bundles/goswebsocket/js/gos_web_socket_client.js') }}"></script>#}
     <div class="shadow"></div>
     <div class="container">
         <div class="center">
@@ -7,24 +9,26 @@
                 <div class="header">
                     <div class="header_menu_bl">
                         <div class="header_menu">
-                            {% block header_menu %}
-                                {{ knp_menu_render('top') }}
-                            {% endblock header_menu %}
+                            {#{{ knp_menu_render('top') }}#}
+                            {#<ul>#}
+                                {#<li data-title="Часто задаваемые вопросы" data-content="content1">ЧЗД</li>#}
+                                {#<li data-content="content2">Ссылки для плеера</li>#}
+                                {#<li data-content="content3" data-title>Представься! Землянин.</li>#}
+                            {#</ul>#}
                         </div>
                     </div>
                     <div class="logo">
                         <a href="/" title=""><img src="{{ asset('assets/template/logo.png') }}" alt=""/></a>
                     </div>
-                    {#{% block auth %}#}
                     {#<div class="auth" id="auth">#}
-                    {#Представся, землянин.#}
+                        {#Представься, землянин.#}
                     {#</div>#}
-                    {#{% endblock %}#}
                     <div class="break"></div>
 
                     <div class="listeners">
-                        {% block listeners %}
-                        {% endblock listeners %}
+                        <div class="listenersdiv">
+                            <p>Экипаж в корабле: <span id="listeners"></span></p>
+                        </div>
                     </div>
                 </div>
 
@@ -32,32 +36,42 @@
                     <div class="comment_block_title">
                         Комментарии к трансляции
                     </div>
-                        <div id="comments" class="comm_box">
+                    <div id="comments" class="comm_box">
 
-                        </div>
-                        <div id="comment_add">
-                            Комментировать
-                        </div>
+                    </div>
+                    <div id="comment_add">
+                        Комментировать
+                    </div>
                 </div>
 
                 <div class="player">
                     <div class="player_title">
                         Выберите спутник:
                     </div>
-                    {% block audiochoice %}
-                    {% endblock audiochoice %}
+
+                    <div class="playerlistcontent">
+                        {#{{ knp_menu_render('menu_icecast') }}#}
+                    </div>
+
                     <div class="sound">
                         <div class="volume">
-                            {% block volume %}
-
-                            {% endblock volume %}
+                            <p class="ui-state-default ui-corner-all ui-helper-clearfix  uiicon">
+                                <span class="ui-icon ui-icon-play ui-state-disabled" id="playsource"></span>
+                                <span class="ui-icon ui-icon-pause ui-state-disabled" id="pausesource"></span>
+                                Время в полете: <span id="timeleft">&infin;</span>
+                            </p>
+                            <p class="ui-state-default ui-corner-all ui-helper-clearfix uiicon">
+                                <span class="ui-icon ui-icon-volume-on" id="mute"></span>
+                                Уровень громкости <span id="volumevalue"></span>
+                            </p>
+                            <div id="volmaster"></div>
                         </div>
                     </div>
                     <div class="break"></div>
 
                     <div class="player_name">
-                        {% block sound_name %}
-                        {% endblock sound_name %}
+                        <p id="sound_name"></p>
+                        {#<img src="{{ asset('assets/vendor/owlcar/assets/img/AjaxLoader.gif') }}" id="loading-indicator" style="display:none"/>#}
                     </div>
                     <div class="audiodiv">
                         {#<audio id="audioplayer" controls></audio>#}
@@ -66,9 +80,7 @@
                 </div>
 
                 <div class="vk">
-                    {% block vkontakte %}
-                        <img src="{{ asset('assets/template/vk.png') }}" alt=""/>
-                    {% endblock vkontakte %}
+                    <div id="vk_groups"></div>
                 </div>
 
             </div>
@@ -83,12 +95,83 @@
                 </div>
                 <div class="panel_right">
                     <span class="link" data-href="http://vk.com/id19627527">Дизайн: Данил Лямин </span>
-                    <br /><span class="link" data-href="http://vk.com/zavalyuk">Программинг: Zalex</span>
+                    <br/><span class="link" data-href="http://vk.com/zavalyuk">Программинг: Zalex</span>
                 </div>
             </div>
-            {% block commentForm %}
-            {% endblock commentForm %}
+
+            <div id="dialog-form" title="Оставте комментарий тут">
+                <div id="form">
+                </div>
+            </div>
             {% block dialogs %}
+                {#<div class="dialog_wrapper">#}
+                {#<div id="content1" title="Часто задаваемые вопросы">#}
+                {#<div class="dialog_infoblock">#}
+                {#<p>В: Что тут происходит ?</p>#}
+                {#<p>О: Пока еще не до конца ясно.</p>#}
+                {#</div>#}
+                {#<div class="dialog_infoblock">#}
+                {#<p>В: Где обещанные пятничные полеты?</p>#}
+                {#<p>О: Очень хочется возобновить, но это не наша работа, это наше хобби,#}
+                {#к сожалению часто не хватает времени у вдохновителя эфиров. Пишите ему чаще сюда#}
+                {#<a href="http://vk.com/mitusenko" target="_blank">http://vk.com/mitusenko</a> </p>#}
+                {#</div>#}
+                {#<div class="dialog_infoblock">#}
+                {#<p>В: Хаха! А у вас время тут 1:1 показывает?</p>#}
+                {#<p>О: Это не бага, это фича. А еще у нас 3015 год на дворе.</p>#}
+                {#</div>#}
+                {#<div class="dialog_infoblock">#}
+                {#<p>В: Надоело все время вводить имя в комментарии!</p>#}
+                {#<p>О: Есть такое дело. На подходе авторизация и возможность комментариев только для авторизованных землян(или не землян).#}
+                {#Есть элемент неудобства, но в дальнейшем корабль планируется апгрейдить и вероятно авторизация пойдет только на пользу.#}
+                {#</p>#}
+                {#</div>#}
+                {#<div class="dialog_infoblock">#}
+                {#<p>В: А время окончания рассказа есть?</p>#}
+                {#<p>О: Есть, но мы его прячем!</p>#}
+                {#</div>#}
+                {#<div class="dialog_infoblock">#}
+                {#<p>В: Почему части рассказов не подряд?</p>#}
+                {#<p>О: Увы, пока что это так.</p>#}
+                {#</div>#}
+                {#<div class="dialog_infoblock">#}
+                {#<p>В: Планируется ли мобильное приложение?</p>#}
+                {#<p>О: Нет. Тем более что тематические приложения уже существуют.</p>#}
+                {#</div>#}
+                {#<div class="dialog_infoblock">#}
+                {#<p>В: Планируется ли планирование мобильного приложения?</p>#}
+                {#<p>О: Да. Но не факт что планирование запланирует планирование.</p>#}
+                {#</div>#}
+                {#<div class="dialog_infoblock">#}
+                {#<p>В: В конце концов, будет ли версия под планшетотелефоныфотоаппараты?</p>#}
+                {#<p>О: Хочется, но надо ведь это взять и сделать.</p>#}
+                {#</div>#}
+                {#<div class="dialog_infoblock">#}
+                {#<p>О: А еще вот да! Вот ссылка на нас TuneIn http://tunein.com/radio/MDS---voice-s246392/#}
+                {#Ну или попросту найдите наш голос в tuneIn с поиском MDS#}
+                {#.</p>#}
+                {#</div>#}
+                {#<div class="dialog_infoblock">#}
+                {#<p>О: Спутник MDS Музыка вот тут на TuneIn - http://tunein.com/radio/Model-dlya-sborki-s189395/#}
+                {#.</p>#}
+                {#</div>#}
+
+
+                {#</div>#}
+                {#<div id="content2" title="Слушать через плеер">#}
+                {#<div class="dialog_infoblock">#}
+                {#<p>У нас есть как минимум две ссылки, по которым вы можете слушать трансляции через любой удобный вам плеер.</p>#}
+                {#<div class="dialog_infoblock">#}
+                {#<p>http://mds.planeset.ru:8000/mds_voice.mp3</p>#}
+                {#<p>http://mds.planeset.ru:8000/mds.mp3</p>#}
+                {#</div></div>#}
+                {#</div>#}
+                {#<div id="content3">#}
+                {#<div class="dialog_infoblock">#}
+                {#<p>Ой, а тут пока еще ничего не работает, но все равно спасибо что нажали!</p>#}
+                {#</div>#}
+                {#</div>#}
+                {#</div>#}
             {% endblock dialogs %}
         </div>
     </div>
@@ -98,143 +181,5 @@
 
 
 
-{% block header_menu %}
-    {#Сначала тут реализовал через меню, потом решил что надо через сущность.#}
-    {#<ul>#}
-    {#<li data-title="Часто задаваемые вопросы" data-content="content1">ЧЗД</li>#}
-    {#<li data-content="content2">Ссылки для плеера</li>#}
-    {#<li data-content="content3" data-title>Представься! Землянин.</li>#}
-    {#</ul>#}
-{% endblock header_menu %}
-
-{% block audiochoice %}
-    <div class="playerlistcontent">
-        {{ knp_menu_render('menu_icecast') }}
-    </div>
-
-    {#<div id="choosedialog">#}
-    {#<p>Сначала выберите спутник</p>#}
-    {#</div>#}
-{% endblock audiochoice %}
-
-{% block sound_name %}
-    {#<button onclick="stopplay()">Stop</bccutton>#}
-    <p id="sound_name"></p>
-
-    <img src="{{ asset('assets/vendor/owlcar/assets/img/AjaxLoader.gif') }}" id="loading-indicator"
-         style="display:none"/>
-{% endblock sound_name %}
-
-{% block listeners %}
-    <div class="listenersdiv">
-        <p>Экипаж в корабле: <span id="listeners"></span></p>
-    </div>
-{% endblock listeners %}
-
-{% block volume %}
-    <p class="ui-state-default ui-corner-all ui-helper-clearfix  uiicon">
-        <span class="ui-icon ui-icon-play ui-state-disabled" id="playsource"></span>
-        <span class="ui-icon ui-icon-pause ui-state-disabled" id="pausesource"></span>
-        Время в полете: <span id="timeleft">&infin;</span>
-    </p>
-    <p class="ui-state-default ui-corner-all ui-helper-clearfix uiicon">
-        <span class="ui-icon ui-icon-volume-on" id="mute"></span>
-        Уровень громкости <span id="volumevalue"></span>
-    </p>
-    <div id="volmaster"></div>
-{% endblock %}
-{% block vkontakte %}
-    <script type="text/javascript" src="//vk.com/js/api/openapi.js?116"></script>
-    <! VK Widget >
-    <div id="vk_groups"></div>
-    <script type="text/javascript">
-        VK.Widgets.Group("vk_groups", {
-            mode: 4,
-            height: "400",
-            width: "auto",
-            color1: '4B6D95',
-            color2: 'EFE0E0',
-            color3: 'A8935E'
-        }, 144631646);
-    </script>
-    <a id="testlink" href="#">Тыцтыцтыц</a>
-
-{% endblock vkontakte %}
-
-{% block commentForm %}
-    <div id="dialog-form" title="Оставте комментарий тут">
-        <div id="form">
-        </div>
-    </div>
-{% endblock commentForm %}
-
-{% block dialogs %}
-    {#<div class="dialog_wrapper">#}
-    {#<div id="content1" title="Часто задаваемые вопросы">#}
-    {#<div class="dialog_infoblock">#}
-    {#<p>В: Что тут происходит ?</p>#}
-    {#<p>О: Пока еще не до конца ясно.</p>#}
-    {#</div>#}
-    {#<div class="dialog_infoblock">#}
-    {#<p>В: Где обещанные пятничные полеты?</p>#}
-    {#<p>О: Очень хочется возобновить, но это не наша работа, это наше хобби,#}
-    {#к сожалению часто не хватает времени у вдохновителя эфиров. Пишите ему чаще сюда#}
-    {#<a href="http://vk.com/mitusenko" target="_blank">http://vk.com/mitusenko</a> </p>#}
-    {#</div>#}
-    {#<div class="dialog_infoblock">#}
-    {#<p>В: Хаха! А у вас время тут 1:1 показывает?</p>#}
-    {#<p>О: Это не бага, это фича. А еще у нас 3015 год на дворе.</p>#}
-    {#</div>#}
-    {#<div class="dialog_infoblock">#}
-    {#<p>В: Надоело все время вводить имя в комментарии!</p>#}
-    {#<p>О: Есть такое дело. На подходе авторизация и возможность комментариев только для авторизованных землян(или не землян).#}
-    {#Есть элемент неудобства, но в дальнейшем корабль планируется апгрейдить и вероятно авторизация пойдет только на пользу.#}
-    {#</p>#}
-    {#</div>#}
-    {#<div class="dialog_infoblock">#}
-    {#<p>В: А время окончания рассказа есть?</p>#}
-    {#<p>О: Есть, но мы его прячем!</p>#}
-    {#</div>#}
-    {#<div class="dialog_infoblock">#}
-    {#<p>В: Почему части рассказов не подряд?</p>#}
-    {#<p>О: Увы, пока что это так.</p>#}
-    {#</div>#}
-    {#<div class="dialog_infoblock">#}
-    {#<p>В: Планируется ли мобильное приложение?</p>#}
-    {#<p>О: Нет. Тем более что тематические приложения уже существуют.</p>#}
-    {#</div>#}
-    {#<div class="dialog_infoblock">#}
-    {#<p>В: Планируется ли планирование мобильного приложения?</p>#}
-    {#<p>О: Да. Но не факт что планирование запланирует планирование.</p>#}
-    {#</div>#}
-    {#<div class="dialog_infoblock">#}
-    {#<p>В: В конце концов, будет ли версия под планшетотелефоныфотоаппараты?</p>#}
-    {#<p>О: Хочется, но надо ведь это взять и сделать.</p>#}
-    {#</div>#}
-    {#<div class="dialog_infoblock">#}
-    {#<p>О: А еще вот да! Вот ссылка на нас TuneIn http://tunein.com/radio/MDS---voice-s246392/#}
-    {#Ну или попросту найдите наш голос в tuneIn с поиском MDS#}
-    {#.</p>#}
-    {#</div>#}
-    {#<div class="dialog_infoblock">#}
-    {#<p>О: Спутник MDS Музыка вот тут на TuneIn - http://tunein.com/radio/Model-dlya-sborki-s189395/#}
-    {#.</p>#}
-    {#</div>#}
 
 
-    {#</div>#}
-    {#<div id="content2" title="Слушать через плеер">#}
-    {#<div class="dialog_infoblock">#}
-    {#<p>У нас есть как минимум две ссылки, по которым вы можете слушать трансляции через любой удобный вам плеер.</p>#}
-    {#<div class="dialog_infoblock">#}
-    {#<p>http://mds.planeset.ru:8000/mds_voice.mp3</p>#}
-    {#<p>http://mds.planeset.ru:8000/mds.mp3</p>#}
-    {#</div></div>#}
-    {#</div>#}
-    {#<div id="content3">#}
-    {#<div class="dialog_infoblock">#}
-    {#<p>Ой, а тут пока еще ничего не работает, но все равно спасибо что нажали!</p>#}
-    {#</div>#}
-    {#</div>#}
-    {#</div>#}
-{% endblock dialogs %}

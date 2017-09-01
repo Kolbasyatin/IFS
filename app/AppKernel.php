@@ -1,5 +1,7 @@
 <?php
 
+use Gos\Bundle\PubSubRouterBundle\GosPubSubRouterBundle;
+use Gos\Bundle\WebSocketBundle\GosWebSocketBundle;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
 
@@ -16,6 +18,8 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new AppBundle\AppBundle(),
+            new GosWebSocketBundle(),
+            new GosPubSubRouterBundle()
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
