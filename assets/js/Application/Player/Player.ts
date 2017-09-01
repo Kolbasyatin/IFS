@@ -4,7 +4,6 @@ export class Player {
     private _isReady: boolean;
     private _currentSourceId: string = '';
     private _lastSourceId: string;
-    private _audio: HTMLAudioElement = new Audio();
     private _jPlayerConfig: object = {
         ready: () => {this._isReady = true},
         error: Player.handleError
@@ -14,7 +13,6 @@ export class Player {
     private _lastSrc: string;
 
     constructor() {
-        this._audio.preload = "none";
         this.jPlayerInit();
     }
 

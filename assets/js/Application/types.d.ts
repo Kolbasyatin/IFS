@@ -26,3 +26,12 @@ interface jPlayerStatus {
         playbackRate: number, // Warning - Now both an option and a status property
         ended: number
 }
+
+
+
+interface WS {
+        connect: (url: string) => WS;
+        on: (type: string, callback: (arg:any)=>void ) => void;
+        fire: (event: any) => void;
+        off: (type: string, listeners: any[]) => void;
+}
