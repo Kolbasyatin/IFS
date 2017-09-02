@@ -35,3 +35,18 @@ interface WS {
         fire: (event: any) => void;
         off: (type: string, listeners: any[]) => void;
 }
+
+interface ABSession {
+        close: () => void;
+        sessionid: string;
+        wsuri: string;
+        resolve: () => void;
+        prefix: any;
+        call: any;
+        subscribe: (topicuri: string, callback: (uri: string, payload: object) => void) => void;
+        unsubscribe: (topicuri: string, callback: () => void) => void;
+        publish: (topic: string, event: any, exclude: any, eligible: any) => void;
+        authreq: (appkey: string, extra: any) => any;
+        authsign: (challenge: any, secret: string) => any;
+        auth: (signature: string) => any;
+}
