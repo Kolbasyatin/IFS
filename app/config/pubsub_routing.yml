@@ -1,0 +1,12 @@
+app_rpc:
+    channel: commentator/{method}
+    handler:
+        callback: 'commentator.rpc'
+    requirements:
+        method:
+            pattern: "[a-z_]+"
+
+herald:
+    channel: herald/{message}
+    handler:
+        callback: 'herald.topic'

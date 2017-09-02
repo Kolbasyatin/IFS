@@ -45,7 +45,7 @@ interface ABSession {
         call: any;
         subscribe: (topicuri: string, callback: (uri: string, payload: object) => void) => void;
         unsubscribe: (topicuri: string, callback: () => void) => void;
-        publish: (topic: string, event: any, exclude: any, eligible: any) => void;
+        publish: (topic: string, event: any, exclude?: any, eligible?: any) => void;
         authreq: (appkey: string, extra: any) => any;
         authsign: (challenge: any, secret: string) => any;
         auth: (signature: string) => any;

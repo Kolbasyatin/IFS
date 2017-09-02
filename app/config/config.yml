@@ -73,3 +73,15 @@ gos_web_socket:
     server:
         port: 8181
         host: 0.0.0.0
+        router:
+            resources:
+                - "config/pubsub_routing.yml"
+    rpc:
+      - AppBundle\Services\Commentator
+    topics:
+      - AppBundle\Services\Herald
+    periodic:
+      - AppBundle\Services\StreamStatusChecker
+
+
+
