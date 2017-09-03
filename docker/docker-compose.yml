@@ -13,6 +13,15 @@ mysql-server:
   ports:
     - "3306:3306"
 
+postgres-server:
+  image: postgres:latest
+  container_name: postgres-server
+  volumes:
+    - postgres_data:/var/lib/postgresql/data
+  environment:
+    POSTGRES_PASSWORD: 'mysecretpassword'
+  ports:
+    - "5433:5432"
 
 mds-memcached:
   image: phpdockerio/memcached:latest
@@ -54,6 +63,7 @@ mds-php-fpm:
   links:
     - mds-memcached
     - mysql-server
+    - postgres-server
 #    - mds-rabbitmq
 #  env_file:
 #    - ./php-fpm/xdebug-cli.env
