@@ -7,6 +7,7 @@ namespace AppBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class PageController extends Controller
 {
@@ -19,6 +20,6 @@ class PageController extends Controller
     /** @Route("/test", name="test") */
     public function testAction()
     {
-        return new Response('Allohha!');
+        return $this->render('::base.html.twig');
     }
 }

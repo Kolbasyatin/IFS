@@ -181,6 +181,10 @@
     <div id="jp"></div>
 {% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('build/js/app.js') }}"></script>
+{% endblock javascripts %}
 
 
 
