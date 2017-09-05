@@ -27,9 +27,15 @@ class User extends BaseUser
     }
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", name="vkontakte_id", length=255, nullable=true)
      */
     protected $vkontakte_id;
+
+
+    /**
+     * @ORM\Column(type="string", name="vkontakte_access_token", length=255, nullable=true)
+     */
+    protected $vkontakteAccessToken;
 
     /**
      * @return mixed
@@ -39,13 +45,34 @@ class User extends BaseUser
         return $this->vkontakte_id;
     }
 
-    /**
-     * @param mixed $vkontakte_id
-     */
-    public function setVkontakteId($vkontakte_id)
+
+    public function setVkontakteId($vkontakteId)
     {
-        $this->vkontakte_id = $vkontakte_id;
+        $this->vkontakte_id = $vkontakteId;
+
+        return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getVkontakteAccessToken()
+    {
+        return $this->vkontakteAccessToken;
+    }
+
+    /**
+     * @param mixed $vkontakteAccessToken
+     * @return User
+     */
+    public function setVkontakteAccessToken($vkontakteAccessToken)
+    {
+        $this->vkontakteAccessToken = $vkontakteAccessToken;
+
+        return $this;
+    }
+
+
 
 
 }

@@ -29,5 +29,5 @@ services:
         public: true
         tags: ['controller.service_arguments']
 
-    HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider:
+    AppBundle\Auth\IFSUserProvider:
         arguments: ['@fos_user.user_manager', { vkontakte: vkontakte_id } ]

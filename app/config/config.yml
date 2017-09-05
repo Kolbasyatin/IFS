@@ -92,9 +92,18 @@ fos_user:
         sender_name: "%mailer_user%"
 
 hwi_oauth:
+    connect:
+        account_connector: AppBundle\Auth\IFSUserProvider
     firewall_names: [main]
+    fosub:
+        username_iterations: 30
+        properties:
+            facebook: facebook_id
+            google: google_id
+
     resource_owners:
         vkontakte:
             type:                vkontakte
             client_id:           6173790
             client_secret:       eD7SOyD8OpyXcEH5t1QE
+            scope: "email"
