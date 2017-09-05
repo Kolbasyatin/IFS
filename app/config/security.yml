@@ -25,11 +25,11 @@ security:
         main:
             pattern: ^/
 
-#            form_login:
-#                provider: fos_userbundle
-#
-#                login_path: /login
-#                check_path: /login_check
+            form_login:
+                provider: fos_userbundle
+
+                login_path: /login
+                check_path: /login_check
 
             oauth:
                 resource_owners:
@@ -43,6 +43,7 @@ security:
 
             logout: true
             anonymous: true
+            stateless: false
 #        login:
 #            pattern:  ^/login$
 #            security: false

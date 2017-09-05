@@ -40,8 +40,8 @@ class IFSUserProvider extends FOSUBUserProvider
 
     public function loadUserByOAuthUserResponse(UserResponseInterface $response)
     {
-        $username = $response->getUsername();
-        $user = $this->userManager->findUserBy(array($this->getProperty($response) => $username));
+        $userId = $response->getUsername();
+        $user = $this->userManager->findUserBy(array($this->getProperty($response) => $userId));
 
         if (null === $user) {
             $service = $response->getResourceOwner()->getName();
@@ -50,23 +50,24 @@ class IFSUserProvider extends FOSUBUserProvider
             $setter_token = $setter.'AccessToken';
             // create new user here
             $user = $this->userManager->createUser();
-            $user->$setter_id($username);
+            $user->$setter_id($userId);
             $user->$setter_token($response->getAccessToken());
             //I have set all requested data with the user's username
             //modify here with relevant data
-            $user->setUsername($username);
-            $user->setEmail($username);
-            $user->setPassword($username);
+            $user->setUsername($response->getNickname());
+            $user->setEmail($response->getEmail());
+            $user->setPassword($response->getAccessToken());
             $user->setEnabled(true);
             $this->userManager->updateUser($user);
+
             return $user;
         }
 
         $user = parent::loadUserByOAuthUserResponse($response);
         $serviceName = $response->getResourceOwner()->getName();
         $setter = 'set' . ucfirst($serviceName) . 'AccessToken';
-
         $user->$setter($response->getAccessToken());
+
         return $user;
     }
 
