@@ -24,12 +24,22 @@ security:
 
         main:
             pattern: ^/
-            form_login:
-                provider: fos_userbundle
-                csrf_token_generator: security.csrf.token_manager
 
-            logout:       true
-            anonymous:    true
+#            form_login:
+#                provider: fos_userbundle
+#                csrf_token_generator: security.csrf.token_manager
+#            logout:       true
+#            anonymous:    true
+            anonymous: ~
+            oauth:
+                resource_owners:
+                    vkontakte:           "/login/check-vkontakte"
+                login_path:        /login
+                use_forward:       false
+                failure_path:      /login
+
+                oauth_user_provider:
+                    service: HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider
 
     access_control:
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }

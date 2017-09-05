@@ -26,5 +26,26 @@ class User extends BaseUser
         parent::__construct();
     }
 
+    /**
+     * @ORM\Column(type="string")
+     */
+    protected $vkontakte_id;
+
+    /**
+     * @return mixed
+     */
+    public function getVkontakteId()
+    {
+        return $this->vkontakte_id;
+    }
+
+    /**
+     * @param mixed $vkontakte_id
+     */
+    public function setVkontakteId($vkontakte_id)
+    {
+        $this->vkontakte_id = $vkontakte_id;
+    }
+
 
 }

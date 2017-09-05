@@ -91,3 +91,10 @@ fos_user:
         address: "%mailer_user%"
         sender_name: "%mailer_user%"
 
+hwi_oauth:
+    firewall_names: [main]
+    resource_owners:
+        vkontakte:
+            type:                vkontakte
+            client_id:           6173790
+            client_secret:       eD7SOyD8OpyXcEH5t1QE
