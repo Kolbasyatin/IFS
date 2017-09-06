@@ -1,9 +1,10 @@
 <?php
 
 
-namespace AppBundle\Services;
+namespace AppBundle\WebSocket;
 
 
+use AppBundle\Services\TestService;
 use Gos\Bundle\WebSocketBundle\Router\WampRequest;
 use Gos\Bundle\WebSocketBundle\Topic\TopicInterface;
 use Ratchet\ConnectionInterface;

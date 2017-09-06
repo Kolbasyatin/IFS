@@ -1,7 +1,7 @@
 <?php
 
 
-namespace AppBundle\Services;
+namespace AppBundle\WebSocket;
 
 
 use Gos\Bundle\WebSocketBundle\Router\WampRequest;

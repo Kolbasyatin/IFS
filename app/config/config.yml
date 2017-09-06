@@ -77,11 +77,11 @@ gos_web_socket:
             resources:
                 - "config/pubsub_routing.yml"
     rpc:
-      - AppBundle\Services\Commentator
+      - AppBundle\WebSocket\Commentator
     topics:
-      - AppBundle\Services\Herald
+      - AppBundle\WebSocket\Herald
     periodic:
-      - AppBundle\Services\StreamStatusChecker
+      - AppBundle\WebSocket\StreamStatusChecker
 
 fos_user:
     db_driver: orm
