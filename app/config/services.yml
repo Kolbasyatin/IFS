@@ -31,3 +31,17 @@ services:
 
     AppBundle\Auth\IFSUserProvider:
         arguments: ['@fos_user.user_manager', { vkontakte: vkontakte_id } ]
+
+    pdo:
+        class: PDO
+        arguments:
+            - 'pgsql:host=%database_host%;port=%database_port%;dbname=%database_name%'
+            - '%database_user%'
+            - '%database_password%'
+        calls:
+            - [ setAttribute, [3,2] ]
+
+    Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler:
+        arguments: [ '@pdo', { lock_mode: 0} ]
+
+

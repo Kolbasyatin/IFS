@@ -24,9 +24,13 @@ framework:
     default_locale: '%locale%'
     trusted_hosts: ~
     session:
+        handler_id: Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
         # https://symfony.com/doc/current/reference/configuration/framework.html#handler-id
-        handler_id: session.handler.native_file
-        save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
+      #Change session handler for PDO
+        #handler_id: session.handler.native_file
+        #save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
+
+
     fragments: ~
     http_method_override: true
     assets:
@@ -76,6 +80,9 @@ gos_web_socket:
         router:
             resources:
                 - "config/pubsub_routing.yml"
+    client:
+        firewall: [main]
+        session_handler: 'Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler'
     rpc:
       - AppBundle\WebSocket\Commentator
     topics:
