@@ -80,6 +80,13 @@ gos_web_socket:
         router:
             resources:
                 - "config/pubsub_routing.yml"
+    pushers:
+        zmq:
+            default: true
+            host: 127.0.0.1
+            port: 5555
+            persistent: true
+            protocol: tcp
     client:
         firewall: [main]
         session_handler: 'Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler'
@@ -106,7 +113,6 @@ hwi_oauth:
         username_iterations: 30
         properties:
             vkontakte: vkontakte_id
-
     resource_owners:
         vkontakte:
             type:                vkontakte

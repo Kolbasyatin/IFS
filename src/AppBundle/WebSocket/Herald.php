@@ -6,12 +6,13 @@ namespace AppBundle\WebSocket;
 
 use AppBundle\Services\TestService;
 use Gos\Bundle\WebSocketBundle\Router\WampRequest;
+use Gos\Bundle\WebSocketBundle\Topic\PushableTopicInterface;
 use Gos\Bundle\WebSocketBundle\Topic\TopicInterface;
 use Ratchet\ConnectionInterface;
 use Ratchet\Wamp\Topic;
 use Ratchet\Wamp\WampConnection;
 
-class Herald implements TopicInterface
+class Herald implements TopicInterface, PushableTopicInterface
 {
     /** @var  TestService */
     private $testService;
@@ -61,6 +62,12 @@ class Herald implements TopicInterface
     {
         return 'herald.topic';
     }
+
+    public function onPush(Topic $topic, WampRequest $request, $data, $provider)
+    {
+        dump('asdf');
+    }
+
 
     public function getTopic()
     {

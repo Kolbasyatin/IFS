@@ -1,5 +1,6 @@
 <?php
 
+use Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle;
 use Gos\Bundle\PubSubRouterBundle\GosPubSubRouterBundle;
 use Gos\Bundle\WebSocketBundle\GosWebSocketBundle;
 use HWI\Bundle\OAuthBundle\HWIOAuthBundle;
@@ -29,6 +30,7 @@ class AppKernel extends Kernel
             $bundles[] = new Symfony\Bundle\DebugBundle\DebugBundle();
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
+            $bundles[] = new DoctrineFixturesBundle();
 
             if ('dev' === $this->getEnvironment()) {
                 $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
