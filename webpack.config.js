@@ -31,7 +31,8 @@ Encore
     })
     .enableSourceMaps(!Encore.isProduction())
     .addLoader({
-        test: __dirname + "/web/bundles/goswebsocket/js/gos_web_socket_client.js",
+        test: /gos_web_socket_client.js$/,
+
         loader: "exports-loader?WS"
     })
     .enableVersioning();
@@ -40,7 +41,8 @@ let config = Encore.getWebpackConfig();
 
 config.resolve.alias = {
     'jquery-slider': 'jquery-ui/ui/widgets/slider',
-    'gos-ws': __dirname + '/web/bundles/goswebsocket/js/gos_web_socket_client.js'
+    'gos-ws': __dirname + '/vendor/gos/web-socket-bundle/Resources/public/js/gos_web_socket_client.js'
+
 };
 config.plugins.unshift(
     new CopyWebpackPlugin([{

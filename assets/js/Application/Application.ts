@@ -1,4 +1,3 @@
-import * as $ from "jquery";
 import {Player} from "./Player/Player";
 import {Listeners} from "./Listeners/Listeners";
 import {CommentManager} from "./Comments/CommentManager";
@@ -38,11 +37,11 @@ export class Application {
 
     private bindHandlers(): void {
         this._player.addOnPlayingHandler((event) => {
-            this._commentator.isCommentButtonActive(!event.jPlayer.status.paused);
+            this._commentator.toggleCommentButton(!event.jPlayer.status.paused);
             /** TODO: refresh comment */
         });
         this._player.addOnPauseHandler((event) => {
-            this._commentator.isCommentButtonActive(!event.jPlayer.status.paused);
+            this._commentator.toggleCommentButton(!event.jPlayer.status.paused);
             /** TODO: refresh comment */
         });
         this._commentator.getCommentButton().on('click', (event) => {

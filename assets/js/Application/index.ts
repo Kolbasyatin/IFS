@@ -10,7 +10,7 @@ let vk = new VKWidget();
 vk.start();
 
 let WS: WS = require("gos-ws");
-
+console.log(WS);
 let websocket = WS.connect("ws://127.0.0.1/stat");
 
 websocket.on("socket/connect", function (session: ABSession) {

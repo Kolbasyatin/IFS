@@ -49,7 +49,7 @@ export class Player {
         this._jPlayer.jPlayer("setMedia", {mp3: source}).jPlayer("play");
     }
     //https://stackoverflow.com/questions/27258169/how-can-i-stop-and-resume-a-live-audio-stream-in-html5-instead-of-just-pausing-i
-    public pause(): string|void {
+    public pause(): string {
         if (!this.isPaused()) {
             this._lastSrc = this._src;
             this._src = '';

@@ -15,7 +15,7 @@ export class Commentator {
         this._$comm_button.fadeOut('easing');
     }
 
-    public isCommentButtonActive(status: boolean): void {
+    public toggleCommentButton(status: boolean): void {
         status ? this.showCommentButton() : this.hideCommentButton();
     }
     public getCommentButton(): JQuery {

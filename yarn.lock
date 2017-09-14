@@ -33,9 +33,13 @@
   dependencies:
     "@types/when" "*"
 
-"@types/jquery@*", "@types/jquery@^3.2.12":
+"@types/jquery@*":
   version "3.2.12"
   resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-3.2.12.tgz#f496823108c3874c97c9a822e675a3926ee64b46"
+
+"@types/jquery@3.2.1":
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-3.2.1.tgz#72c2a4c35448fd4c6b15e82efd0852e71dd630f8"
 
 "@types/jqueryui@^1.11.36":
   version "1.11.36"

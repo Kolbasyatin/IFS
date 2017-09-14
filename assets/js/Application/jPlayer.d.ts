@@ -1,3 +1,7 @@
+interface jPlayer {
+    (id?: any, options?: any): any;
+}
 interface JQuery {
-    jPlayer: any
+    jPlayer: jPlayer
+    status: jPlayerStatus;
 }
