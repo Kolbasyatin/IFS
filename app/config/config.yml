@@ -89,7 +89,7 @@ gos_web_socket:
             protocol: tcp
     client:
         firewall: [main]
-        session_handler: 'Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler'
+        session_handler: Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
     rpc:
       - AppBundle\WebSocket\Commentator
     topics:

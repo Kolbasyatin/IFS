@@ -5,6 +5,7 @@ namespace AppBundle\WebSocket;
 
 
 use Gos\Bundle\WebSocketBundle\Periodic\PeriodicInterface;
+use Ratchet\Wamp\Topic;
 
 class StreamStatusChecker implements PeriodicInterface
 {
@@ -19,7 +20,9 @@ class StreamStatusChecker implements PeriodicInterface
 
     public function tick()
     {
+
         $topic = $this->herald->getTopic();
+        /** @var Topic $topic */
         if ($topic) {
             $msg = ['msg' => 'Im from status Checker!!!'];
             $topic->broadcast($msg);
@@ -29,6 +32,6 @@ class StreamStatusChecker implements PeriodicInterface
 
     public function getTimeout()
     {
-        return 3;
+        return 8;
     }
 }
