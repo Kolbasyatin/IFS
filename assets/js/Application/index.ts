@@ -2,6 +2,7 @@ import {Application} from "./Application";
 import {VKWidget} from "./Widgets/VKWidget";
 import * as autobahn from "autobahn";
 
+
 //
 let application = new Application();
 application.start();
@@ -10,8 +11,7 @@ let vk = new VKWidget();
 vk.start();
 
 let WS: WS = require("gos-ws");
-console.log(WS);
-let websocket = WS.connect("ws://127.0.0.1/stat");
+let websocket = WS.connect("ws://localhost/stat");
 
 websocket.on("socket/connect", function (session: ABSession) {
 

@@ -38,9 +38,8 @@ class Herald implements TopicInterface, PushableTopicInterface
     {
         $this->topic = $topic;
 
-        $clients = $this->clientManipulator->getAll($topic);
-        echo 'dump clients';
-        var_dump($clients);
+        $client = $this->clientManipulator->getClient($connection);
+
         /** @var WampConnection $connection */
         /** @var string $msg На самом деле array, но IDE напрягает подсвечивать */
         $msg = ['msg' => ''. " has joined " . $topic->getId(). $this->testService->sayHello()];

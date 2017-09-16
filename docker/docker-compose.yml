@@ -2,16 +2,16 @@
 #                          Generated on phpdocker.io                          #
 ###############################################################################
 
-mysql-server:
-  image:  mysql/mysql-server:latest
-  container_name: mysql-server
-  volumes:
-    - mysql_data:/var/lib/mysql
-  environment:
-    MYSQL_ROOT_PASSWORD: 'mysqlrootpassword'
-    MYSQL_ROOT_HOST: '%'
-  ports:
-    - "3306:3306"
+#mysql-server:
+#  image:  mysql/mysql-server:latest
+#  container_name: mysql-server
+#  volumes:
+#    - mysql_data:/var/lib/mysql
+#  environment:
+#    MYSQL_ROOT_PASSWORD: 'mysqlrootpassword'
+#    MYSQL_ROOT_HOST: '%'
+#  ports:
+#    - "3306:3306"
 
 postgres-server:
   image: postgres:latest
@@ -27,33 +27,33 @@ mds-memcached:
   image: phpdockerio/memcached:latest
   container_name: mds-memcached
 
-icecast:
-  image: moul/icecast:latest
-  container_name: icecast
-  volumes:
-  - logs:/var/log/icecast2
-  - /etc/localtime:/etc/localtime:ro
-  environment:
-  - ICECAST_SOURCE_PASSWORD=changeme
-  - ICECAST_ADMIN_PASSWORD=changeme
-  - ICECAST_PASSWORD=changeme
-  - ICECAST_RELAY_PASSWORD=changeme
-  ports:
-  - 8001:8000
-
-mpd:
-  image: vimagick/mpd
-  container_name: mpd
-  ports:
-    - "6600:6600"
-    - "8800:8800"
-  volumes:
-#    - ./mpd/mpd.conf:/etc/mpd.conf
-    - ./mpd/music:/var/lib/mpd/music
-    - ./playlists:/var/lib/mpd/playlists
-  devices:
-    - /dev/snd
-  restart: always
+#icecast:
+#  image: moul/icecast:latest
+#  container_name: icecast
+#  volumes:
+#  - logs:/var/log/icecast2
+#  - /etc/localtime:/etc/localtime:ro
+#  environment:
+#  - ICECAST_SOURCE_PASSWORD=changeme
+#  - ICECAST_ADMIN_PASSWORD=changeme
+#  - ICECAST_PASSWORD=changeme
+#  - ICECAST_RELAY_PASSWORD=changeme
+#  ports:
+#  - 8001:8000
+#
+#mpd:
+#  image: vimagick/mpd
+#  container_name: mpd
+#  ports:
+#    - "6600:6600"
+#    - "8800:8800"
+#  volumes:
+##    - ./mpd/mpd.conf:/etc/mpd.conf
+#    - ./mpd/music:/var/lib/mpd/music
+#    - ./playlists:/var/lib/mpd/playlists
+#  devices:
+#    - /dev/snd
+#  restart: always
 
 #mds-rabbitmq:
 #  image: rabbitmq:latest
@@ -90,7 +90,7 @@ mds-php-fpm:
     - /tmp/:/tmp/
   links:
     - mds-memcached
-    - mysql-server
+#    - mysql-server
     - postgres-server
 #    - mds-rabbitmq
 #  env_file:
