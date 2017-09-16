@@ -4,6 +4,7 @@ use Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle;
 use Gos\Bundle\PubSubRouterBundle\GosPubSubRouterBundle;
 use Gos\Bundle\WebSocketBundle\GosWebSocketBundle;
 use HWI\Bundle\OAuthBundle\HWIOAuthBundle;
+use Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
 
@@ -23,7 +24,8 @@ class AppKernel extends Kernel
             new GosWebSocketBundle(),
             new GosPubSubRouterBundle(),
             new \FOS\UserBundle\FOSUserBundle(),
-            new HWIOAuthBundle()
+            new HWIOAuthBundle(),
+            new StofDoctrineExtensionsBundle()
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

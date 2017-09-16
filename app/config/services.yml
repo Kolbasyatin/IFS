@@ -43,5 +43,3 @@ services:
 
     Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler:
         arguments: [ '@pdo', { lock_mode: 0} ]
-
-

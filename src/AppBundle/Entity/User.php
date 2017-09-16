@@ -21,6 +21,12 @@ class User extends BaseUser
      */
     protected $id;
 
+    /**
+     * @var Comment[]
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Comment", mappedBy="ownerUser")
+     */
+    protected $comments;
+
     public function __construct()
     {
         parent::__construct();
