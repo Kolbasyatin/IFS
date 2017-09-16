@@ -103,7 +103,7 @@ fos_user:
     firewall_name: main
     user_class: AppBundle\Entity\User
     from_email:
-        address: "%mailer_user%"
+        address: "no-replay@mds.planeset.ru"
         sender_name: "%mailer_user%"
 
 hwi_oauth:
