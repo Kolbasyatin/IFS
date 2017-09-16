@@ -104,7 +104,7 @@ fos_user:
     user_class: AppBundle\Entity\User
     from_email:
         address: "no-replay@mds.planeset.ru"
-        sender_name: "%mailer_user%"
+        sender_name: "Your Capitan"
 
 hwi_oauth:
     connect:
