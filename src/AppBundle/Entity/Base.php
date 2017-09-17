@@ -4,9 +4,9 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Blameable\Traits\Blameable;
-use Gedmo\SoftDeleteable\Traits\SoftDeleteable;
-use Gedmo\Timestampable\Traits\Timestampable;
+use Gedmo\Blameable\Traits\BlameableEntity;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * Class Base
@@ -16,6 +16,11 @@ use Gedmo\Timestampable\Traits\Timestampable;
  */
 class Base
 {
+
+    use SoftDeleteableEntity;
+    use TimestampableEntity;
+    use BlameableEntity;
+
     /**
      * @var int
      * @ORM\Column(name="id", type="integer")
@@ -26,7 +31,7 @@ class Base
 
     /**
      * @var string
-     * @ORM\Column(name="title", type="string", length=255)
+     * @ORM\Column(name="title", type="string", length=255, nullable=true)
      *
      */
 
@@ -38,8 +43,57 @@ class Base
      */
     protected $isEnabled = true;
 
-    use SoftDeleteable;
-    use Timestampable;
-    use Blameable;
+    /**
+     * @var integer
+     */
+    protected $position;
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId(int $id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle(string $title)
+    {
+        $this->title = $title;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEnabled(): bool
+    {
+        return $this->isEnabled;
+    }
+
+    /**
+     * @param bool $isEnabled
+     */
+    public function setIsEnabled(bool $isEnabled)
+    {
+        $this->isEnabled = $isEnabled;
+    }
 
 }

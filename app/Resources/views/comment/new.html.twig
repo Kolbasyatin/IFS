@@ -1,2 +1,6 @@
 {{ app.user }}
-{{ form(form) }}
+{{ form_start(form) }}
+{{ form_widget(form.text) }}
+<button type="submit">Телеграфировать</button>
+{{ form_end(form) }}
+

@@ -9,6 +9,7 @@ use AppBundle\Services\Commentator;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -22,19 +23,33 @@ class CommentController extends Controller
     /**
      * @Route("/new", name="comment_new" )
      * @Security("has_role('ROLE_COMMENT_NEW')")
+     * @param Request $request
+     * @param Commentator $commentator
+     * @param UserInterface|null $user
+     * @return JsonResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function newAction(Request $request, Commentator $commentator, UserInterface $user = null)
     {
         $comment = new Comment();
         /** @var User $user */
-        $comment->setOwnerUser($user);
+        $comment
+            ->setOwnerUser($user)
+            ->setIP($request->getClientIp())
+        ;
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $commentator->createComment($comment);
+            return new JsonResponse([
+                'error' => false,
+                'commentId' => $comment->getId(),
+                'createdAt' => $comment->getCreatedAt()
+            ]);
+
         }
         return $this->render('comment/new.html.twig', [
             'form' => $form->createView()
         ]);
     }
+
 }

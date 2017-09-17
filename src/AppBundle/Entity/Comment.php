@@ -14,6 +14,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Comment extends Base
 {
+
+    const TYPES = [
+        'comment',
+        'news'
+    ];
     /**
      * @var User
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="comments")
@@ -29,6 +34,12 @@ class Comment extends Base
      * @var
      */
     protected $targetSong;
+
+    /** @var  string
+     * @ORM\Column(type="string", name="type", length=128, nullable=false)
+     * @Assert\Choice(callback="getTypes")
+     */
+    protected $type = 'comment';
 
     /**
      * @var string
@@ -175,6 +186,11 @@ class Comment extends Base
 
         return $this;
     }
+
+    public static function getTypes() {
+        return static::TYPES;
+    }
+
 
 
 }
