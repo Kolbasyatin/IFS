@@ -11,7 +11,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 /**
  * Class Base
  * @package AppBundle\Entity
- * @ORM\MappedSuperclass(repositoryClass="BaseRepository")
+ * @ORM\MappedSuperclass(repositoryClass="AppBundle\Repository\BaseRepository")
  *
  */
 class Base

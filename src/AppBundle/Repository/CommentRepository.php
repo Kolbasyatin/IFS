@@ -1,9 +1,11 @@
 <?php
 
 
-namespace AppBundle\Entity;
+namespace AppBundle\Repository;
 
 
+use AppBundle\Entity\Comment;
+use AppBundle\Entity\User;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 

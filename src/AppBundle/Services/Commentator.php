@@ -4,7 +4,7 @@ namespace AppBundle\Services;
 
 
 use AppBundle\Entity\Comment;
-use AppBundle\Entity\CommentRepository;
+use AppBundle\Repository\CommentRepository;
 use Doctrine\ORM\EntityManager;
 
 class Commentator

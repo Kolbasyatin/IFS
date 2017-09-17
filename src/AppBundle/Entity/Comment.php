@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Class Comment
  * @package AppBundle\Entity
  * @ORM\Table(name="Comments")
- * @ORM\Entity(repositoryClass="AppBundle\Entity\CommentRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\CommentRepository")
  */
 class Comment extends Base
 {
@@ -23,23 +23,23 @@ class Comment extends Base
      * @var User
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="comments")
      */
-    protected $ownerUser;
+    private $ownerUser;
 
     /**
      * @var
      */
-    protected $targetSource;
+    private $targetSource;
 
     /**
      * @var
      */
-    protected $targetSong;
+    private $targetSong;
 
     /** @var  string
      * @ORM\Column(type="string", name="type", length=128, nullable=false)
      * @Assert\Choice(callback="getTypes")
      */
-    protected $type = 'comment';
+    private $type = 'comment';
 
     /**
      * @var string
@@ -54,14 +54,14 @@ class Comment extends Base
      * )
      */
 
-    protected $text;
+    private $text;
 
     /**
      * @var string
-     * @ORM\Column(type="string", name="ip", length=15, nullable=true)
+     * @ORM\Column(type="inet", nullable=true)
      * @Assert\Ip()
      */
-    protected $ip;
+    private $ip;
 
     /**
      * @var integer
@@ -73,7 +73,7 @@ class Comment extends Base
      * @Assert\NotNull()
      * @Assert\NotBlank()
      */
-    protected $rate = 0;
+    private $rate = 0;
 
     /**
      * @return User
