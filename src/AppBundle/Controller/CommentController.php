@@ -21,7 +21,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class CommentController extends Controller
 {
     /**
-     * @Route("/new", name="comment_new" )
+     * @Route("/new", name="comment_new", options={"expose" = true } )
      * @Security("has_role('ROLE_COMMENT_NEW')")
      * @param Request $request
      * @param Commentator $commentator

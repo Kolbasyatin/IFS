@@ -50,3 +50,17 @@ interface ABSession {
         authsign: (challenge: any, secret: string) => any;
         auth: (signature: string) => any;
 }
+
+interface Router {
+        generate: (name: string, opt_params?: object, absolute?: boolean) => string;
+    // getInstance
+    // 'setRoutes',
+    // 'getRoutes',
+    // 'setBaseUrl'
+    // 'getBaseUrl'
+    // 'generate',
+    // 'setPrefix',
+    // 'getRoute',
+}
+
+declare let Routing: Router;

@@ -1,6 +1,7 @@
 <?php
 
 use Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle;
+use FOS\JsRoutingBundle\FOSJsRoutingBundle;
 use Gos\Bundle\PubSubRouterBundle\GosPubSubRouterBundle;
 use Gos\Bundle\WebSocketBundle\GosWebSocketBundle;
 use HWI\Bundle\OAuthBundle\HWIOAuthBundle;
@@ -25,7 +26,10 @@ class AppKernel extends Kernel
             new GosPubSubRouterBundle(),
             new \FOS\UserBundle\FOSUserBundle(),
             new HWIOAuthBundle(),
-            new StofDoctrineExtensionsBundle()
+            new StofDoctrineExtensionsBundle(),
+            new FOSJsRoutingBundle()
+
+
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

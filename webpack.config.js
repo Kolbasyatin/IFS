@@ -27,12 +27,21 @@ Encore
     .autoProvidejQuery()
     .autoProvideVariables({
         "window.jQuery": "jquery",
-        "$.jPlayer": "jplayer"
+        "$.jPlayer": "jplayer",
+        "Routing": "router"
     })
     .enableSourceMaps(!Encore.isProduction())
     .addLoader({
         test: /gos_web_socket_client.js$/,
         loader: "exports-loader?WS"
+    })
+    .addLoader({
+        test: /jsrouting-bundle\/Resources\/public\/js\/router.js$/,
+        loader: "imports-loader?window=>{}!exports-loader?router=window.Routing"
+    })
+    .addLoader({
+        test: /fos_js_routes.js$/,
+        loader: "imports-loader?router"
     })
     .enableVersioning();
 
@@ -40,8 +49,8 @@ let config = Encore.getWebpackConfig();
 
 config.resolve.alias = {
     'jquery-slider': 'jquery-ui/ui/widgets/slider',
-    'gos-ws': __dirname + '/vendor/gos/web-socket-bundle/Resources/public/js/gos_web_socket_client.js'
-
+    'gos-ws': __dirname + '/vendor/gos/web-socket-bundle/Resources/public/js/gos_web_socket_client.js',
+    'router': __dirname + '/assets/js/router.js'
 };
 config.plugins.unshift(
     new CopyWebpackPlugin([{

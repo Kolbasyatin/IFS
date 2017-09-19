@@ -1,3 +1,8 @@
+/** Connect FOS js-router */
+console.log(Routing.generate('comment_new'));
+
+
+
 import {Application} from "./Application";
 import {VKWidget} from "./Widgets/VKWidget";
 import * as autobahn from "autobahn";
@@ -30,12 +35,10 @@ websocket.on("socket/connect", function (session: ABSession) {
 
     // RPC
     session.call("commentator/comment", {"term1": 2, "term2": 5}).then(
-        function(result: any)
-        {
+        function (result: any) {
             console.log("RPC Valid!", result);
         },
-        function(error: any, desc: any)
-        {
+        function (error: any, desc: any) {
             console.log("RPC Error", error, desc);
         }
     );
