@@ -10,16 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="user_rate")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRateRepository")
  */
-class UserRate
+class UserRate extends Base
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
 
     /**
      * @var string
@@ -48,17 +40,6 @@ class UserRate
      * @ORM\Column(name="rank", type="integer", nullable=true)
      */
     private $rank;
-
-
-    /**
-     * Get id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * Set ownerUser

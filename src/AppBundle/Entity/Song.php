@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,16 +11,9 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="song")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\SongRepository")
  */
-class Song
+class Song extends Base
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
+
 
     /**
      * @var string
@@ -29,28 +23,69 @@ class Song
     private $hash;
 
     /**
-     * @var text_array
+     * @var array
      *
      * @ORM\Column(name="tags", type="text_array", nullable=true)
      */
     private $tags;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="rank", type="string", length=255)
+     * @var SongRate[]
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\SongRate", mappedBy="song")
      */
-    private $rank;
-
+    private $rates;
 
     /**
-     * Get id
-     *
-     * @return int
+     * @var Comment[]
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Comment", mappedBy="targetSong")
      */
-    public function getId()
+    private $comments;
+
+    /**
+     * Song constructor.
+     */
+    public function __construct()
     {
-        return $this->id;
+        $this->rates = new ArrayCollection();
+        $this->comments = new ArrayCollection();
+    }
+
+    /**
+     * @return SongRate[]
+     */
+    public function getRates()
+    {
+        return $this->rates;
+    }
+
+    /**
+     * @param SongRate $rate
+     * @return Song
+     */
+    public function addRate(SongRate $rate): Song
+    {
+        $this->rates->add($rate);
+
+        return $this;
+    }
+
+    /**
+     * @return Comment[]
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
+
+    /**
+     * @param Comment $comment
+     * @return Song
+     */
+    public function addComment(Comment $comment): Song
+    {
+        $this->comments->add($comment);
+
+        return $this;
     }
 
     /**
@@ -60,7 +95,7 @@ class Song
      *
      * @return Song
      */
-    public function setHash($hash)
+    public function setHash(string $hash)
     {
         $this->hash = $hash;
 
@@ -72,7 +107,7 @@ class Song
      *
      * @return string
      */
-    public function getHash()
+    public function getHash(): ?string
     {
         return $this->hash;
     }
@@ -80,7 +115,7 @@ class Song
     /**
      * Set tags
      *
-     * @param text_array $tags
+     * @param array $tags
      *
      * @return Song
      */
@@ -94,7 +129,7 @@ class Song
     /**
      * Get tags
      *
-     * @return text_array
+     * @return array
      */
     public function getTags()
     {

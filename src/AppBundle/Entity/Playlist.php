@@ -10,17 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="playlist")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\PlaylistRepository")
  */
-class Playlist
+class Playlist extends Base
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
-
     /**
      * @var string
      *
@@ -34,17 +25,6 @@ class Playlist
      * @ORM\Column(name="songs", type="string", length=255)
      */
     private $songs;
-
-
-    /**
-     * Get id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * Set name

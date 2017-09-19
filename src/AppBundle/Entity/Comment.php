@@ -26,12 +26,14 @@ class Comment extends Base
     private $ownerUser;
 
     /**
-     * @var
+     * @var Source[]
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Source", inversedBy="comments")
      */
     private $targetSource;
 
     /**
-     * @var
+     * @var Song
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Song", inversedBy="comments")
      */
     private $targetSong;
 
@@ -190,6 +192,26 @@ class Comment extends Base
     public static function getTypes() {
         return static::TYPES;
     }
+
+    /**
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $type
+     * @return Comment
+     */
+    public function setType(string $type): Comment
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
 
 
 

@@ -10,16 +10,12 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="stream")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\StreamRepository")
  */
-class Stream
+class Stream extends Base
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+    /** @var  Source
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Source", inversedBy="streams" )
      */
-    private $id;
+    private $source;
 
     /**
      * @var string
@@ -49,15 +45,23 @@ class Stream
      */
     private $url;
 
+    /**
+     * @return Source
+     */
+    public function getSource(): Source
+    {
+        return $this->source;
+    }
 
     /**
-     * Get id
-     *
-     * @return int
+     * @param Source $source
+     * @return Stream
      */
-    public function getId()
+    public function setSource(Source $source): Stream
     {
-        return $this->id;
+        $this->source = $source;
+
+        return $this;
     }
 
     /**

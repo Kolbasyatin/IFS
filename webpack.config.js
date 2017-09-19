@@ -32,7 +32,6 @@ Encore
     .enableSourceMaps(!Encore.isProduction())
     .addLoader({
         test: /gos_web_socket_client.js$/,
-
         loader: "exports-loader?WS"
     })
     .enableVersioning();

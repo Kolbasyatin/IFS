@@ -10,21 +10,12 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="song_rate")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\SongRateRepository")
  */
-class SongRate
+class SongRate extends Base
 {
     /**
-     * @var int
+     * @var User
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="ownerUser", type="string", length=255)
      */
     private $ownerUser;
 
@@ -35,29 +26,25 @@ class SongRate
      */
     private $sign;
 
+    /**
+     * @var integer
+     * @ORM\Column(name="value", type="smallint", nullable=true)
+     */
     private $value;
 
-    private $song;
-
-
     /**
-     * Get id
-     *
-     * @return int
+     * @var Song
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Song", inversedBy="rates")
      */
-    public function getId()
-    {
-        return $this->id;
-    }
+    private $song;
 
     /**
      * Set ownerUser
      *
-     * @param string $ownerUser
-     *
+     * @param User $ownerUser
      * @return SongRate
      */
-    public function setOwnerUser($ownerUser)
+    public function setOwnerUser(User $ownerUser)
     {
         $this->ownerUser = $ownerUser;
 
@@ -81,7 +68,7 @@ class SongRate
      *
      * @return SongRate
      */
-    public function setSign($sign)
+    public function setSign(int $sign)
     {
         $this->sign = $sign;
 
@@ -93,9 +80,49 @@ class SongRate
      *
      * @return int
      */
-    public function getSign()
+    public function getSign(): ?int
     {
         return $this->sign;
     }
+
+    /**
+     * @return int
+     */
+    public function getValue(): ?int
+    {
+        return $this->value;
+    }
+
+    /**
+     * @param int $value
+     * @return SongRate
+     */
+    public function setValue(int $value): SongRate
+    {
+        $this->value = $value;
+        return $this;
+    }
+
+    /**
+     * @return Song
+     */
+    public function getSong(): Song
+    {
+        return $this->song;
+    }
+
+    /**
+     * @param Song $song
+     * @return SongRate
+     */
+    public function setSong(Song $song): SongRate
+    {
+        $this->song = $song;
+
+        return $this;
+    }
+
+
+
 }
 

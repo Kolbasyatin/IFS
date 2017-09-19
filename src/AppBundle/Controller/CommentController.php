@@ -30,6 +30,7 @@ class CommentController extends Controller
      */
     public function newAction(Request $request, Commentator $commentator, UserInterface $user = null)
     {
+        $request->getSession()->get('sourceId');
         $comment = new Comment();
         /** @var User $user */
         $comment

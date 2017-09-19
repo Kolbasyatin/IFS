@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -42,16 +43,15 @@ class Source extends Base
     private $password;
 
     /**
-     * @var string
+     * @var Stream[]
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Stream", mappedBy="source")
      *
-     * @ORM\Column(name="streams", type="string", length=255)
      */
     private $streams;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="comments", type="string", length=255)
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Comment", mappedBy="targetSource")
      */
     private $comments;
 
@@ -68,6 +68,14 @@ class Source extends Base
      * @ORM\Column(name="type", type="string", length=255)
      */
     private $type;
+
+    /**
+     * Source constructor.
+     */
+    public function __construct()
+    {
+        $this->streams = new ArrayCollection();
+    }
 
 
     /**
@@ -169,11 +177,10 @@ class Source extends Base
     /**
      * Set streams
      *
-     * @param string $streams
-     *
+     * @param Stream $streams
      * @return Source
      */
-    public function setStreams($streams)
+    public function addStreams(Stream $streams)
     {
         $this->streams = $streams;
 
@@ -182,10 +189,9 @@ class Source extends Base
 
     /**
      * Get streams
-     *
-     * @return string
+     * @return ArrayCollection|null
      */
-    public function getStreams()
+    public function getStreams(): ?ArrayCollection
     {
         return $this->streams;
     }
