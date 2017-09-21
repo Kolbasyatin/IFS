@@ -37,12 +37,9 @@ Encore
     })
     .addLoader({
         test: /jsrouting-bundle\/Resources\/public\/js\/router.js$/,
-        loader: "imports-loader?window=>{}!exports-loader?router=window.Routing"
+        loader: "exports-loader?router=window.Routing"
     })
-    .addLoader({
-        test: /fos_js_routes.js$/,
-        loader: "imports-loader?router"
-    })
+
     .enableVersioning();
 
 let config = Encore.getWebpackConfig();
