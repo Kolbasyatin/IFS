@@ -5,6 +5,7 @@ import {ControlManagement} from "./Management/ControlManagement";
 import {Timer} from "./Time/Timer";
 import {Commentator} from "./Comments/Commentator";
 import {CommentDataInterface} from "./Comments/CommentDataInterface";
+import {User} from "./User/User";
 
 
 export class Application {
@@ -14,6 +15,7 @@ export class Application {
     private _controlManagement: ControlManagement;
     private _timer: Timer;
     private _commentator: Commentator;
+    private _user: User;
 
     constructor() {
         this._player = new Player();
@@ -22,6 +24,7 @@ export class Application {
         this._controlManagement = new ControlManagement(this._player);
         this._timer = new Timer($("#curtime"));
         this._commentator = new Commentator();
+        this._user = new User();
     }
 
     public start(): void {
@@ -46,7 +49,7 @@ export class Application {
         });
         this._commentator.getCommentButton().on('click', (event) => {
             let currentStation = this.getCurrentSourceId();
-            this._commentator.doComment(currentStation);
+            this._commentator.doComment(currentStation, this._user);
         });
     }
 

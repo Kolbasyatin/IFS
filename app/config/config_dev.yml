@@ -1,3 +1,7 @@
+parameters:
+    router.request_context.host: null
+    router.request_context.scheme: http
+    router.request_context.base_url: app_dev.php
 imports:
     - { resource: config.yml }
 

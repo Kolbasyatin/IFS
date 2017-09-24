@@ -46,6 +46,7 @@ let config = Encore.getWebpackConfig();
 
 config.resolve.alias = {
     'jquery-slider': 'jquery-ui/ui/widgets/slider',
+    'jquery-dialog': 'jquery-ui/ui/widgets/dialog',
     'gos-ws': __dirname + '/vendor/gos/web-socket-bundle/Resources/public/js/gos_web_socket_client.js',
     'router': __dirname + '/assets/js/router.js'
 };

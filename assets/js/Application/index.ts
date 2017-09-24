@@ -1,20 +1,13 @@
-/** Connect FOS js-router */
-console.log(Routing.generate('comment_new'));
-
-
-
 import {Application} from "./Application";
 import {VKWidget} from "./Widgets/VKWidget";
 import * as autobahn from "autobahn";
-
-
 //
 let application = new Application();
 application.start();
 //
 let vk = new VKWidget();
 vk.start();
-
+//
 let WS: WS = require("gos-ws");
 let websocket = WS.connect("ws://localhost/stat");
 

@@ -1,9 +1,13 @@
+import {CommentForm} from "./CommentForm";
+import {User} from "../User/User";
+
 export class Commentator {
-    private _$form: JQuery;
+    private _$form: CommentForm;
     private _$comm_button: JQuery;
+    private _$auth: JQuery = $("ul.auth-ul li");
 
     constructor() {
-        this._$form = $("#dialog-form");
+        this._$form = new CommentForm();
         this._$comm_button = $("#comment_add");
     }
 
@@ -21,8 +25,14 @@ export class Commentator {
     public getCommentButton(): JQuery {
         return this._$comm_button;
     }
-    public doComment(station: string): void {
-        console.log(station);
+    public doComment(station: string, user: User): void {
+        if (user.isAuthenticated()) {
+            this._$form.comment(station);
+        } else {
+            console.log(this._$auth);
+            this._$auth.toggleClass('li-hovered');
+        }
+
     }
 
 }

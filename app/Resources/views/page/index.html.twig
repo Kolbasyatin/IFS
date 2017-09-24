@@ -11,6 +11,14 @@
                 <div class="header">
                     <div class="header_menu_bl">
                         <div class="header_menu">
+                            <ul class="auth-ul">
+                                {% if app.user %}
+                                <li>{{ app.user }}</li>
+                                {% else %}
+                                    {#<li><a class="auth-link" href="{{ path('fos_user_security_login') }}">Авторизироваться</a></li>#}
+                                    {{ render(controller('HWIOAuthBundle:Connect:connect')) }}
+                                {% endif %}
+                            </ul>
                             {#{{ knp_menu_render('top') }}#}
                             {#<ul>#}
                                 {#<li data-title="Часто задаваемые вопросы" data-content="content1">ЧЗД</li>#}
@@ -106,10 +114,12 @@
                 </div>
             </div>
 
-            <div id="dialog-form" title="Оставте комментарий тут">
+            <div id="dialog-form" title="Оставь след.">
                 <div id="form">
+
                 </div>
             </div>
+            <div id="user-info" data-is-authenticated="{{ app.user ? 'true': 'false' }}"></div>
             {% block dialogs %}
                 {#<div class="dialog_wrapper">#}
                 {#<div id="content1" title="Часто задаваемые вопросы">#}

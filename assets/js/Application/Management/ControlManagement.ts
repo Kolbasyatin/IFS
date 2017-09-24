@@ -21,16 +21,9 @@ export class ControlManagement {
         animate: true,
         //Странный глюк. Если не передать в конструктор для change, в дальнейшем на евент не вешается.
         //При срабатывании create не отдает value
-        change: (e: any, ui: any) => {
-            this.setVolume(ui.value);
-        },
-        create: () => {
-            this.setVolume(0.6);
-        },
-        slide: (e: any, ui: any) => {
-            this.setVolume(ui.value);
-        }
-
+        change: (e: any, ui: any) => this.setVolume(ui.value),
+        create: () => this.setVolume(0.6),
+        slide: (e: any, ui: any) => this.setVolume(ui.value)
         //disabled: true
 
     };

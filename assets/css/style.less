@@ -1,5 +1,8 @@
 @import (css) '~jquery-ui-themes/jquery-ui.css';
 @import (css) '~jquery-ui-themes/themes/dot-luv/theme.css';
+//Custom jquery ui style. Move to npm?
+//@import (css) './jquery-ui-custom/jquery-ui.min.css';
+//@import (css) './jquery-ui-custom/jquery-ui.theme.min.css';
 @color_1: #fff;
 @color_2: #333333;
 @color_3: #7c7c7c;
@@ -90,6 +93,10 @@ body {
   height: auto;
   width: 100%;
 }
+.li-hovered {
+  cursor: pointer;
+  background: #6da3e9!important;
+}
 .header_menu {
   margin: 0 auto;
   width: auto;
@@ -100,14 +107,11 @@ body {
       display: inline-block;
       font-size: 1.2em;
       line-height: 30px;
-      margin: 15px 2px;
+      margin: 5px 2px;
       background: rgba(255, 255, 255, 0.2);
       padding-left: 10px;
       padding-right: 10px;
-      -o-transition: all 0.3s linear;
-      -moz-transition: all 0.3s linear;
-      -webkit-transition: all 0.3s linear;
-      transition: all 0.3s linear;
+      transition: all 0.2s linear;
       border-radius: 3px;
       -moz-border-radius: 3px;
       -khtml-border-radius: 3px;
@@ -115,13 +119,10 @@ body {
       -webkit-box-shadow: 0 0 10px rgba(111, 189, 255, 0.4);
       box-shadow: 0 0 10px rgba(111, 189, 255, 0.4);
       &:hover {
-        cursor: pointer;
-        padding-left: 11px;
-        padding-right: 11px;
-        background: #6da3e9;
+        .li-hovered;
       }
       &:nth-last-child(1) {
-        margin-right: 10px;
+        margin-right: 5px;
       }
     }
   }
@@ -297,7 +298,7 @@ body {
   font-weight: bold;
   cursor: pointer;
   float: left;
-  display: none;
+  //display: none;
 }
 .player {
   background: url('../images/template/pleer.png') top;
@@ -426,6 +427,10 @@ ul {
   position: absolute;
   top: 14px;
   left: 50%;
+}
+.text {
+  width: 100%;
+  min-height: 200px;
 }
 .panel_left {
   margin: 32px 20px 0 20px;

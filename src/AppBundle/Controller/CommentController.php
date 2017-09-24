@@ -40,7 +40,7 @@ class CommentController extends Controller
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $commentator->createComment($comment);
+            $commentator->createComment($comment, $request->request->get('sourceId'));
             return new JsonResponse([
                 'error' => false,
                 'commentId' => $comment->getId(),

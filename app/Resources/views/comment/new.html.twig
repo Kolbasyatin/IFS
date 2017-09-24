@@ -1,6 +1,6 @@
-{{ app.user }}
+<p><label class="comment_block_title">{{ app.user }}</label></p>
 {{ form_start(form) }}
-{{ form_widget(form.text) }}
-<button type="submit">Телеграфировать</button>
+{{ form_row(form.text) }}
+{#<button type="submit">{{ 'message.telega'| trans }}</button>#}
 {{ form_end(form) }}
 

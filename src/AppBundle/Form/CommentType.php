@@ -16,7 +16,13 @@ class CommentType extends AbstractType
     {
         $builder
             ->add('text', TextareaType::class, [
-                'attr' => []
+                'label' => 'comment.message',
+                'label_attr' => [
+                    'class' => 'comment_block_title'
+                ],
+                'attr' => [
+                    'class' => 'text ui-widget-content ui-corner-all',
+                ]
             ])
 
         ;
@@ -28,5 +34,11 @@ class CommentType extends AbstractType
             'data_class' => Comment::class
         ]);
     }
+
+    public function getBlockPrefix()
+    {
+        return 'comment_form';
+    }
+
 
 }
