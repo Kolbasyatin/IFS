@@ -13,7 +13,7 @@
                         <div class="header_menu">
                             <ul class="auth-ul">
                                 {% if app.user %}
-                                <li>{{ app.user }}</li>
+                                <li class="logged" title="{{ 'logged.title'|trans }}"><a href="#">{{ app.user }}</a></li>
                                 {% else %}
                                     {#<li><a class="auth-link" href="{{ path('fos_user_security_login') }}">Авторизироваться</a></li>#}
                                     {{ render(controller('HWIOAuthBundle:Connect:connect')) }}
@@ -119,7 +119,11 @@
 
                 </div>
             </div>
-            <div id="user-info" data-is-authenticated="{{ app.user ? 'true': 'false' }}"></div>
+            <div
+                    id="user-info"
+                    data-is-authenticated="{{ app.user ? 'true': 'false' }}"
+                    data-is-newsmaker="{{ (app.user and is_granted('ROLE_NEWS_NEW'))? 'true': 'false' }}"
+            ></div>
             {% block dialogs %}
                 {#<div class="dialog_wrapper">#}
                 {#<div id="content1" title="Часто задаваемые вопросы">#}

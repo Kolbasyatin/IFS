@@ -1,46 +1,47 @@
 <?php
 
+
 namespace AppBundle\Services;
 
 
 use AppBundle\Entity\Comment;
-use AppBundle\Lib\Exceptions\CommentatorException;
-use AppBundle\Repository\CommentRepository;
-use Doctrine\ORM\EntityManager;
+use AppBundle\Entity\Source;
+use AppBundle\Entity\User;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class Commentator
 {
-    /** @var  EntityManager */
-    protected $em;
-    /** @var  CommentRepository */
-    private $repository;
+    /** @var  AuthorizationChecker */
+    protected $authorizationChecker;
 
     /**
      * Commentator constructor.
-     * @param EntityManager $em
+     * @param AuthorizationChecker $authorizationChecker
      */
-
-    public function __construct(EntityManager $em)
+    public function __construct(AuthorizationChecker $authorizationChecker)
     {
-        $this->em = $em;
-        $this->repository = $em->getRepository(Comment::class);
+        $this->authorizationChecker = $authorizationChecker;
     }
 
-    public function createComment(Comment $comment, string $sourceId = null)
+
+    public function createComment(Request $request, User $user, string $type, Source $source = null): Comment
     {
-        //TODO: Подумать как проверять тут доступ на создание новостей.
-        if ($sourceId) {
-            $source = $this->em->find('AppBundle:Source', $sourceId);
+        $comment = new Comment();
+        /** @var User $user */
+        $comment
+            ->setOwnerUser($user)
+            ->setIP($request->getClientIp())
+            ->setType($type);
+        if ($source) {
             $comment->setTargetSource($source);
-        } elseif ($comment->getType() !== Comment::TYPE_NEWS) {
-            throw new CommentatorException('Замануха!');
         }
-        $this->em->persist($comment);
-        $this->em->flush($comment);
+        if ($comment->getType() === Comment::TYPE_NEWS && !$this->authorizationChecker->isGranted('ROLE_NEWS_NEW')) {
+            throw new AccessDeniedException('Access Denied.');
+        }
+
+        return $comment;
     }
 
-    public function createJsonComment(string $json)
-    {
-        /** TODO: Implement create comment from json ?? */
-    }
 }

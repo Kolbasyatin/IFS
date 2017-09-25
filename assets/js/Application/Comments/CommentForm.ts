@@ -1,7 +1,6 @@
 import "jquery-dialog";
 
 export class CommentForm {
-    private _route: string = Routing.generate('comment_new');
     private _$dialog: JQuery = $("div#dialog-form");
     private _$form_container: JQuery = $("div#form");
     private _commentStation: string | null;
@@ -29,17 +28,14 @@ export class CommentForm {
     };
 
 
-    public init(): void {
+    public initDialog(): void {
         this._$dialog.dialog(this._dialogOptions);
     }
 
     private sendForm(): void {
         let data: JQuery.PlainObject = this._$form_container.find('form').serializeArray();
-        data.push({
-            name: 'sourceId',
-            value: this._commentStation
-        });
-        let post = $.post(this._route, data);
+
+        let post = $.post(this.generateRoute(), data);
         $.when(post)
             .done(result => {
                 if (result.error === false) {
@@ -47,7 +43,6 @@ export class CommentForm {
                 } else {
                     this.generateErrorCommentedEvent();
                 }
-
             })
             .fail(error => {
                 console.error(error);
@@ -55,11 +50,17 @@ export class CommentForm {
             })
             .always(() => this.closeDialog())
     }
+    private generateRoute(): string {
+        let commentType = this._commentStation ? 'comment' : 'news';
+
+        return Routing.generate('comment_new', {type: commentType, source_id: this._commentStation});
+    }
+
 
     public comment(station: string) {
         console.log(station);
         this._commentStation = station;
-        this.init();
+        this.initDialog();
         this.openDialog();
     }
 
@@ -72,7 +73,7 @@ export class CommentForm {
     }
 
     private onOpen(): void {
-        let ajax = this.sendAjax();
+        let ajax: JQuery.jqXHR = $.get(this.generateRoute());
         $.when(ajax).then(
             data => this.showContent(data),
             error => console.error('error' + error)
@@ -87,10 +88,6 @@ export class CommentForm {
 
     private showContent(data: string): void {
         this._$form_container.append(data);
-    }
-
-    private sendAjax(data: JQuery.PlainObject = {}): JQuery.jqXHR {
-        return $.get(this._route, data);
     }
 
     private generateCommentedEvent(): void {

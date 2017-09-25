@@ -5,10 +5,8 @@ namespace AppBundle\Controller;
 
 
 use AppBundle\WebSocket\Herald;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
+use AppBundle\Controller\BaseController as Controller;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class PageController extends Controller
 {

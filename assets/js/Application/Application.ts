@@ -18,13 +18,13 @@ export class Application {
     private _user: User;
 
     constructor() {
+        this._user = new User();
         this._player = new Player();
         this._currentListeners = new Listeners($("#listeners"));
         this._commentManager = new CommentManager($("#comments"));
         this._controlManagement = new ControlManagement(this._player);
         this._timer = new Timer($("#curtime"));
-        this._commentator = new Commentator();
-        this._user = new User();
+        this._commentator = new Commentator(this._user);
     }
 
     public start(): void {
@@ -39,17 +39,17 @@ export class Application {
     }
 
     private bindHandlers(): void {
-        this._player.addOnPlayingHandler((event) => {
+        this._player.addOnPlayingHandler(event => {
             this._commentator.toggleCommentButton(!event.jPlayer.status.paused);
             /** TODO: refresh comment */
         });
-        this._player.addOnPauseHandler((event) => {
+        this._player.addOnPauseHandler(event => {
             this._commentator.toggleCommentButton(!event.jPlayer.status.paused);
             /** TODO: refresh comment */
         });
-        this._commentator.getCommentButton().on('click', (event) => {
+        this._commentator.getCommentButton().on('click', () => {
             let currentStation = this.getCurrentSourceId();
-            this._commentator.doComment(currentStation, this._user);
+            this._commentator.doComment(currentStation);
         });
     }
 

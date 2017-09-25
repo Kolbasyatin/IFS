@@ -1,6 +1,11 @@
 import {Application} from "./Application";
 import {VKWidget} from "./Widgets/VKWidget";
 import * as autobahn from "autobahn";
+import {Apperiance} from "./Apperiance/Apperiance";
+//
+let apperiance = new Apperiance();
+apperiance.init();
+
 //
 let application = new Application();
 application.start();

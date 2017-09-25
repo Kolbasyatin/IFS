@@ -1,3 +1,5 @@
-comment.message: Послание
-message.telega: Телеграфировать
-auth.vk: Авторизация через ВК
+comment.message: "Послание"
+news.message: "Давай Новость!"
+message.telega: "Телеграфировать"
+auth.vk: "Авторизация через ВК"
+logged.title: "Ждем капитана!"

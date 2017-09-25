@@ -3,4 +3,7 @@ export class User {
     public isAuthenticated(): boolean {
         return this._$userInformer.data('is-authenticated') === true;
     }
+    public isNewsMaker(): boolean {
+        return this._$userInformer.data('is-newsmaker') === true;
+    }
 }

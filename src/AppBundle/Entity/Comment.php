@@ -20,6 +20,7 @@ class Comment extends Base
         self::TYPE_COMMENT,
         self::TYPE_NEWS
     ];
+    public const ROUTE_TYPES_RESTRICTIONS = self::TYPE_COMMENT.'|'.self::TYPE_NEWS;
     /**
      * @var User
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="comments")

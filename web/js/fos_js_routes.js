@@ -1,1 +1,1 @@
-fos.Router.setData({"base_url":"app_dev.php","routes":{"comment_new":{"tokens":[["text","\/comment\/new"]],"defaults":[],"requirements":[],"hosttokens":[],"methods":[],"schemes":[]}},"prefix":"","host":"","scheme":"http"});
+fos.Router.setData({"base_url":"app_dev.php","routes":{"comment_new":{"tokens":[["variable","\/","[^\/]++","source_id"],["variable","\/","comment|news","type"],["text","\/comment\/new"]],"defaults":{"source_id":null,"type":"comment"},"requirements":{"type":"comment|news"},"hosttokens":[],"methods":[],"schemes":[]}},"prefix":"","host":"","scheme":"http"});

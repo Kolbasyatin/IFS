@@ -15,6 +15,6 @@ class PageControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/');
 
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
-        $this->assertContains('Shalom!', $crawler->filter('div.init')->text());
+        $this->assertContains('Shalom!', $crawler->filter('div.initDialog')->text());
     }
 }
