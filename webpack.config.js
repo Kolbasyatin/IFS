@@ -25,6 +25,7 @@ Encore
             disable: !Encore.isProduction,
             test: /\.(jpe?g|png|gif|svg)$/i,
 
+
         })
     )
     // .addPlugin(new webpack.optimize.CommonsChunkPlugin(
@@ -32,6 +33,7 @@ Encore
     // ))
     .addStyleEntry('css/app', './assets/css/style.less')
     .enableLessLoader()
+    .enablePostCssLoader()
     .autoProvidejQuery()
     .autoProvideVariables({
         "window.jQuery": "jquery",
