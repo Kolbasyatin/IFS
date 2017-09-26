@@ -33,7 +33,6 @@ Encore
     // ))
     .addStyleEntry('css/app', './assets/css/style.less')
     .enableLessLoader()
-    .enablePostCssLoader()
     .autoProvidejQuery()
     .autoProvideVariables({
         "window.jQuery": "jquery",
