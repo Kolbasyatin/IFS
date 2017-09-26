@@ -184,6 +184,6 @@ hwi_oauth:
     resource_owners:
         vkontakte:
             type:                vkontakte
-            client_id:           6173790
-            client_secret:       eD7SOyD8OpyXcEH5t1QE
+            client_id:           '%vkontakte_app_id%'
+            client_secret:       '%vkontakte_app_secret%'
             scope: "email"
