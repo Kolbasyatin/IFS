@@ -3,7 +3,6 @@
     {# TODO: Подумать о переводе на WAMP v.2 ибо данный autobahn 0.8.3 убрали отовсюду. Через webpack собрать не получается х.з.
         https://github.com/voryx/ThruwayBundle
     #}
-    <script src="{{ asset('bundles/goswebsocket/js/vendor/autobahn.min.js') }}"></script>
     <div class="shadow"></div>
     <div class="container">
         <div class="center">
@@ -202,6 +201,7 @@
 
 {% block javascripts %}
     {{ parent() }}
+    <script src="{{ asset('bundles/goswebsocket/js/vendor/autobahn.min.js') }}"></script>
     <script src="{{ asset('build/js/app.js') }}"></script>
 {% endblock javascripts %}
 

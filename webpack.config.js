@@ -1,6 +1,7 @@
 const Encore = require("@symfony/webpack-encore"),
     webpack = require("webpack");
 let CopyWebpackPlugin = require('copy-webpack-plugin');
+let ImageminPlugin = require('imagemin-webpack-plugin').default;
 
 Encore
     .setOutputPath('web/build/')
@@ -18,6 +19,14 @@ Encore
         new webpack.ContextReplacementPlugin(
             /node_modules\/moment\/locale/, /ru|en-gb/
         )
+    )
+    .addPlugin(
+        new ImageminPlugin({
+            disable: !Encore.isProduction,
+            test: /\.(jpe?g|png|gif|svg)$/i,
+
+
+        })
     )
     // .addPlugin(new webpack.optimize.CommonsChunkPlugin(
     //     "js/vendor"
