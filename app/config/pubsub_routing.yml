@@ -10,3 +10,13 @@ herald:
     channel: herald/{message}
     handler:
         callback: 'herald.topic'
+
+source:
+    channel: source
+    handler:
+        callback: 'source.topic'
+
+comment:
+    channel: comment
+    handler:
+        callback: 'comment.topic'

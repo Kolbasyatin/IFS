@@ -1,5 +1,6 @@
 imports:
     - { resource: parameters.yml }
+    - { resource: websocket.yml }
     - { resource: roles.yml }
     - { resource: security.yml }
     - { resource: services.yml }
@@ -141,29 +142,7 @@ swiftmailer:
     password: '%mailer_password%'
     spool: { type: memory }
 
-gos_web_socket:
-    server:
-        port: 8181
-        host: 0.0.0.0
-        router:
-            resources:
-                - "config/pubsub_routing.yml"
-    pushers:
-        zmq:
-            default: true
-            host: 127.0.0.1
-            port: 5555
-            persistent: true
-            protocol: tcp
-    client:
-        firewall: [main]
-        session_handler: Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
-    rpc:
-      - AppBundle\WebSocket\Commentator
-    topics:
-      - AppBundle\WebSocket\Herald
-    periodic:
-      - AppBundle\WebSocket\StreamStatusChecker
+
 
 fos_user:
     db_driver: orm

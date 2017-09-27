@@ -17,10 +17,14 @@ let WS: WS = require("gos-ws");
 let websocket = WS.connect("ws://localhost/stat");
 
 websocket.on("socket/connect", function (session: ABSession) {
-
-    //PUB_SUB
-    console.log('Sucessfully Connected!');
+    //Let's do something
     session.subscribe('herald/', function (uri: string, payload: object) {
+        console.log(uri, payload);
+    });
+    session.subscribe('source', function (uri: string, payload: object) {
+        console.log(uri, payload);
+    });
+    session.subscribe('comment', function (uri: string, payload: object) {
         console.log(uri, payload);
     });
 
