@@ -7,7 +7,7 @@ export class Comment {
         <span>{{message}}</span>
         <span class="datetime">{{dateTime}}</span>
         </div>`;
-    // private _template: string = "<div class=\"comment\" id=\"commentid{{commentId}}\" >" +
+    // private _template: string = "<div class=\"comment\" id=\"commentid{{id}}\" >" +
     //     "<p>{{username}}</p>" +
     //     "<span>{{message}}</span>" +
     //     "<span class=\"datetime\">{{dateTime}}</span>" +

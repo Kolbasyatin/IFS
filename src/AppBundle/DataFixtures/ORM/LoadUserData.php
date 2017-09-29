@@ -21,7 +21,9 @@ class LoadUserData implements FixtureInterface, OrderedFixtureInterface, Contain
         $superUser
             ->setUsername('admin')
             ->setEmail('no-reply@planeset.ru')
-            ->setEnabled(true);
+            ->setEnabled(true)
+            ->addRole(USER::ROLE_SUPER_ADMIN)
+        ;
 
         $plainPassword = 'admin';
         $encoded = $this->container->get('security.password_encoder')->encodePassword($superUser, $plainPassword);

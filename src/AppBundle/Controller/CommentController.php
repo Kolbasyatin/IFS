@@ -51,7 +51,7 @@ class CommentController extends Controller
             $em->flush();
             return new JsonResponse([
                 'error' => false,
-                'commentId' => $comment->getId(),
+                'id' => $comment->getId(),
                 'createdAt' => $comment->getCreatedAt()
             ]);
 

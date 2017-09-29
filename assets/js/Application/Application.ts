@@ -37,11 +37,12 @@ export class Application {
 
     private firstInitializeApp(): void {
         this._timer.start();
-        const comments = this._wamp.commentatorCall('comment', {"term1": 2, "term2": 5});
-        console.log(comments);
-        /** TODO: not properly works **/
+        this.updateComments();
     }
-
+    async updateComments(): Promise<void> {
+        const comments: CommentDataInterface[] = await this._wamp.commentatorCall('getInitComments');
+        this._commentManager.addCommentsSourceId(comments, this.getCurrentSourceId());
+    }
     private bindHandlers(): void {
         this._player.addOnPlayingHandler(event => {
             this._commentator.toggleCommentButton(!event.jPlayer.status.paused);
@@ -57,17 +58,17 @@ export class Application {
         });
     }
 
-    private updateComments(): void {
-        this._commentManager.addCommentsBySource(this._player.getCurrentSourceId());
-    }
+    // private updateComments(): void {
+    //     this._commentManager.addCommentsBySource(this._player.getCurrentSourceId());
+    // }
 
     public updateListeners(data?: number): void {
         this._currentListeners.setListenersCount(data);
     }
 
-    public addComments(comments: CommentDataInterface[]): void {
-        this._commentManager.addComments(comments);
-    }
+    // public addComments(comments: CommentDataInterface[]): void {
+    //     this._commentManager.addComments(comments);
+    // }
 
     private getCurrentSourceId(): string {
         return this._player.getCurrentSourceId();

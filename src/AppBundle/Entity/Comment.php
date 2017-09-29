@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="Comments")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\CommentRepository")
  */
-class Comment extends Base
+class Comment extends Base implements \JsonSerializable
 {
     public const TYPE_COMMENT = 'comment';
     public const TYPE_NEWS = 'news';
@@ -20,7 +20,7 @@ class Comment extends Base
         self::TYPE_COMMENT,
         self::TYPE_NEWS
     ];
-    public const ROUTE_TYPES_RESTRICTIONS = self::TYPE_COMMENT.'|'.self::TYPE_NEWS;
+    public const ROUTE_TYPES_RESTRICTIONS = self::TYPE_COMMENT . '|' . self::TYPE_NEWS;
     /**
      * @var User
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="comments")
@@ -28,7 +28,7 @@ class Comment extends Base
     private $ownerUser;
 
     /**
-     * @var Source[]
+     * @var Source
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Source", inversedBy="comments")
      */
     private $targetSource;
@@ -98,7 +98,7 @@ class Comment extends Base
     }
 
     /**
-     * @return mixed
+     * @return Source
      */
     public function getTargetSource()
     {
@@ -106,10 +106,10 @@ class Comment extends Base
     }
 
     /**
-     * @param mixed $targetSource
+     * @param Source $targetSource
      * @return Comment
      */
-    public function setTargetSource($targetSource)
+    public function setTargetSource(Source $targetSource)
     {
         $this->targetSource = $targetSource;
         return $this;
@@ -191,7 +191,8 @@ class Comment extends Base
         return $this;
     }
 
-    public static function getTypes() {
+    public static function getTypes()
+    {
         return static::TYPES;
     }
 
@@ -214,7 +215,16 @@ class Comment extends Base
         return $this;
     }
 
-
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->id,
+            'username' => $this->getOwnerUser()->getUsername(),
+            'message' => $this->getText(),
+            'time' => 'time',
+            'sourceId' => $this->getTargetSource()?$this->getTargetSource()->getHumanId(): ''
+        ];
+    }
 
 
 }

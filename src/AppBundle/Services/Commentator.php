@@ -7,6 +7,8 @@ namespace AppBundle\Services;
 use AppBundle\Entity\Comment;
 use AppBundle\Entity\Source;
 use AppBundle\Entity\User;
+use AppBundle\Repository\CommentRepository;
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -16,13 +18,18 @@ class Commentator
     /** @var  AuthorizationChecker */
     protected $authorizationChecker;
 
+    /** @var  CommentRepository */
+    protected $repo;
+
     /**
      * Commentator constructor.
      * @param AuthorizationChecker $authorizationChecker
+     * @param EntityManager $em
      */
-    public function __construct(AuthorizationChecker $authorizationChecker)
+    public function __construct(AuthorizationChecker $authorizationChecker, EntityManager $em)
     {
         $this->authorizationChecker = $authorizationChecker;
+        $this->repo = $em->getRepository(Comment::class);
     }
 
 
@@ -43,5 +50,10 @@ class Commentator
 
         return $comment;
     }
+
+    public function getFirstPage(): array {
+        return $this->repo->getReversePageComment(1);
+    }
+
 
 }

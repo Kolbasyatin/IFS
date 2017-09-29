@@ -27,7 +27,7 @@ export class CommentManager {
      * @param {CommentDataInterface} data
      */
     public updateComment(data: CommentDataInterface): void {
-        let id: number = data.commentId;
+        let id: number = data.id;
         let commentForUpdate: Comment|null = this.getCommentById(id);
 
         if (commentForUpdate) {
@@ -54,13 +54,17 @@ export class CommentManager {
 
     /**
      * Add several comments from array of comments data
-     * @param {CommentDataInterface[]} commentsData
+     * @param {CommentDataInterface[]} comments
      */
-    public addComments(commentsData: CommentDataInterface[]) {
-        for (let data of commentsData) {
+    private addComments(comments: CommentDataInterface[]): void {
+        for (let data of comments) {
             let comment: Comment = new Comment(data);
-            this.addCommentUp(comment);
+            this.addCommentDown(comment);
         }
+    }
+
+    public addCommentsSourceId(comments: CommentDataInterface[], sourceId: string): void {
+        this.addComments(comments.filter((comment: CommentDataInterface) => comment.sourceId === sourceId));
     }
 
     /**
@@ -163,7 +167,7 @@ export class CommentManager {
      */
     public getCommentById(id: number): Comment|null {
         for (let comment of this._comments) {
-            if (comment.getData().commentId === id) {
+            if (comment.getData().id === id) {
                 return comment;
             }
         }

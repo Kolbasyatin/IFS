@@ -1,5 +1,6 @@
 export interface CommentDataInterface {
-    commentId: number;
+    id: number;
+    sourceId: string;
     username: string;
     message: string;
     dateTime: string;

@@ -11,7 +11,7 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 
 class CommentRepository extends BaseRepository
 {
-    const COMMENTS_PER_PAGE = 3;
+    const COMMENTS_PER_PAGE = 5;
 
     /**
      * Returns last comment
@@ -71,14 +71,25 @@ class CommentRepository extends BaseRepository
      * @param int $page
      * @return Comment[]
      */
-    public function getCommentsPage(int $page)
+    public function getSpreadPageComment(int $page)
+    {
+        return $this->getPageComment($page, 'ASC');
+    }
+
+    public function getReversePageComment(int $page)
+    {
+        return $this->getPageComment($page, 'DESC');
+    }
+
+    private function getPageComment(int $page, string $sort)
     {
         $comments = [];
         if ($page <= $this->getPagesCount()) {
             $limit = self::COMMENTS_PER_PAGE;
-            $offset = $page * $limit;
-            $comments = $this->findBy([], [], $limit, $offset);
+            $offset = ($page - 1) * $limit;
+            $comments = $this->findBy([], ['id' => $sort], $limit, $offset);
         }
+
 
         return $comments;
     }

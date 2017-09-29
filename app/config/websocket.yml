@@ -16,7 +16,6 @@ gos_web_socket:
         firewall: [main]
         session_handler: Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
     rpc:
-      - AppBundle\WebSocket\Commentator
       - AppBundle\WebSocket\RPC\CommentRPC
     topics:
       - AppBundle\WebSocket\Herald
