@@ -6,6 +6,7 @@ import {Timer} from "./Time/Timer";
 import {Commentator} from "./Comments/Commentator";
 import {CommentDataInterface} from "./Comments/CommentDataInterface";
 import {User} from "./User/User";
+import {WAMP} from "./WebSocket/WAMP";
 
 
 export class Application {
@@ -16,6 +17,7 @@ export class Application {
     private _timer: Timer;
     private _commentator: Commentator;
     private _user: User;
+    private _wamp: WAMP;
 
     constructor() {
         this._user = new User();
@@ -23,19 +25,21 @@ export class Application {
         this._currentListeners = new Listeners($("#listeners"));
         this._commentManager = new CommentManager($("#comments"));
         this._controlManagement = new ControlManagement(this._player);
-        this._timer = new Timer($("#curtime"));
         this._commentator = new Commentator(this._user);
+        this._wamp = new WAMP();
+        this._timer = new Timer($("#curtime"));
     }
 
     public start(): void {
         this.firstInitializeApp();
         this.bindHandlers();
-        // this._commentManager.addComments(commentData);
     }
 
     private firstInitializeApp(): void {
         this._timer.start();
-        this.updateComments();
+        const comments = this._wamp.commentatorCall('comment', {"term1": 2, "term2": 5});
+        console.log(comments);
+        /** TODO: not properly works **/
     }
 
     private bindHandlers(): void {

@@ -58,7 +58,6 @@ export class CommentForm {
 
 
     public comment(station: string) {
-        console.log(station);
         this._commentStation = station;
         this.initDialog();
         this.openDialog();
