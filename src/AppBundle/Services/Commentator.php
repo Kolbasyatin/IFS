@@ -51,8 +51,13 @@ class Commentator
         return $comment;
     }
 
-    public function getFirstPage(): array {
-        return $this->repo->getReversePageComment(1);
+    public function getFirstPage(string $source = ''): array {
+        return $this->repo->getReversePageCommentBySource($source, 1);
+    }
+
+    public function getNextPage(string $source = '', int $lastCommentId)
+    {
+        return $this->repo->getCommentsNewerId($source, $lastCommentId);
     }
 
 

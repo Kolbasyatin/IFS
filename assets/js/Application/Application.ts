@@ -4,9 +4,9 @@ import {CommentManager} from "./Comments/CommentManager";
 import {ControlManagement} from "./Management/ControlManagement";
 import {Timer} from "./Time/Timer";
 import {Commentator} from "./Comments/Commentator";
-import {CommentDataInterface} from "./Comments/CommentDataInterface";
 import {User} from "./User/User";
 import {WAMP} from "./WebSocket/WAMP";
+import {Source} from "./Source";
 
 
 export class Application {
@@ -18,15 +18,17 @@ export class Application {
     private _commentator: Commentator;
     private _user: User;
     private _wamp: WAMP;
+    private _source: Source;
 
     constructor() {
+        this._source = new Source();
         this._user = new User();
-        this._player = new Player();
-        this._currentListeners = new Listeners($("#listeners"));
-        this._commentManager = new CommentManager($("#comments"));
-        this._controlManagement = new ControlManagement(this._player);
-        this._commentator = new Commentator(this._user);
+        this._player = new Player(this._source);
         this._wamp = new WAMP();
+        this._currentListeners = new Listeners($("#listeners"));
+        this._commentManager = new CommentManager($("#comments"), this._wamp, this._source);
+        this._controlManagement = new ControlManagement(this._player, this._source);
+        this._commentator = new Commentator(this._user);
         this._timer = new Timer($("#curtime"));
     }
 
@@ -37,30 +39,23 @@ export class Application {
 
     private firstInitializeApp(): void {
         this._timer.start();
-        this.updateComments();
+        this._commentManager.updateComments();
     }
-    async updateComments(): Promise<void> {
-        const comments: CommentDataInterface[] = await this._wamp.commentatorCall('getInitComments');
-        this._commentManager.addCommentsSourceId(comments, this.getCurrentSourceId());
-    }
+
     private bindHandlers(): void {
         this._player.addOnPlayingHandler(event => {
             this._commentator.toggleCommentButton(!event.jPlayer.status.paused);
-            /** TODO: refresh comment */
+            this._commentManager.updateComments();
         });
         this._player.addOnPauseHandler(event => {
             this._commentator.toggleCommentButton(!event.jPlayer.status.paused);
-            /** TODO: refresh comment */
+            this._commentManager.updateComments();
         });
         this._commentator.getCommentButton().on('click', () => {
-            let currentStation = this.getCurrentSourceId();
-            this._commentator.doComment(currentStation);
+            this._commentator.doComment(this._source.getCurrentSourceId());
         });
     }
 
-    // private updateComments(): void {
-    //     this._commentManager.addCommentsBySource(this._player.getCurrentSourceId());
-    // }
 
     public updateListeners(data?: number): void {
         this._currentListeners.setListenersCount(data);
@@ -69,9 +64,5 @@ export class Application {
     // public addComments(comments: CommentDataInterface[]): void {
     //     this._commentManager.addComments(comments);
     // }
-
-    private getCurrentSourceId(): string {
-        return this._player.getCurrentSourceId();
-    }
 
 }

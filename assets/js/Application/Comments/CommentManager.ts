@@ -1,25 +1,43 @@
 import {CommentDataInterface} from "./CommentDataInterface";
 import {Comment} from "./Comment";
+import {WAMP} from "../WebSocket/WAMP";
+import {Source} from "../Source";
 
 require('jquery-mousewheel');
 require('malihu-custom-scrollbar-plugin');
 
 export class CommentManager {
-    private _comments: Comment[] = [];
-    private _$commentContainer: JQuery;
-    private _$mCustomScrollContainer: JQuery;
+    private _cSBOptions: MCustomScrollbar.CustomScrollbarOptions = {
+        theme: 'dark-thin',
+        callbacks: {
+            onTotalScroll: (): void => this.showNextPage()
+        }
+    };
     private _effectOptions: object = {
         effect: 'slide',
         easing: 'easeOutCirc',
         duration: 150
     };
+    private _comments: Comment[] = [];
+    private _$commentContainer: JQuery;
+    private _$mCustomScrollContainer: JQuery;
+    private _wamp: WAMP;
+    private _source: Source;
 
-    constructor($container: JQuery) {
+    constructor($container: JQuery, wamp: WAMP, source: Source) {
         if(!$container.length) {
             throw new Error("There is no container for CommentManager")
         }
-        this._$mCustomScrollContainer = $container.mCustomScrollbar({theme: 'dark-thin'});
+        this._$mCustomScrollContainer = $container.mCustomScrollbar(this._cSBOptions);
         this._$commentContainer = this._$mCustomScrollContainer.find("#mCSB_1_container");
+        this._wamp = wamp;
+        this._source = source;
+    }
+
+    /** Update all comments in container */
+    async updateComments(): Promise<void> {
+        const comments: CommentDataInterface[] = await this._wamp.commentatorCall('getCommentsFirstPageBySource', {source: this._source.getCurrentSourceId()});
+        this.refreshComments(comments);
     }
 
     /**
@@ -39,32 +57,39 @@ export class CommentManager {
         }
     }
 
-    /**
-     * Что то тут надо было сделать.
-     * @param {string} source
-     */
-    public addCommentsBySource(source: string): void {
-        /** Забрать данные по id */
+
+    public refreshComments(comments: CommentDataInterface[]): void {
+
         if (!this.isEmptyContainer()) {
             this.removeAllComments();
         }
-        /*this.addComments(commentData);*/
 
+        this.addComments(comments);
+        console.log(comments);
+
+    }
+
+    private showNextPage(): void {
+        console.log(this.getLastComment().getCommentId());
+    }
+
+    private getFirstComment(): Comment {
+        return this._comments[0];
+    }
+
+    private getLastComment(): Comment {
+        return this._comments[this._comments.length - 1];
     }
 
     /**
      * Add several comments from array of comments data
      * @param {CommentDataInterface[]} comments
      */
-    private addComments(comments: CommentDataInterface[]): void {
+    public addComments(comments: CommentDataInterface[]): void {
         for (let data of comments) {
             let comment: Comment = new Comment(data);
             this.addCommentDown(comment);
         }
-    }
-
-    public addCommentsSourceId(comments: CommentDataInterface[], sourceId: string): void {
-        this.addComments(comments.filter((comment: CommentDataInterface) => comment.sourceId === sourceId));
     }
 
     /**
@@ -180,7 +205,7 @@ export class CommentManager {
      * @return {boolean}
      */
     public isEmptyContainer(): boolean {
-        return Boolean(this._comments.length);
+        return ! Boolean(this._comments.length);
     }
 
 

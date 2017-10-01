@@ -25,8 +25,10 @@ export class WAMP {
         await this.waitForSession();
         const json = await this._session.call(`commentator/${procedure}`, args);
 
-        return JSON.parse(json);;
+        return JSON.parse(json);
     }
+
+
 
     private waitForSession(): Promise<void> {
         return new Promise (resolve => {

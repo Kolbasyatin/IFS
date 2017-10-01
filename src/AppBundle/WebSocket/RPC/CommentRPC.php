@@ -23,9 +23,10 @@ class CommentRPC implements RpcInterface
         $this->commentator = $commentator;
     }
 
-    public function getInitComments(ConnectionInterface $connection, WampRequest $request, array $params)
+    public function getCommentsFirstPageBySource(ConnectionInterface $connection, WampRequest $request, array $params)
     {
-        $comments = $this->commentator->getFirstPage();
+        $comments = $this->commentator->getFirstPage($params['source']);
+
         return [json_encode($comments, JSON_UNESCAPED_UNICODE)];
     }
 

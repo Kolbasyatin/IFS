@@ -4,4 +4,5 @@ export interface CommentDataInterface {
     username: string;
     message: string;
     dateTime: string;
+    type: string;
 }

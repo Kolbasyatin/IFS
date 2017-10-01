@@ -2,7 +2,7 @@ import {CommentDataInterface} from "./CommentDataInterface";
 import * as Mustache from "mustache";
 
 export class Comment {
-    private _template: string = `<div class="comment" id="commentid{{commentId}}" >
+    private _template: string = `<div class="comment" id="commentid{{id}}" >
         <p>{{username}}</p>
         <span>{{message}}</span>
         <span class="datetime">{{dateTime}}</span>
@@ -60,6 +60,10 @@ export class Comment {
 
     public getData(): CommentDataInterface {
         return this._data;
+    }
+
+    public getCommentId(): number {
+        return this._data.id;
     }
 
 }

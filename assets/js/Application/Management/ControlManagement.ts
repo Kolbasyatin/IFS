@@ -1,7 +1,9 @@
 import 'jquery-slider';
 import {Player} from "../Player/Player";
+import {Source} from "../Source";
 
 export class ControlManagement {
+    private _source: Source;
     private _player: Player;
     private _$links: JQuery;
     private _$playButton: JQuery;
@@ -28,7 +30,8 @@ export class ControlManagement {
 
     };
 
-    constructor(player: Player) {
+    constructor(player: Player, source: Source) {
+        this._source = source;
         this._player = player;
         this._$links = $("ul#playerlist>li");
         this._$playButton = $("#playsource");
@@ -50,7 +53,8 @@ export class ControlManagement {
     private bindHandlers(): void {
 
         this._player.addOnPlayHandler(() => {
-            this.linkActive(this._player.getCurrentSrc());
+            this.linkActive(this._source.getSourceUrl());
+
         });
 
         this._player.addOnPlayingHandler((event) => {
@@ -69,9 +73,9 @@ export class ControlManagement {
         });
         this._$pauseButton.on('click', (e) => {
             e.preventDefault();
-            let lastSrc = this._player.pause();
-            if (lastSrc) {
-                this.linkPaused(lastSrc);
+            this._player.pause();
+            if (this._source.getLastSourceUrl()) {
+                this.linkPaused(this._source.getLastSourceUrl());
             }
 
         });
@@ -84,9 +88,9 @@ export class ControlManagement {
         })
     }
 
-    private play(source?: string, sourceId?: string): void {
+    private play(sourceUrl?: string, sourceId?: string): void {
         this._$loaderSign.show();
-        this._player.play(source, sourceId);
+        this._player.play(sourceUrl, sourceId);
     }
 
     private setVolume(volume: number): void {
@@ -122,7 +126,7 @@ export class ControlManagement {
         let isPaused = status.paused;
         if (isPaused) {
             this._$pauseButton.addClass('ui-state-disabled');
-            if (this._player.getLastSrc()) {
+            if (this._source.getLastSourceUrl()) {
                 this._$playButton.removeClass('ui-state-disabled');
             }
         } else {

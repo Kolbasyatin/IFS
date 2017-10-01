@@ -1,19 +1,19 @@
 import 'jplayer';
+import {Source} from "../Source";
 
 export class Player {
+    private _source: Source;
     private _isReady: boolean;
-    private _currentSourceId: string = '';
-    private _lastSourceId: string;
     private _jPlayerConfig: object = {
         ready: () => this._isReady = true,
         error: Player.handleError
     };
     private _jPlayer: JQuery;
-    private _src: string;
-    private _lastSrc: string;
 
-    constructor() {
+    constructor(source: Source) {
+        this._source = source;
         this.jPlayerInit();
+
     }
 
     private jPlayerInit(): void {
@@ -26,42 +26,38 @@ export class Player {
 
     /**
      * Play|Resume stream
-     * @param {string} source
+     * @param {string} sourceUrl
      * @param {string} sourceId
      */
-    public play(source?: string, sourceId?: string): void {
-        if (!this.isPaused() && source === this._src) {
+    public play(sourceUrl?: string, sourceId?: string): void {
+        if (!this.isPaused() && sourceUrl === this._source.getSourceUrl()) {
             return;
         }
         //resume
-        if (!source && !sourceId) {
-            source = this._lastSrc;
-            sourceId = this._lastSourceId;
+        if (!sourceUrl && !sourceId) {
+            sourceUrl = this._source.getLastSourceUrl();
+            sourceId = this._source.getLastSourceId();
         }
-        if (!source) {
+        if (!sourceUrl) {
             throw new Error('No source to play!');
         }
         if (!sourceId) {
             throw new Error('No sourceId to identification Radio source!')
         }
-        this._src = source;
-        this._currentSourceId = sourceId;
-        this._jPlayer.jPlayer("setMedia", {mp3: source}).jPlayer("play");
+        this._source.setSourceUrl(sourceUrl);
+        this._source.setCurrentSourceId(sourceId);
+        this._jPlayer.jPlayer("setMedia", {mp3: sourceUrl}).jPlayer("play");
     }
     //https://stackoverflow.com/questions/27258169/how-can-i-stop-and-resume-a-live-audio-stream-in-html5-instead-of-just-pausing-i
     /** return lastSrc */
-    public pause(): string {
+    public pause(): void {
         if (!this.isPaused()) {
-            this._lastSrc = this._src;
-            this._src = '';
-            this._lastSourceId = this._currentSourceId;
-            this._currentSourceId = '';
+            this._source.setLastSourceUrl(this._source.getSourceUrl());
+            this._source.emptySourceUrl();
+            this._source.setLastSourceId(this._source.getCurrentSourceId());
+            this._source.emptyCurrentSourceId();
             this._jPlayer.jPlayer("pause");
-
-            return this.getLastSrc();
         }
-
-        return '';
     }
     /**
      * Stop playing, empty source.
@@ -70,33 +66,6 @@ export class Player {
         this.pause();
     }
 
-    /**
-     * Return jPlayer audio player.
-     * @return {JQuery}
-     */
-    private getAudio(): JQuery {
-        return this._jPlayer;
-    }
-
-    /**
-     * Get current source id that is playing now.
-     * @return {string}
-     */
-    public getCurrentSourceId(): string {
-        return this._currentSourceId;
-    }
-
-    /**
-     * Get current stream source url.
-     * @return {string}
-     */
-    public getCurrentSrc(): string {
-        return this._src;
-    }
-
-    public getLastSrc(): string {
-        return this._lastSrc;
-    }
 
     public setVolume(volume: number): void {
         this._jPlayer.jPlayer("volume", volume);
