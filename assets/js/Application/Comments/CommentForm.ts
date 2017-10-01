@@ -1,6 +1,7 @@
 import "jquery-dialog";
 
 export class CommentForm {
+    private _error: boolean = false;
     private _$dialog: JQuery = $("div#dialog-form");
     private _$form_container: JQuery = $("div#form");
     private _commentStation: string | null;
@@ -33,22 +34,25 @@ export class CommentForm {
     }
 
     private sendForm(): void {
-        let data: JQuery.PlainObject = this._$form_container.find('form').serializeArray();
+        if(!this._error) {
+            let data: JQuery.PlainObject = this._$form_container.find('form').serializeArray();
 
-        let post = $.post(this.generateRoute(), data);
-        $.when(post)
-            .done(result => {
-                if (result.error === false) {
+            let post = $.post(this.generateRoute(), data);
+            $.when(post)
+                .done(result => {
+                    if (result.error === false) {
+                        this.generateCommentedEvent()
+                    } else {
+                        this.generateErrorCommentedEvent();
+                    }
+                })
+                .fail(error => {
+                    console.error(error);
                     this.generateCommentedEvent()
-                } else {
-                    this.generateErrorCommentedEvent();
-                }
-            })
-            .fail(error => {
-                console.error(error);
-                this.generateCommentedEvent()
-            })
-            .always(() => this.closeDialog())
+                })
+                .always(() => this.closeDialog())
+        }
+
     }
     private generateRoute(): string {
         let commentType = this._commentStation ? 'comment' : 'news';
@@ -74,15 +78,24 @@ export class CommentForm {
     private onOpen(): void {
         let ajax: JQuery.jqXHR = $.get(this.generateRoute());
         $.when(ajax).then(
-            data => this.showContent(data),
-            error => console.error('error' + error)
+            data => {
+                this.showContent(data)
+            },
+            error => {
+                console.error(error);
+                this._error = true;
+                this.showContent('У нас что то сломалось.');
+                setTimeout(() => {this.closeDialog()}, 4000)
+            }
         );
+
 
     }
 
     private onClose(): void {
         this._$form_container.empty();
         this._commentStation = null;
+        this._error = false;
     }
 
     private showContent(data: string): void {

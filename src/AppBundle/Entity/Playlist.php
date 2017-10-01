@@ -20,11 +20,16 @@ class Playlist extends Base
     private $name;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="songs", type="string", length=255)
+     * @var Song[]
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Song")
      */
     private $songs;
+
+    /**
+     * @var Source
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Source")
+     */
+    private $source;
 
     /**
      * Set name
@@ -73,5 +78,23 @@ class Playlist extends Base
     {
         return $this->songs;
     }
+
+    /**
+     * @return Source
+     */
+    public function getSource(): Source
+    {
+        return $this->source;
+    }
+
+    /**
+     * @param Source $source
+     */
+    public function setSource(Source $source)
+    {
+        $this->source = $source;
+    }
+
+
 }
 

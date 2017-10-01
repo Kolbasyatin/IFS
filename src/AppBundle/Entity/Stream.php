@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Stream
@@ -21,8 +22,23 @@ class Stream extends Base
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
+     * @Assert\Type(type="string")
+     * @Assert\Length(max=512)
+     * @Assert\NotNull()
+     * @Assert\NotBlank()
      */
     private $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="title", type="string", length=255)
+     * @Assert\Type(type="string")
+     * @Assert\Length(max=512)
+     * @Assert\NotNull()
+     * @Assert\NotBlank()
+     */
+    protected $title;
 
     /**
      * @var int
@@ -34,14 +50,16 @@ class Stream extends Base
     /**
      * @var string
      *
-     * @ORM\Column(name="stat", type="string", length=255)
+     * @ORM\Column(name="stat", type="string", length=255, nullable=true)
      */
     private $stat;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="url", type="string", length=255)
+     * @ORM\Column(name="url", type="string", length=512)
+     * @Assert\Url()
+     * @Assert\NotNull()
+     * @Assert\NotBlank()
      */
     private $url;
 
@@ -159,5 +177,25 @@ class Stream extends Base
     {
         return $this->url;
     }
+
+    /**
+     * @return string
+     */
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     * @return Stream
+     */
+    public function setTitle(string $title): Stream
+    {
+        $this->title = $title;
+        return $this;
+    }
+
+
 }
 

@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Source
@@ -13,32 +14,46 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Source extends Base
 {
-
+    const MPD_TYPE = 'mpd';
     /**
      * @var string
      *
      * @ORM\Column(name="humanId", type="string", length=32, unique=true)
+     * @Assert\Type(type="string")
+     * @Assert\NotNull()
+     * @Assert\Length(min=1, max=32)
      */
     private $humanId;
 
     /**
+     * MPD here?
      * @var string
-     *
-     * @ORM\Column(name="ip", type="inet")
+     * @ORM\Column(name="ip", type="inet", nullable=true)
+     * @Assert\Ip()
      */
     private $ip;
 
     /**
+     * @var int
+     * @ORM\Column(name="port", type="smallint", nullable=true)
+     * @Assert\Type(type="integer")
+     * @Assert\Length(min=1024, max=65536)
+     */
+    private $port;
+
+    /**
      * @var string
-     *
      * @ORM\Column(name="login", type="string", length=255, nullable=true)
+     * @Assert\Length(min=0, max=255)
+     * @Assert\Type(type="string")
      */
     private $login;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="password", type="string", length=512, nullable=true)
+     * @Assert\Length(min=0, max=255)
+     * @Assert\Type(type="string")
      */
     private $password;
 
@@ -50,7 +65,7 @@ class Source extends Base
     private $streams;
 
     /**
-     * @var string
+     * @var Comment[]
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Comment", mappedBy="targetSource")
      */
     private $comments;
@@ -58,14 +73,10 @@ class Source extends Base
     /**
      * @var string
      *
-     * @ORM\Column(name="playlists", type="string", length=255)
-     */
-    private $playlists;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="type", type="string", length=255)
+     * @Assert\Choice(callback="getSourceTypes")
+     * @Assert\Type(type="string")
+     * @Assert\Length(max=255)
      */
     private $type;
 
@@ -75,6 +86,7 @@ class Source extends Base
     public function __construct()
     {
         $this->streams = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
 
@@ -85,7 +97,7 @@ class Source extends Base
      *
      * @return Source
      */
-    public function setHumanId($humanId)
+    public function setHumanId(string $humanId)
     {
         $this->humanId = $humanId;
 
@@ -97,7 +109,7 @@ class Source extends Base
      *
      * @return string
      */
-    public function getHumanId()
+    public function getHumanId(): string
     {
         return $this->humanId;
     }
@@ -177,12 +189,12 @@ class Source extends Base
     /**
      * Set streams
      *
-     * @param Stream $streams
+     * @param Stream $stream
      * @return Source
      */
-    public function addStreams(Stream $streams)
+    public function addStream(Stream $stream)
     {
-        $this->streams = $streams;
+        $this->streams->add($stream);
 
         return $this;
     }
@@ -199,13 +211,13 @@ class Source extends Base
     /**
      * Set comments
      *
-     * @param string $comments
+     * @param Comment $comment
      *
      * @return Source
      */
-    public function setComments($comments)
+    public function addComment(Comment $comment)
     {
-        $this->comments = $comments;
+        $this->comments->add($comment);
 
         return $this;
     }
@@ -221,37 +233,13 @@ class Source extends Base
     }
 
     /**
-     * Set playlists
-     *
-     * @param string $playlists
-     *
-     * @return Source
-     */
-    public function setPlaylists($playlists)
-    {
-        $this->playlists = $playlists;
-
-        return $this;
-    }
-
-    /**
-     * Get playlists
-     *
-     * @return string
-     */
-    public function getPlaylists()
-    {
-        return $this->playlists;
-    }
-
-    /**
      * Set type
      *
      * @param string $type
      *
      * @return Source
      */
-    public function setType($type)
+    public function setType(string $type)
     {
         $this->type = $type;
 
@@ -263,9 +251,34 @@ class Source extends Base
      *
      * @return string
      */
-    public function getType()
+    public function getType(): ?string
     {
         return $this->type;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPort(): ?int
+    {
+        return $this->port;
+    }
+
+    /**
+     * @param int $port
+     * @return $this
+     */
+    public function setPort(int $port)
+    {
+        $this->port = $port;
+
+        return $this;
+    }
+
+
+
+    public static function getSourceTypes(): array {
+        return [static::MPD_TYPE];
     }
 }
 

@@ -30,7 +30,7 @@ class CommentController extends Controller
      *      defaults={"source_id" = null, "type" = "comment"},
      *     requirements={"type" = AppBundle\Entity\Comment::ROUTE_TYPES_RESTRICTIONS}
      * )
-     * @ParamConverter("source", class="AppBundle:Source", options={"humanId" = "source_id"})
+     * @ParamConverter("source", options={ "mapping": {"source_id"="humanId"}})
      * @Security("has_role('ROLE_COMMENT_NEW') or has_role('ROLE_NEWS_NEW')")
      * @param Request $request
      * @param UserInterface|User $user
@@ -39,7 +39,7 @@ class CommentController extends Controller
      * @param Commentator $commentator
      * @return JsonResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function newAction(Request $request, UserInterface $user = null, Source $source = null, string $type, Commentator $commentator)
+    public function newAction(Request $request, string $type, Source $source = null,  UserInterface $user = null, Commentator $commentator)
     {
         $comment = $commentator->createComment($request, $user, $type, $source);
 
