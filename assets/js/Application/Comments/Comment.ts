@@ -14,6 +14,11 @@ export class Comment {
     //     "</div>";
     private _data: CommentDataInterface;
     private _$jComment: JQuery;
+    private _effectOptions: object = {
+        effect: 'slide',
+        easing: 'easeOutBounce',
+        duration: 650
+    };
 
     constructor(data: CommentDataInterface) {
         this._data = data;
@@ -41,9 +46,6 @@ export class Comment {
         return Mustache.render(this._template, this._data);
     }
 
-    public show(): void {
-        this._$jComment.fadeIn('easing');
-    }
 
     public hide(): void {
         this._$jComment.hide();
@@ -64,6 +66,10 @@ export class Comment {
 
     public getCommentId(): number {
         return this._data.id;
+    }
+
+    public show(): void {
+        this._$jComment.show(this._effectOptions);
     }
 
 }

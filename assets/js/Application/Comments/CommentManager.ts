@@ -15,11 +15,7 @@ export class CommentManager {
             onTotalScroll: (): Promise<void> => this.showNextPage()
         }
     };
-    private _effectOptions: object = {
-        effect: 'slide',
-        easing: 'easeOutBounce',
-        duration: 650
-    };
+
     private _comments: Comment[] = [];
     private _$commentContainer: JQuery;
     private _$mCustomScrollContainer: JQuery;
@@ -48,6 +44,7 @@ export class CommentManager {
                 source: this._source.getCurrentSourceId(),
                 lastCommentId: this.getLastComment().getCommentId()
             });
+            console.log(comments);
             if(!comments.length) {
                 this._source.setLastCommentPage();
             }
@@ -78,7 +75,6 @@ export class CommentManager {
         if (!this.isEmptyContainer()) {
             this.removeAllComments();
         }
-
         this.addComments(comments);
 
     }
@@ -94,30 +90,50 @@ export class CommentManager {
 
     /**
      * Add several comments from array of comments data
-     * @param {CommentDataInterface[]} comments
+     * @param {CommentDataInterface[]} commentsData
      */
-    public addComments(comments: CommentDataInterface[]): void {
+    public addComments(commentsData: CommentDataInterface[]): void {
+        let comments:Comment[] = [];
+        for (let data of commentsData) {
+            let comment: Comment = new Comment(data);
+            this.addCommentDown(comment);
+            comments.push(comment);
+        }
+        this.showComments(comments);
+    }
 
-        const adder = (comments: CommentDataInterface[]) => {
+    private showComments(comments: Comment[]): void {
+        const show = (comments: Comment[]): void => {
+            console.log(comments);
             setTimeout(() => {
-                let comm: CommentDataInterface|void = comments.pop();
-                if(comm) {
-                    let comment: Comment = new Comment(comm);
-                    if (comment) {
-                        this.addCommentDown(comment);
-                    }
-                    adder(comments);
+                let comment: Comment|void = comments.pop();
+                if(comment) {
+                    comment.show();
+                    show(comments)
                 }
-
-            }, 50);
+            }, 80);
         };
+        /** Clone comments before show */
+        show(comments);
 
-        adder(comments);
-
-        // for (let data of comments) {
-        //     let comment: Comment = new Comment(data);
-        //     this.addCommentDown(comment);
+        // for (let comment of this._comments) {
+        //     comment.show();
         // }
+        // const adder = (comments: CommentDataInterface[]) => {
+        //     setTimeout(() => {
+        //         let comm: CommentDataInterface|void = comments.pop();
+        //         if(comm) {
+        //             let comment: Comment = new Comment(comm);
+        //             if (comment) {
+        //                 this.addCommentDown(comment);
+        //             }
+        //             adder(comments);
+        //         }
+        //
+        //     }, 50);
+        // };
+        //
+        // adder(comments);
     }
 
     /**
@@ -151,7 +167,7 @@ export class CommentManager {
             if ('down' === direction) {
                 this._$commentContainer.append(jComment);
             }
-            jComment.show(this._effectOptions);
+
             this.commentContainerUpdate();
         } else {
             this.updateComment(comment.getData());

@@ -49,3 +49,7 @@ services:
         arguments: ["@knp_menu.factory", "@doctrine.orm.default_entity_manager"]
         tags:
             - { name: knp_menu.menu_builder, method: createMainMenu, alias: main }
+
+    AppBundle\EventListener\CommentSubscriber:
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }

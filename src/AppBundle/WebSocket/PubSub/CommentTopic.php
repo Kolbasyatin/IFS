@@ -14,7 +14,7 @@ class CommentTopic implements TopicInterface, PushableTopicInterface
 {
     public function onPush(Topic $topic, WampRequest $request, $data, $provider)
     {
-        // TODO: Implement onPush() method.
+        dump($data, $provider);
     }
 
     public function onSubscribe(ConnectionInterface $connection, Topic $topic, WampRequest $request)
