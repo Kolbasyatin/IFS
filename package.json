@@ -30,6 +30,7 @@
     "imagemin-webpack-plugin": "^1.5.2",
     "imports-loader": "^0.7.1",
     "jquery": "^3.2.1",
+    "jquery-easing": "^0.0.1",
     "jquery-mousewheel": "^3.1.13",
     "jquery-ui": "^1.12.1",
     "jquery-ui-themes": "^1.12.0",

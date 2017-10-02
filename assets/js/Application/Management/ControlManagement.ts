@@ -60,10 +60,12 @@ export class ControlManagement {
         this._player.addOnPlayingHandler((event) => {
             this._$loaderSign.hide();
             this.pauseResumeButtonsStatus(event.jPlayer.status);
+            this._source.switchSource();
         });
 
         this._player.addOnPauseHandler((event) => {
             this.pauseResumeButtonsStatus(event.jPlayer.status);
+            this._source.switchSource();
         });
 
         this._$links.on('click', (event) => {

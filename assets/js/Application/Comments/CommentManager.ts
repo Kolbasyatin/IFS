@@ -3,6 +3,7 @@ import {Comment} from "./Comment";
 import {WAMP} from "../WebSocket/WAMP";
 import {Source} from "../Source";
 
+
 require('jquery-mousewheel');
 require('malihu-custom-scrollbar-plugin');
 
@@ -16,8 +17,8 @@ export class CommentManager {
     };
     private _effectOptions: object = {
         effect: 'slide',
-        easing: 'easeOutCirc',
-        duration: 150
+        easing: 'easeOutBounce',
+        duration: 650
     };
     private _comments: Comment[] = [];
     private _$commentContainer: JQuery;
@@ -79,7 +80,6 @@ export class CommentManager {
         }
 
         this.addComments(comments);
-        console.log(comments);
 
     }
 
@@ -97,10 +97,27 @@ export class CommentManager {
      * @param {CommentDataInterface[]} comments
      */
     public addComments(comments: CommentDataInterface[]): void {
-        for (let data of comments) {
-            let comment: Comment = new Comment(data);
-            this.addCommentDown(comment);
-        }
+
+        const adder = (comments: CommentDataInterface[]) => {
+            setTimeout(() => {
+                let comm: CommentDataInterface|void = comments.pop();
+                if(comm) {
+                    let comment: Comment = new Comment(comm);
+                    if (comment) {
+                        this.addCommentDown(comment);
+                    }
+                    adder(comments);
+                }
+
+            }, 50);
+        };
+
+        adder(comments);
+
+        // for (let data of comments) {
+        //     let comment: Comment = new Comment(data);
+        //     this.addCommentDown(comment);
+        // }
     }
 
     /**
@@ -126,7 +143,7 @@ export class CommentManager {
      */
     private addComment(comment: Comment, direction: string): void {
         if (!this.isCommentExistInList(comment)) {
-            let jComment = comment.getJComment();
+            let jComment: JQuery = comment.getJComment();
             this._comments.push(comment);
             if ('up' === direction) {
                 this._$commentContainer.prepend(jComment);
@@ -134,6 +151,7 @@ export class CommentManager {
             if ('down' === direction) {
                 this._$commentContainer.append(jComment);
             }
+            jComment.show(this._effectOptions);
             this.commentContainerUpdate();
         } else {
             this.updateComment(comment.getData());

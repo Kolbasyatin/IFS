@@ -48,7 +48,6 @@ export class Player {
         //SwitchChannel
         this._source.setSourceUrl(sourceUrl);
         this._source.setCurrentSourceId(sourceId);
-        this._source.switchSource();
         this._jPlayer.jPlayer("setMedia", {mp3: sourceUrl}).jPlayer("play");
     }
     //https://stackoverflow.com/questions/27258169/how-can-i-stop-and-resume-a-live-audio-stream-in-html5-instead-of-just-pausing-i
@@ -60,7 +59,6 @@ export class Player {
             this._source.setLastSourceId(this._source.getCurrentSourceId());
             this._source.emptyCurrentSourceId();
             this._jPlayer.jPlayer("pause");
-            this._source.switchSource();
         }
     }
     /**
