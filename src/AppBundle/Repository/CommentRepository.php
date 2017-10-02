@@ -56,16 +56,25 @@ class CommentRepository extends BaseRepository
 
     /**
      * Get the comments newer given comment id
-     * TODO: Метод не рабочий. Надо подумать как добавить смещение на случай появления новых комментов ведь тогда количество страниц становится другим.
+     * @param string $source
      * @param int $lastCommentId
-     * @return \Doctrine\Common\Collections\Collection
+     * @return array
      */
     public function getCommentsNewerId(string $source, int $lastCommentId)
     {
-        $criteria = new Criteria();
-        $criteria->where($criteria::expr()->gt('id', $lastCommentId));
+//        $criteria = new Criteria();
+//        $criteria->where($criteria::expr()->gt('id', $lastCommentId));
+//        return $this->matching($criteria);
+        $qb = $this->createQueryBuilder('comment');
+        $qb->where('comment.id < :lastCommentId');
+        $qb = $source ? $this->addFilterCommentsQueryBuilder($qb, $source) : $this->addFilterNewsQueryBuilder($qb);
+        $qb->setMaxResults(self::COMMENTS_PER_PAGE);
+        $qb->setParameter('lastCommentId', $lastCommentId);
+        $qb->addOrderBy('comment.id', 'DESC');
+        $comments = $qb->getQuery()->getResult();
 
-        return $this->matching($criteria);
+        return $comments;
+
     }
 
     /**
@@ -92,7 +101,7 @@ class CommentRepository extends BaseRepository
 
             $qb = $this->createQueryBuilder('comment');
             /** Тут магия. Выдаем новости если пустой source, но тип комментария news */
-            $qb = $source ? $this->createCommentsQueryBuilder($qb, $source) : $this->createNewsQueryBuilder($qb);
+            $qb = $source ? $this->addFilterCommentsQueryBuilder($qb, $source) : $this->addFilterNewsQueryBuilder($qb);
             $qb
                 ->addOrderBy('comment.createdAt', $sort)
                 ->addOrderBy('comment.id', $sort)
@@ -104,11 +113,11 @@ class CommentRepository extends BaseRepository
         return $comments;
     }
 
-    private function createCommentsQueryBuilder(QueryBuilder $qb, string $source): QueryBuilder
+    private function addFilterCommentsQueryBuilder(QueryBuilder $qb, string $source): QueryBuilder
     {
         return $qb
             ->innerJoin('comment.targetSource', 'source')
-            ->where('source.humanId = :sourceId')
+            ->andWhere('source.humanId = :sourceId')
             ->andWhere('comment.type = :type')
             ->setParameters([
                 'sourceId'=> $source,
@@ -116,10 +125,10 @@ class CommentRepository extends BaseRepository
             ]);
     }
 
-    private function createNewsQueryBuilder(QueryBuilder $qb): QueryBuilder
+    private function addFilterNewsQueryBuilder(QueryBuilder $qb): QueryBuilder
     {
         return $qb
-            ->where('comment.type = :type')
+            ->andWhere('comment.type = :type')
             ->setParameter('type', Comment::TYPE_NEWS);
     }
 

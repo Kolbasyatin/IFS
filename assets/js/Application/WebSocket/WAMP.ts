@@ -23,7 +23,13 @@ export class WAMP {
 
     public async commentatorCall(procedure: string, args: object = {}): Promise<CommentDataInterface[]> {
         await this.waitForSession();
-        const json = await this._session.call(`commentator/${procedure}`, args);
+        let json;
+        try {
+            json = await this._session.call(`commentator/${procedure}`, args);
+        }
+        catch(err) {
+            console.log(err);
+        }
 
         return JSON.parse(json);
     }

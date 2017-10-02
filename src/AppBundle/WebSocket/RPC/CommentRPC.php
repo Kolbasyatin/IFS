@@ -30,6 +30,18 @@ class CommentRPC implements RpcInterface
         return [json_encode($comments, JSON_UNESCAPED_UNICODE)];
     }
 
+    public function getCommentsNewerThanId(ConnectionInterface $connection, WampRequest $request, array $params)
+    {
+        try {
+            $comments = $this->commentator->getNewerCommentsThanId($params['source'], $params['lastCommentId']);
+        } catch (\Exception $e) {
+            $a = 'b';
+        }
+
+
+        return [json_encode($comments, JSON_UNESCAPED_UNICODE)];
+    }
+
 
     public function getName()
     {

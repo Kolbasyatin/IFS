@@ -7,10 +7,11 @@ require('jquery-mousewheel');
 require('malihu-custom-scrollbar-plugin');
 
 export class CommentManager {
+    private _lastPage: boolean = false;
     private _cSBOptions: MCustomScrollbar.CustomScrollbarOptions = {
         theme: 'dark-thin',
         callbacks: {
-            onTotalScroll: (): void => this.showNextPage()
+            onTotalScroll: (): Promise<void> => this.showNextPage()
         }
     };
     private _effectOptions: object = {
@@ -40,6 +41,20 @@ export class CommentManager {
         this.refreshComments(comments);
     }
 
+    private async showNextPage(): Promise<void> {
+        if(!this._source.isLastCommentPage()) {
+            const comments: CommentDataInterface[] = await this._wamp.commentatorCall('getCommentsNewerThanId', {
+                source: this._source.getCurrentSourceId(),
+                lastCommentId: this.getLastComment().getCommentId()
+            });
+            if(!comments.length) {
+                this._source.setLastCommentPage();
+            }
+            this.addComments(comments);
+        }
+
+    }
+
     /**
      * Update exists comment
      * @param {CommentDataInterface} data
@@ -57,7 +72,6 @@ export class CommentManager {
         }
     }
 
-
     public refreshComments(comments: CommentDataInterface[]): void {
 
         if (!this.isEmptyContainer()) {
@@ -69,9 +83,6 @@ export class CommentManager {
 
     }
 
-    private showNextPage(): void {
-        console.log(this.getLastComment().getCommentId());
-    }
 
     private getFirstComment(): Comment {
         return this._comments[0];

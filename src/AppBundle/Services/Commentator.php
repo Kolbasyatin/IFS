@@ -55,7 +55,7 @@ class Commentator
         return $this->repo->getReversePageCommentBySource($source, 1);
     }
 
-    public function getNextPage(string $source = '', int $lastCommentId)
+    public function getNewerCommentsThanId(string $source = '', int $lastCommentId)
     {
         return $this->repo->getCommentsNewerId($source, $lastCommentId);
     }

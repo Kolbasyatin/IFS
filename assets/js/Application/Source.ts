@@ -3,6 +3,7 @@ export class Source {
     private _lastSourceId: string = '';
     private _sourceUrl: string = '';
     private _lastSourceUrl: string = '';
+    private _lastPage: boolean = false;
 
 
     public setCurrentSourceId(sourceId: string): void {
@@ -43,6 +44,18 @@ export class Source {
 
     public emptySourceUrl(): void {
         this._sourceUrl = '';
+    }
+
+    public setLastCommentPage(): void {
+        this._lastPage = true;
+    }
+
+    public isLastCommentPage(): boolean {
+        return this._lastPage;
+    }
+
+    public switchSource(): void {
+        this._lastPage = false;
     }
 
 
