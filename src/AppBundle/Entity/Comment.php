@@ -221,7 +221,7 @@ class Comment extends Base implements \JsonSerializable
             'id' => $this->id,
             'username' => $this->getOwnerUser()->getUsername(),
             'message' => $this->getText(),
-            'time' => 'time',
+            'dateTime' => $this->getCreatedAt()->getTimestamp(),
             'sourceId' => $this->getTargetSource()?$this->getTargetSource()->getHumanId(): ''
         ];
     }

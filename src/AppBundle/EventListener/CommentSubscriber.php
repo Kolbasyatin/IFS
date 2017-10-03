@@ -36,24 +36,24 @@ class CommentSubscriber implements EventSubscriber
 
     public function onFlush(OnFlushEventArgs $args)
     {
-        $ids = [];
+        $comments = [];
         $newComments = $args->getEntityManager()->getUnitOfWork()->getScheduledEntityInsertions();
         foreach ($newComments as $newComment) {
             /** @var Comment $newComment */
-            $ids[] = $newComment->getId();
+            $comments[] = $newComment;
         }
 
-        if (count($ids)) {
-            $this->push('new', $ids);
+        if (count($comments)) {
+            $this->push('newcomment', $comments);
         }
 
     }
 
-    private function push(string $action, array $ids)
+    private function push(string $action, array $comments)
     {
         $msg = [
             'action' => $action,
-            'ids' => $ids
+            'data' => json_encode($comments, JSON_UNESCAPED_UNICODE)
         ];
         $this->zmqPusher->push($msg, 'comment', [], ['context']);
     }

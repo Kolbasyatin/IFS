@@ -1,11 +1,12 @@
 import * as moment from "moment";
 import {TimeData} from "./TimeDataInterface"
+import settings from "../settings";
 
 export class Timer {
     private _$container: JQuery;
 
     constructor($container: JQuery) {
-        if(!$container.length) {
+        if (!$container.length) {
             throw new Error("There is no container for timer");
         }
         this._$container = $container;
@@ -26,7 +27,7 @@ export class Timer {
 
     private static getTime(): TimeData {
         let curtime = moment().locale('ru'),
-            year: number = curtime.year() + 1000,
+            year: number = curtime.year() + settings.timeShift,
             hour: number = curtime.hour(),
             minute: number = curtime.minute();
         return {

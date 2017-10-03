@@ -1,11 +1,12 @@
-import {CommentDataInterface} from "./CommentDataInterface";
 import * as Mustache from "mustache";
+import * as moment from "moment";
+import settings from "../settings";
 
 export class Comment {
     private _template: string = `<div class="comment" id="commentid{{id}}" >
         <p>{{username}}</p>
         <span>{{message}}</span>
-        <span class="datetime">{{dateTime}}</span>
+        <span class="datetime">{{timeToShow}}</span>
         </div>`;
     // private _template: string = "<div class=\"comment\" id=\"commentid{{id}}\" >" +
     //     "<p>{{username}}</p>" +
@@ -40,9 +41,10 @@ export class Comment {
     }
 
     private renderHtml(): string {
-        if(!this._data) {
+        if (!this._data) {
             throw new Error("There is no data to render");
         }
+        this._data.timeToShow = moment.unix(this._data.dateTime).locale('ru').add(settings.timeShift, 'year').format('lll');
         return Mustache.render(this._template, this._data);
     }
 

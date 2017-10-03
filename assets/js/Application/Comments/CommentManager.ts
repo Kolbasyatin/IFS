@@ -1,4 +1,3 @@
-import {CommentDataInterface} from "./CommentDataInterface";
 import {Comment} from "./Comment";
 import {WAMP} from "../WebSocket/WAMP";
 import {Source} from "../Source";
@@ -9,7 +8,6 @@ require('jquery-mousewheel');
 require('malihu-custom-scrollbar-plugin');
 
 export class CommentManager implements OnDeleteCommentInterface, OnNewCommentInterface, OnUpdateCommentInterface {
-    private _lastPage: boolean = false;
     private _cSBOptions: MCustomScrollbar.CustomScrollbarOptions = {
         theme: 'dark-thin',
         callbacks: {
@@ -45,7 +43,6 @@ export class CommentManager implements OnDeleteCommentInterface, OnNewCommentInt
                 source: this._source.getCurrentSourceId(),
                 lastCommentId: this.getLastComment().getCommentId()
             });
-            console.log(comments);
             if(!comments.length) {
                 this._source.setLastCommentPage();
             }
@@ -74,15 +71,12 @@ export class CommentManager implements OnDeleteCommentInterface, OnNewCommentInt
         return this._comments[this._comments.length - 1];
     }
 
-    /**
-     * Add several comments from array of comments data
-     * @param {CommentDataInterface[]} commentsData
-     */
-    public addComments(commentsData: CommentDataInterface[]): void {
+
+    public addComments(commentsData: CommentDataInterface[], upDirection: boolean = false): void {
         let comments:Comment[] = [];
         for (let data of commentsData) {
             let comment: Comment = new Comment(data);
-            this.addCommentDown(comment);
+            upDirection ? this.addCommentUp(comment): this.addCommentDown(comment);
             comments.push(comment);
         }
         this.showComments(comments);
@@ -90,7 +84,6 @@ export class CommentManager implements OnDeleteCommentInterface, OnNewCommentInt
 
     private showComments(comments: Comment[]): void {
         const show = (comments: Comment[]): void => {
-            console.log(comments);
             setTimeout(() => {
                 let comment: Comment|void = comments.pop();
                 if(comment) {
@@ -209,9 +202,12 @@ export class CommentManager implements OnDeleteCommentInterface, OnNewCommentInt
     }
 
 
-    public addNewComment (commentsData: CommentDataInterface[]): void {
-        this.addComments(commentsData)
+    public newComments(commentsData: CommentDataInterface[]) {
+        const currentSource = this._source.getCurrentSourceId();
+        let data: CommentDataInterface[] = commentsData.filter(data => data.sourceId === currentSource);
+        this.addComments(data, true)
     }
+
     /**
      * Remove comment by ID
      * @param {number} id

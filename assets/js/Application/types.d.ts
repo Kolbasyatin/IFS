@@ -1,4 +1,12 @@
-import {CommentDataInterface} from "./Comments/CommentDataInterface";
+interface CommentDataInterface {
+    id: number;
+    sourceId: string;
+    username: string;
+    message: string;
+    dateTime: number;
+    type: string;
+    timeToShow?: string;
+}
 
 declare module "*.json" {
     const value: any;
@@ -68,7 +76,7 @@ interface Router {
 declare let Routing: Router;
 
 interface OnNewCommentInterface {
-    addNewComment: (commentsData: CommentDataInterface[]) => void;
+    newComments: (commentsData: CommentDataInterface[], upDirection?: boolean) => void;
 }
 
 interface OnDeleteCommentInterface {

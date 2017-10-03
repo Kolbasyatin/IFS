@@ -39,6 +39,9 @@ export class Application {
 
     private firstInitializeApp(): void {
         this._timer.start();
+        this._wamp.onNewCommentAttach(this._commentManager);
+        this._wamp.onUpdateCommentAttach(this._commentManager);
+        this._wamp.onDeleteCommentAttach(this._commentManager);
         this._commentManager.updateComments();
     }
 
