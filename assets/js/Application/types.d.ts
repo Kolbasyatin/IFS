@@ -1,3 +1,5 @@
+import {CommentDataInterface} from "./Comments/CommentDataInterface";
+
 declare module "*.json" {
     const value: any;
     export default value;
@@ -64,3 +66,15 @@ interface Router {
 }
 
 declare let Routing: Router;
+
+interface OnNewCommentInterface {
+    addNewComment: (commentsData: CommentDataInterface[]) => void;
+}
+
+interface OnDeleteCommentInterface {
+    removeCommentById: (commentId: number) => void;
+}
+
+interface OnUpdateCommentInterface {
+    updateComment: (data: CommentDataInterface) => void;
+}

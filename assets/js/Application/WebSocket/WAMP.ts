@@ -1,5 +1,6 @@
 import * as autobahn from "autobahn";
 import {CommentDataInterface} from "../Comments/CommentDataInterface";
+import {ABSession} from "../types";
 
 export class WAMP {
     private _isConnected: boolean;
@@ -15,6 +16,8 @@ export class WAMP {
         this._isConnected = true;
         this._session = session;
     }
+
+
 
     private onDisconnect(error: autobahn.ICloseEventDetails): void {
         this._isConnected = false;

@@ -4,10 +4,11 @@ import {WAMP} from "../WebSocket/WAMP";
 import {Source} from "../Source";
 
 
+
 require('jquery-mousewheel');
 require('malihu-custom-scrollbar-plugin');
 
-export class CommentManager {
+export class CommentManager implements OnDeleteCommentInterface, OnNewCommentInterface, OnUpdateCommentInterface {
     private _lastPage: boolean = false;
     private _cSBOptions: MCustomScrollbar.CustomScrollbarOptions = {
         theme: 'dark-thin',
@@ -53,22 +54,7 @@ export class CommentManager {
 
     }
 
-    /**
-     * Update exists comment
-     * @param {CommentDataInterface} data
-     */
-    public updateComment(data: CommentDataInterface): void {
-        let id: number = data.id;
-        let commentForUpdate: Comment|null = this.getCommentById(id);
 
-        if (commentForUpdate) {
-            let updateResult: boolean = commentForUpdate.updateJComment(data);
-            if (updateResult) {
-                commentForUpdate.hide();
-                commentForUpdate.show();
-            }
-        }
-    }
 
     public refreshComments(comments: CommentDataInterface[]): void {
 
@@ -115,25 +101,6 @@ export class CommentManager {
         };
         /** Clone comments before show */
         show(comments);
-
-        // for (let comment of this._comments) {
-        //     comment.show();
-        // }
-        // const adder = (comments: CommentDataInterface[]) => {
-        //     setTimeout(() => {
-        //         let comm: CommentDataInterface|void = comments.pop();
-        //         if(comm) {
-        //             let comment: Comment = new Comment(comm);
-        //             if (comment) {
-        //                 this.addCommentDown(comment);
-        //             }
-        //             adder(comments);
-        //         }
-        //
-        //     }, 50);
-        // };
-        //
-        // adder(comments);
     }
 
     /**
@@ -167,7 +134,6 @@ export class CommentManager {
             if ('down' === direction) {
                 this._$commentContainer.append(jComment);
             }
-
             this.commentContainerUpdate();
         } else {
             this.updateComment(comment.getData());
@@ -189,17 +155,6 @@ export class CommentManager {
     private isCommentExistInList(comment: Comment): boolean {
         let index: number = this._comments.indexOf(comment);
         return index !== -1;
-    }
-
-    /**
-     * Remove comment by ID
-     * @param {number} id
-     */
-    public removeCommentById(id: number): void {
-        let comment: Comment|null = this.getCommentById(id);
-        if (comment) {
-            this.removeComment(comment);
-        }
     }
 
     /**
@@ -252,6 +207,40 @@ export class CommentManager {
     public isEmptyContainer(): boolean {
         return ! Boolean(this._comments.length);
     }
+
+
+    public addNewComment (commentsData: CommentDataInterface[]): void {
+        this.addComments(commentsData)
+    }
+    /**
+     * Remove comment by ID
+     * @param {number} id
+     */
+    public removeCommentById(id: number): void {
+        let comment: Comment|null = this.getCommentById(id);
+        if (comment) {
+            this.removeComment(comment);
+        }
+    }
+
+    /**
+     * Update exists comment
+     * @param {CommentDataInterface} data
+     */
+    public updateComment(data: CommentDataInterface): void {
+        let id: number = data.id;
+        let commentForUpdate: Comment|null = this.getCommentById(id);
+
+        if (commentForUpdate) {
+            let updateResult: boolean = commentForUpdate.updateJComment(data);
+            if (updateResult) {
+                commentForUpdate.hide();
+                commentForUpdate.show();
+            }
+        }
+    }
+
+
 
 
 }
