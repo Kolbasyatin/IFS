@@ -10,7 +10,8 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
-
+/** Was used before migrations for create pdosessionhandler table in DB */
+/** @deprecated  */
 class DBRecreateCommand extends Command
 {
     /** @var  EntityManager */

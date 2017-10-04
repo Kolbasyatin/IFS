@@ -6,6 +6,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\WebSocket\Herald;
 use AppBundle\Controller\BaseController as Controller;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class PageController extends Controller
@@ -20,9 +21,10 @@ class PageController extends Controller
     public function testAction(Herald $herald)
     {
 
-        $pusher = $this->container->get('gos_web_socket.zmq.pusher');
-        $pusher->push('asdf', 'herald', ['message' => 'fdsf']);
-
-        return $this->render('::base.html.twig');
+//        $pusher = $this->container->get('gos_web_socket.zmq.pusher');
+//        $pusher->push('asdf', 'herald', ['message' => 'fdsf']);
+//
+//        return $this->render('::base.html.twig');
+        return new Response("");
     }
 }

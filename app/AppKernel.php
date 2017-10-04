@@ -1,6 +1,7 @@
 <?php
 
 use Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle;
+use Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle;
 use FOS\JsRoutingBundle\FOSJsRoutingBundle;
 use Gos\Bundle\PubSubRouterBundle\GosPubSubRouterBundle;
 use Gos\Bundle\WebSocketBundle\GosWebSocketBundle;
@@ -29,7 +30,8 @@ class AppKernel extends Kernel
             new HWIOAuthBundle(),
             new StofDoctrineExtensionsBundle(),
             new FOSJsRoutingBundle(),
-            new KnpMenuBundle()
+            new KnpMenuBundle(),
+            new DoctrineMigrationsBundle()
 
 
         ];
