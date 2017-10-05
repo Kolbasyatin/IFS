@@ -41,8 +41,6 @@ class DBRecreateCommand extends Command
         $createScheme = $application->find('doctrine:schema:create');
         $createScheme->run(new ArrayInput([]), $output);
 
-        $this->em->getConnection()->exec($this->getSessionSql());
-
         $fixtures = $application->find('doctrine:fixtures:load');
         $fixtures->run(new ArrayInput([]), $output);
 
@@ -51,16 +49,4 @@ class DBRecreateCommand extends Command
         $output->writeln(sprintf('Complete. Elapsed time: %s', date('i:s', $time/1000)));
     }
 
-    private function getSessionSql()
-    {
-        return <<<SESSION_TABLE
-CREATE TABLE IF NOT EXISTS sessions (
-    sess_id VARCHAR(128) NOT NULL PRIMARY KEY,
-    sess_data BYTEA NOT NULL,
-    sess_time INTEGER NOT NULL,
-    sess_lifetime INTEGER NOT NULL
-);
-
-SESSION_TABLE;
-    }
 }

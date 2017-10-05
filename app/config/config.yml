@@ -56,6 +56,7 @@ doctrine:
         user: '%database_user%'
         password: '%database_password%'
         charset: UTF8
+        schema_filter: ~^(?!oauth_grants|oauth_sessions|oauth_access_tokens|sessions).*$~
         types:
             text_array: "Doctrine\\DBAL\\PostgresTypes\\TextArrayType"
             int_array: "Doctrine\\DBAL\\PostgresTypes\\IntArrayType"
@@ -173,3 +174,4 @@ doctrine_migrations:
     table_name: migration_versions
     name: Application Migrations
     organize_migrations: false
+

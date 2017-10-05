@@ -8,18 +8,16 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-class Version20171004185453 extends AbstractMigration
+class Version20171005144541 extends AbstractMigration
 {
     /**
      * @param Schema $schema
      */
     public function up(Schema $schema)
     {
-
+        // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
-        //session for PDOSessionhandler
-        $this->addSql('CREATE TABLE sessions (sess_id VARCHAR(128) NOT NULL, sess_data BYTEA NOT NULL, sess_time INT NOT NULL, sess_lifetime INT NOT NULL, PRIMARY KEY(sess_id))');
-        // autogenerate
+
         $this->addSql('CREATE SEQUENCE ext_log_entries_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE user_rate_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE playlist_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
@@ -54,7 +52,7 @@ class Version20171004185453 extends AbstractMigration
         $this->addSql('CREATE TABLE source (id INT NOT NULL, humanId VARCHAR(32) NOT NULL, ip inet DEFAULT NULL, port SMALLINT DEFAULT NULL, login VARCHAR(255) DEFAULT NULL, password VARCHAR(512) DEFAULT NULL, type VARCHAR(255) NOT NULL, title VARCHAR(255) DEFAULT NULL, isEnabled BOOLEAN NOT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_by VARCHAR(255) DEFAULT NULL, updated_by VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_5F8A7F73B5CFD533 ON source (humanId)');
         $this->addSql('COMMENT ON COLUMN source.ip IS \'(DC2Type:inet)\'');
-        $this->addSql('CREATE TABLE Comments (id INT NOT NULL, owner_user_id INT DEFAULT NULL, target_source_id INT DEFAULT NULL, target_song_id INT DEFAULT NULL, type VARCHAR(128) NOT NULL, text TEXT NOT NULL, ip inet DEFAULT NULL, rate INT NOT NULL, title VARCHAR(255) DEFAULT NULL, isEnabled BOOLEAN NOT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_by VARCHAR(255) DEFAULT NULL, updated_by VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE Comments (id INT NOT NULL, owner_user_id INT DEFAULT NULL, target_source_id INT DEFAULT NULL, target_song_id INT DEFAULT NULL, type VARCHAR(128) NOT NULL, text TEXT NOT NULL, ip inet DEFAULT NULL, rate INT NOT NULL, legacy_user_name VARCHAR(255) DEFAULT NULL, title VARCHAR(255) DEFAULT NULL, isEnabled BOOLEAN NOT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_by VARCHAR(255) DEFAULT NULL, updated_by VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_A6E8F47C2B18554A ON Comments (owner_user_id)');
         $this->addSql('CREATE INDEX IDX_A6E8F47CA1886E4D ON Comments (target_source_id)');
         $this->addSql('CREATE INDEX IDX_A6E8F47C6BD50B98 ON Comments (target_song_id)');
@@ -114,7 +112,5 @@ class Version20171004185453 extends AbstractMigration
         $this->addSql('DROP TABLE Comments');
         $this->addSql('DROP TABLE song_rate');
         $this->addSql('DROP TABLE song');
-        //Drop sessions
-        $this->addSql('DROP TABLE sessions');
     }
 }

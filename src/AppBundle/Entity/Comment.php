@@ -80,9 +80,16 @@ class Comment extends Base implements \JsonSerializable
     private $rate = 0;
 
     /**
+     * @var string
+     * @ORM\Column(type="string", nullable=true)
+     * @Assert\Length(max=32)
+     */
+    private $legacyUserName;
+
+    /**
      * @return User
      */
-    public function getOwnerUser(): User
+    public function getOwnerUser(): ?User
     {
         return $this->ownerUser;
     }
@@ -215,11 +222,32 @@ class Comment extends Base implements \JsonSerializable
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getLegacyUserName(): ?string
+    {
+        return $this->legacyUserName;
+    }
+
+    /**
+     * @param string $legacyUserName
+     * @return $this
+     */
+    public function setLegacyUserName(string $legacyUserName)
+    {
+        $this->legacyUserName = $legacyUserName;
+
+        return $this;
+    }
+
+
+
     public function jsonSerialize()
     {
         return [
             'id' => $this->id,
-            'username' => $this->getOwnerUser()->getUsername(),
+            'username' => $this->getOwnerUser()? $this->getOwnerUser()->getUsername(): $this->getLegacyUserName(),
             'message' => $this->getText(),
             'dateTime' => $this->getCreatedAt()->getTimestamp(),
             'sourceId' => $this->getTargetSource()?$this->getTargetSource()->getHumanId(): ''
