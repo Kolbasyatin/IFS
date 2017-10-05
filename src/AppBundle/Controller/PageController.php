@@ -67,7 +67,7 @@ class PageController extends Controller
             $em->persist($comment);
         }
 
-//        $em->flush();
+        $em->flush();
         return new Response("allok");
     }
 }
