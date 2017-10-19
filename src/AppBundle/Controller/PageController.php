@@ -6,11 +6,8 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Comment;
 use AppBundle\Controller\BaseController as Controller;
-use AppBundle\Entity\Source;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Constraints\Ip;
-use Symfony\Component\Validator\Constraints\IpValidator;
 
 class PageController extends Controller
 {
@@ -19,13 +16,17 @@ class PageController extends Controller
     {
         return $this->render(':page:index.html.twig');
     }
-
     /** @Route("/test", name="test") */
     public function testAction()
     {
+        return $this->render(':page:test.html.twig');
+    }
 
-//        $sources = $this->getDoctrine()->getRepository('AppBundle:Source')->findAll();
+    /** @Route("/migrate", name="migrate") */
+    public function migrateAction()
+    {
 
+        //Это временный костыль для импорта из XML MYSQL комментов в POSTGRES.
         $comments = [];
         $data = file_get_contents($this->get('kernel')->getRootDir() . '/../systems/comments.xml');
         $data = simplexml_load_string($data);

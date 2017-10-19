@@ -55,3 +55,4 @@ security:
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/test, role: ROLE_ADMIN }
+        - { path: ^/migrate, role: ROLE_ADMIN }

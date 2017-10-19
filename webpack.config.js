@@ -8,8 +8,9 @@ Encore
     .setPublicPath('/build')
     .cleanupOutputBeforeBuild()
     // read main.js     -> output as web/build/app.js
-    .addEntry('js/app', './assets/js/Application/index.ts')
     .addEntry('js/vendor', ["mustache", "jquery", "jquery-slider"])
+    .addEntry('js/app', './assets/js/Application/index.ts')
+    .addEntry('js/ship', './assets/js/Ship/index.ts')
 
     .enableTypeScriptLoader(function (typeScriptConfigOptions) {
         typeScriptConfigOptions.transpileOnly = true;
@@ -24,13 +25,8 @@ Encore
         new ImageminPlugin({
             disable: !Encore.isProduction,
             test: /\.(jpe?g|png|gif|svg)$/i,
-
-
         })
     )
-    // .addPlugin(new webpack.optimize.CommonsChunkPlugin(
-    //     "js/vendor"
-    // ))
     .addStyleEntry('css/app', './assets/css/style.less')
     .enableLessLoader()
     .autoProvidejQuery()

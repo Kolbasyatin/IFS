@@ -1,8 +1,6 @@
 {% extends '::base.html.twig' %}
 {% block body %}
-    {# TODO: Подумать о переводе на WAMP v.2 ибо данный autobahn 0.8.3 убрали отовсюду. Через webpack собрать не получается х.з.
-        https://github.com/voryx/ThruwayBundle
-    #}
+
     <div class="shadow"></div>
     <div class="container">
         <div class="center">
@@ -200,6 +198,10 @@
 
     <div id="jp"></div>
 {% endblock %}
+
+{# TODO: Подумать о переводе на WAMP v.2 ибо данный autobahn 0.8.3 убрали отовсюду. Через webpack собрать не получается х.з.
+        https://github.com/voryx/ThruwayBundle
+    #}
 
 {% block javascripts %}
     {{ parent() }}
