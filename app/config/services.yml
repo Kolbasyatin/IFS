@@ -53,3 +53,7 @@ services:
     AppBundle\EventListener\CommentSubscriber:
         tags:
             - { name: doctrine.event_subscriber, connection: default }
+
+    AppBundle\Doctrine\MigrationsEventSubscriber:
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
