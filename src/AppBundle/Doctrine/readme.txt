@@ -1,0 +1,1 @@
+Workaround for migrations BUG https://github.com/doctrine/dbal/issues/1110#issuecomment-255765189
