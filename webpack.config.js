@@ -10,7 +10,6 @@ Encore
     // read main.js     -> output as web/build/app.js
     .addEntry('js/vendor', ["mustache", "jquery", "jquery-slider"])
     .addEntry('js/app', './assets/js/Application/index.ts')
-    .addEntry('js/ship', './assets/js/Ship/index.ts')
 
     .enableTypeScriptLoader(function (typeScriptConfigOptions) {
         typeScriptConfigOptions.transpileOnly = true;

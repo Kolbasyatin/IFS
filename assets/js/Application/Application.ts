@@ -6,10 +6,11 @@ import {Timer} from "./Time/Timer";
 import {Commentator} from "./Comments/Commentator";
 import {User} from "./User/User";
 import {WAMP} from "./WebSocket/WAMP";
-import {Source} from "./Source";
+import {RoomManager} from "./User/RoomManager";
 
 
 export class Application {
+    private _roomManager: RoomManager;
     private _player: Player;
     private _currentListeners: Listeners;
     private _commentManager: CommentManager;
@@ -18,16 +19,15 @@ export class Application {
     private _commentator: Commentator;
     private _user: User;
     private _wamp: WAMP;
-    private _source: Source;
 
-    constructor() {
-        this._source = new Source();
-        this._user = new User();
-        this._player = new Player(this._source);
+    constructor(roomManager: RoomManager, user: User) {
+        this._roomManager = roomManager;
+        this._user = user;
+        this._player = new Player();
         this._wamp = new WAMP();
         this._currentListeners = new Listeners($("#listeners"));
-        this._commentManager = new CommentManager($("#comments"), this._wamp, this._source);
-        this._controlManagement = new ControlManagement(this._player, this._source);
+        this._commentManager = new CommentManager(this._user, $("#comments"), this._wamp);
+        this._controlManagement = new ControlManagement(this._player, this._user, roomManager);
         this._commentator = new Commentator(this._user);
         this._timer = new Timer($("#curtime"));
     }
@@ -39,33 +39,26 @@ export class Application {
 
     private firstInitializeApp(): void {
         this._timer.start();
-        this._wamp.onNewCommentAttach(this._commentManager);
-        this._wamp.onUpdateCommentAttach(this._commentManager);
-        this._wamp.onDeleteCommentAttach(this._commentManager);
-        this._commentManager.updateComments();
+
+        this._commentManager.showFirstCommentPage();
     }
 
     private bindHandlers(): void {
         this._player.addOnPlayingHandler(event => {
             this._commentator.toggleCommentButton(!event.jPlayer.status.paused);
-            this._commentManager.updateComments();
+            this._commentManager.showFirstCommentPage();
         });
         this._player.addOnPauseHandler(event => {
             this._commentator.toggleCommentButton(!event.jPlayer.status.paused);
-            this._commentManager.updateComments();
+            this._commentManager.showFirstCommentPage();
         });
         this._commentator.getCommentButton().on('click', () => {
-            this._commentator.doComment(this._source.getCurrentSourceId());
+            this._commentator.doComment(this._user.getCurrentRoomId());
         });
     }
-
 
     public updateListeners(data?: number): void {
         this._currentListeners.setListenersCount(data);
     }
-
-    // public addComments(comments: CommentDataInterface[]): void {
-    //     this._commentManager.addComments(comments);
-    // }
 
 }

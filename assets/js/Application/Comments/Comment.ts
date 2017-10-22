@@ -49,7 +49,7 @@ export class Comment {
     }
 
 
-    public hide(): void {
+    public hideHtml(): void {
         this._$jComment.hide();
     }
 
@@ -58,7 +58,7 @@ export class Comment {
 
     }
 
-    public remove(): void {
+    public removeHtml(): void {
         this._$jComment.fadeOut('easing').remove();
     }
 
@@ -70,8 +70,13 @@ export class Comment {
         return this._data.id;
     }
 
-    public show(): void {
+    public showHtml(): void {
         this._$jComment.show(this._effectOptions);
+    }
+
+    public refreshHtml(): void {
+        this.hideHtml();
+        this.showHtml();
     }
 
 }

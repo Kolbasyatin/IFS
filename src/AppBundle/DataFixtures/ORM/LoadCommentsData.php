@@ -48,7 +48,6 @@ class LoadCommentsData extends AbstractFixture implements OrderedFixtureInterfac
                 $comment->setTargetSource($source);
             }
             $manager->persist($comment);
-
         }
 
         $manager->flush();
@@ -56,7 +55,7 @@ class LoadCommentsData extends AbstractFixture implements OrderedFixtureInterfac
 
     public function getOrder()
     {
-        return 50;
+        return 20;
     }
 
 }

@@ -1,93 +1,92 @@
 import {Comment} from "./Comment";
 import {WAMP} from "../WebSocket/WAMP";
-import {Source} from "../Source";
-
-
-
-require('jquery-mousewheel');
-require('malihu-custom-scrollbar-plugin');
+import {User} from "../User/User";
+import {ScrollBarCommentContainer} from "../Container/CommentContainer";
 
 export class CommentManager implements OnDeleteCommentInterface, OnNewCommentInterface, OnUpdateCommentInterface {
-    private _cSBOptions: MCustomScrollbar.CustomScrollbarOptions = {
-        theme: 'dark-thin',
-        callbacks: {
-            onTotalScroll: (): Promise<void> => this.showNextPage()
-        }
-    };
 
-    private _comments: Comment[] = [];
-    private _$commentContainer: JQuery;
-    private _$mCustomScrollContainer: JQuery;
+    private _user: User;
     private _wamp: WAMP;
-    private _source: Source;
 
-    constructor($container: JQuery, wamp: WAMP, source: Source) {
-        if(!$container.length) {
+    constructor(user: User, $container: JQuery, wamp: WAMP) {
+        if (!$container.length) {
             throw new Error("There is no container for CommentManager")
         }
-        this._$mCustomScrollContainer = $container.mCustomScrollbar(this._cSBOptions);
-        this._$commentContainer = this._$mCustomScrollContainer.find("#mCSB_1_container");
+        this._user = user;
         this._wamp = wamp;
-        this._source = source;
+        this._wamp.onNewCommentAttach(this);
+        this._wamp.onUpdateCommentAttach(this);
+        this._wamp.onDeleteCommentAttach(this);
+        /*this._user.getCurrentCommentsContainer().addOnNetxPageCallBack(() => this.showNextPage());*/
     }
 
     /** Update all comments in container */
-    async updateComments(): Promise<void> {
-        const comments: CommentDataInterface[] = await this._wamp.commentatorCall('getCommentsFirstPageBySource', {source: this._source.getCurrentSourceId()});
+    async showFirstCommentPage(): Promise<void> {
+        const sourceId: string = this._user.getCurrentRoomId();
+        const comments: CommentDataInterface[] = await this._wamp.commentatorCall('getCommentsFirstPageBySource', {source: sourceId});
         this.refreshComments(comments);
     }
 
+    public refreshComments(comments: CommentDataInterface[]): void {
+
+        // if (!this.isEmptyContainer()) {
+        //     this.removeAllComments();
+        // }
+        this.addComments(comments);
+
+    }
+
+    public isEmptyContainer(): boolean {
+        let comments = this._user.getCurrentRoomComments();
+        return !Boolean(comments.length);
+    }
+
+    public removeAllComments(): void {
+        let comments: Comment[] = this._user.getCurrentRoomComments();
+        while (comments.length) {
+            let comment: Comment | void = comments.pop();
+            if (comment) {
+                comment.removeHtml();
+            }
+        }
+    }
+
+    public addComments(commentsData: CommentDataInterface[], upDirection: boolean = false): void {
+        let comments: Comment[] = [];
+        for (let data of commentsData) {
+            let comment: Comment = new Comment(data);
+            upDirection ? this.addCommentUp(comment) : this.addCommentDown(comment);
+            comments.push(comment);
+        }
+        this.showCommentsHtml(comments);
+    }
+
     private async showNextPage(): Promise<void> {
-        if(!this._source.isLastCommentPage()) {
+        if (!this._user.isLastPageCommentsInCurrentRoom()) {
             const comments: CommentDataInterface[] = await this._wamp.commentatorCall('getCommentsNewerThanId', {
-                source: this._source.getCurrentSourceId(),
+                source: this._user.getCurrentRoomId(),
                 lastCommentId: this.getLastComment().getCommentId()
             });
-            if(!comments.length) {
-                this._source.setLastCommentPage();
+            if (!comments.length) {
+                this._user.setLastPageCommentsInCurrentRoom();
             }
             this.addComments(comments);
         }
 
     }
 
-
-
-    public refreshComments(comments: CommentDataInterface[]): void {
-
-        if (!this.isEmptyContainer()) {
-            this.removeAllComments();
-        }
-        this.addComments(comments);
-
-    }
-
-
-    private getFirstComment(): Comment {
-        return this._comments[0];
-    }
-
     private getLastComment(): Comment {
-        return this._comments[this._comments.length - 1];
+        const comments: Comment[] = this._user.getCurrentRoomComments();
+
+        return comments[comments.length - 1];
     }
 
-
-    public addComments(commentsData: CommentDataInterface[], upDirection: boolean = false): void {
-        let comments:Comment[] = [];
-        for (let data of commentsData) {
-            let comment: Comment = new Comment(data);
-            upDirection ? this.addCommentUp(comment): this.addCommentDown(comment);
-            comments.push(comment);
-        }
-        this.showComments(comments);
-    }
-
-    private showComments(comments: Comment[]): void {
+    private showCommentsHtml(comments: Comment[]): void {
         const show = (comments: Comment[]): void => {
             setTimeout(() => {
-                let comment: Comment|void = comments.pop();
-                if(comment) {
-                    comment.show();
+                let comment: Comment | void = comments.pop();
+                if (comment) {
+                    comment.showHtml();
                     show(comments)
                 }
             }, 80);
@@ -96,95 +95,49 @@ export class CommentManager implements OnDeleteCommentInterface, OnNewCommentInt
         show(comments);
     }
 
-    /**
-     * Add comment up in list
-     * @param {Comment} comment
-     */
-    public addCommentUp(comment: Comment): void {
-        this.addComment(comment, 'up');
-    }
-
-    /**
-     * Add comment down in list
-     * @param {Comment} comment
-     */
-    public addCommentDown(comment: Comment): void {
-        this.addComment(comment, 'down');
-    }
-
-    /**
-     * Private method to add comment in list
-     * @param {Comment} comment
-     * @param {string} direction
-     */
-    private addComment(comment: Comment, direction: string): void {
-        if (!this.isCommentExistInList(comment)) {
-            let jComment: JQuery = comment.getJComment();
-            this._comments.push(comment);
-            if ('up' === direction) {
-                this._$commentContainer.prepend(jComment);
-            }
-            if ('down' === direction) {
-                this._$commentContainer.append(jComment);
-            }
-            this.commentContainerUpdate();
+    private appendComment(comment: Comment, direction: string): void {
+        let comments: Comment[] = this._user.getCurrentRoomComments();
+        const container: ScrollBarCommentContainer = this._user.getCurrentCommentsContainer();
+        if (!CommentManager.isCommentExistsInList(comment, comments)) {
+            comments.push(comment);
+            container.appendComment(comment, direction);
+            container.update();
         } else {
             this.updateComment(comment.getData());
         }
     }
 
-
-
-    /** перегрузить метод пустым если нужно будет без скролл плагина и чутка поменять конструктор */
-    private commentContainerUpdate(): void {
-        this._$mCustomScrollContainer.mCustomScrollbar('update');
-    }
-
-    /**
-     * Is comment in list
-     * @param {Comment} comment
-     * @returns {boolean}
-     */
-    private isCommentExistInList(comment: Comment): boolean {
-        let index: number = this._comments.indexOf(comment);
+    private static isCommentExistsInList(comment: Comment, commentList: Comment[]): boolean {
+        let index: number = commentList.indexOf(comment);
         return index !== -1;
     }
 
-    /**
-     * Remove comment
-     * @param {Comment} comment
-     * @return void
-     */
+    public addCommentUp(comment: Comment): void {
+        this.appendComment(comment, 'up');
+    }
+
+    public addCommentDown(comment: Comment): void {
+        this.appendComment(comment, 'down');
+    }
+
+    /** перезагрузить метод пустым если нужно будет без скролл плагина и чутка поменять конструктор ? */
+    private commentContainerUpdate(): void {
+        this._user.getCurrentCommentsContainer().update();
+    }
+
+
     public removeComment(comment: Comment): void {
-        comment.remove();
-        let index: number = this._comments.indexOf(comment);
+        let comments: Comment[] = this._user.getCurrentRoomComments();
+        comment.removeHtml();
+        let index: number = comments.indexOf(comment);
         if (index !== -1) {
-            this._comments.splice(index, 1);
+            comments.splice(index, 1);
         }
         this.commentContainerUpdate();
     }
 
-    /**
-     * Remove add comments
-     * @return void
-     */
-    public removeAllComments(): void {
-        while (this._comments.length) {
-            let comment = this._comments.pop();
-            if(comment) {
-                comment.remove();
-            }
-
-        }
-    }
-
-    /**
-     * Get Comment by ID
-     * @param {number} id
-     * @return {Comment}
-     */
-    public getCommentById(id: number): Comment|null {
-        for (let comment of this._comments) {
+    public getCommentById(id: number): Comment | null {
+        for (let comment of this._user.getCurrentRoomComments()) {
             if (comment.getData().id === id) {
                 return comment;
             }
@@ -193,50 +146,29 @@ export class CommentManager implements OnDeleteCommentInterface, OnNewCommentInt
         return null;
     }
 
-    /**
-     * Check is container is empty
-     * @return {boolean}
-     */
-    public isEmptyContainer(): boolean {
-        return ! Boolean(this._comments.length);
-    }
-
-
     public newComments(commentsData: CommentDataInterface[]) {
-        const currentSource = this._source.getCurrentSourceId();
+        const currentSource = this._user.getCurrentRoomId();
         let data: CommentDataInterface[] = commentsData.filter(data => data.sourceId === currentSource);
         this.addComments(data, true)
     }
 
-    /**
-     * Remove comment by ID
-     * @param {number} id
-     */
     public removeCommentById(id: number): void {
-        let comment: Comment|null = this.getCommentById(id);
+        let comment: Comment | null = this.getCommentById(id);
         if (comment) {
             this.removeComment(comment);
         }
     }
 
-    /**
-     * Update exists comment
-     * @param {CommentDataInterface} data
-     */
     public updateComment(data: CommentDataInterface): void {
         let id: number = data.id;
-        let commentForUpdate: Comment|null = this.getCommentById(id);
+        let commentForUpdate: Comment | null = this.getCommentById(id);
 
         if (commentForUpdate) {
             let updateResult: boolean = commentForUpdate.updateJComment(data);
             if (updateResult) {
-                commentForUpdate.hide();
-                commentForUpdate.show();
+                commentForUpdate.refreshHtml()
             }
         }
     }
-
-
-
 
 }

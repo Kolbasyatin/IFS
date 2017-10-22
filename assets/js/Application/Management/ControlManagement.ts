@@ -1,9 +1,11 @@
 import 'jquery-slider';
 import {Player} from "../Player/Player";
-import {Source} from "../Source";
+import {User} from "../User/User";
+import {RoomManager} from "../User/RoomManager";
+import {Room} from "../Room/Room";
 
 export class ControlManagement {
-    private _source: Source;
+    private _roomManager: RoomManager;
     private _player: Player;
     private _$links: JQuery;
     private _$playButton: JQuery;
@@ -13,6 +15,7 @@ export class ControlManagement {
     private _lastVolume: number;
     private _$muteButton: JQuery;
     private _$loaderSign: JQuery;
+    private _user: User;
     private _sliderConfig: object = {
         min: 0,
         max: 1,
@@ -30,8 +33,8 @@ export class ControlManagement {
 
     };
 
-    constructor(player: Player, source: Source) {
-        this._source = source;
+    constructor(player: Player, user: User, roomManager: RoomManager) {
+        this._roomManager = roomManager;
         this._player = player;
         this._$links = $("ul#playerlist>li");
         this._$playButton = $("#playsource");
@@ -40,6 +43,7 @@ export class ControlManagement {
         this._$muteButton = $("#mute");
         this._$volumeSlider = $("#volmaster").slider(this._sliderConfig);
         this._$loaderSign = $("#loading-indicator");
+        this._user = user;
         this.init();
 
 
@@ -47,52 +51,63 @@ export class ControlManagement {
 
     private init(): void {
         this.bindHandlers();
-        //Из за непонятного глюка (не работает event onpause когда вызывается через класс) приходится костыль делать для проверки кнопок паузы.
     }
 
     private bindHandlers(): void {
 
-        this._player.addOnPlayHandler(() => {
-            this.linkActive(this._source.getSourceUrl());
-
-        });
-
-        this._player.addOnPlayingHandler((event) => {
-            this._$loaderSign.hide();
-            this.pauseResumeButtonsStatus(event.jPlayer.status);
-            this._source.switchSource();
-        });
-
-        this._player.addOnPauseHandler((event) => {
-            this.pauseResumeButtonsStatus(event.jPlayer.status);
-            this._source.switchSource();
-        });
-
         this._$links.on('click', (event) => {
             event.preventDefault();
-            let $link = $(event.target);
-            this.play($link.data('src'), $link.data('sourceid'));
+            const roomId: string = $(event.target).data('sourceid');
+            if (!this.isTheSameRoom(roomId)) {
+                this._roomManager.changeRoom(this._user, roomId);
+                this.play();
+            }
+
         });
         this._$pauseButton.on('click', (e) => {
             e.preventDefault();
-            this._player.pause();
-            if (this._source.getLastSourceUrl()) {
-                this.linkPaused(this._source.getLastSourceUrl());
-            }
+            this._roomManager.changeToDefaultRoom(this._user);
+            this.play();
 
         });
         this._$playButton.on('click', (e) => {
             e.preventDefault();
+            if(this._user.getPreviousRoom()) {
+                const previousRoom: Room = this._user.getPreviousRoom();
+                this._user.changeRoom(previousRoom);
+            }
             this.play();
         });
+
         this._$muteButton.on('click', () => {
             this.mute();
-        })
+        });
+
+        this._player.addOnPlayHandler(() => {
+            this.linkActive();
+
+        });
+
+        this._player.addOnPlayingHandler((event) => {
+            /*this._$loaderSign.hide();*/
+            this.pauseResumeButtonsStatus(event.jPlayer.status);
+        });
+
+        this._player.addOnPauseHandler((event) => {
+            this.pauseResumeButtonsStatus(event.jPlayer.status);
+            this.linkPaused();
+        });
+
+
     }
 
-    private play(sourceUrl?: string, sourceId?: string): void {
-        this._$loaderSign.show();
-        this._player.play(sourceUrl, sourceId);
+    private isTheSameRoom(roomId: string): boolean {
+        return roomId === this._user.getCurrentRoomId()
+    }
+
+    private play(): void {
+        // this._$loaderSign.show();
+        this._player.play(this._user.getCurrentRoom());
     }
 
     private setVolume(volume: number): void {
@@ -128,7 +143,7 @@ export class ControlManagement {
         let isPaused = status.paused;
         if (isPaused) {
             this._$pauseButton.addClass('ui-state-disabled');
-            if (this._source.getLastSourceUrl()) {
+            if (this._user.getPreviousRoom().getSourceUrl()) {
                 this._$playButton.removeClass('ui-state-disabled');
             }
         } else {
@@ -137,16 +152,18 @@ export class ControlManagement {
         }
     }
 
-    private linkActive(src: string): void {
-        let $activeLink = this._$links.find(`[data-src='${src}']`);
+    private linkActive(): void {
+        const room:Room = this._user.getCurrentRoom();
+        let $activeLink = this._$links.find(`[data-src='${room.getSourceUrl()}']`);
         $.each($activeLink.parent().parent().children(), function (index, value) {
             $(value).removeClass("active");
         });
         $activeLink.parent().addClass("active");
     }
 
-    private linkPaused(src: string): void {
-        let $activeLink = this._$links.find(`[data-src='${src}']`);
+    private linkPaused(): void {
+        const room:Room = this._user.getPreviousRoom();
+        let $activeLink = this._$links.find(`[data-src='${room.getSourceUrl()}']`);
         $.each($activeLink.parent().parent().children(), function (index, value) {
             $(value).removeClass("active");
             //TODO: create class Paused

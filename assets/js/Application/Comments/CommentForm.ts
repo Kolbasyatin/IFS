@@ -117,7 +117,7 @@ export class CommentForm {
 //     AjaxStat.call(this);
 //     var that = this;
 //     this.writer = new PrepEffectWriterScrollBarTopWriter();
-//     this.ajaxdata['action'] = 'addComment';
+//     this.ajaxdata['action'] = 'appendComment';
 //     this.dialog = $("#dialog-form").dialog({ //Окно с диалогом, тут же аяксом получаем форму
 //         autoOpen: false,
 //         height: 500,

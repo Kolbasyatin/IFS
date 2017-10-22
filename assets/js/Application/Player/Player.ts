@@ -1,8 +1,10 @@
 import 'jplayer';
 import {Source} from "../Source";
+import {User} from "../User/User";
+import {Room} from "../Room/Room";
 
 export class Player {
-    private _source: Source;
+    /*private _source: Source;*/
     private _isReady: boolean;
     private _jPlayerConfig: object = {
         ready: () => this._isReady = true,
@@ -10,8 +12,8 @@ export class Player {
     };
     private _jPlayer: JQuery;
 
-    constructor(source: Source) {
-        this._source = source;
+    constructor(/*source: Source*/) {
+        /*this._source = source;*/
         this.jPlayerInit();
 
     }
@@ -24,40 +26,37 @@ export class Player {
         this._jPlayer = $container.jPlayer(this._jPlayerConfig);
     }
 
-    /**
-     * Play|Resume stream
-     * @param {string} sourceUrl
-     * @param {string} sourceId
-     */
-    public play(sourceUrl?: string, sourceId?: string): void {
+    public play(room: Room): void {
+        const sourceUrl: string = room.getSourceUrl();
+        if(!sourceUrl) {
+            this.pause();
+        } else {
+            this._jPlayer.jPlayer("setMedia", {mp3: sourceUrl}).jPlayer("play");
+        }
         //alreadyPlaying?
-        if (!this.isPaused() && sourceUrl === this._source.getSourceUrl()) {
-            return;
-        }
+        // if (!this.isPaused() && sourceUrl === this._source.getSourceUrl()) {
+        //     return;
+        // }
+
         //resume
-        if (!sourceUrl && !sourceId) {
-            sourceUrl = this._source.getLastSourceUrl();
-            sourceId = this._source.getLastSourceId();
-        }
-        if (!sourceUrl) {
-            throw new Error('No source to play!');
-        }
-        if (!sourceId) {
-            throw new Error('No sourceId to identification Radio source!')
-        }
+        // if (!sourceUrl && !sourceId) {
+        //     sourceUrl = this._source.getLastSourceUrl();
+        //     sourceId = this._source.getLastSourceId();
+        // }
+        // if (!sourceUrl) {
+        //     throw new Error('No source to play!');
+        // }
+        // if (!sourceId) {
+        //     throw new Error('No sourceId to identification Radio source!')
+        // }
         //SwitchChannel
-        this._source.setSourceUrl(sourceUrl);
-        this._source.setCurrentSourceId(sourceId);
-        this._jPlayer.jPlayer("setMedia", {mp3: sourceUrl}).jPlayer("play");
+        // this._source.setSourceUrl(sourceUrl);
+        // this._source.setCurrentSourceId(sourceId);
     }
     //https://stackoverflow.com/questions/27258169/how-can-i-stop-and-resume-a-live-audio-stream-in-html5-instead-of-just-pausing-i
     /** return lastSrc */
     public pause(): void {
         if (!this.isPaused()) {
-            this._source.setLastSourceUrl(this._source.getSourceUrl());
-            this._source.emptySourceUrl();
-            this._source.setLastSourceId(this._source.getCurrentSourceId());
-            this._source.emptyCurrentSourceId();
             this._jPlayer.jPlayer("pause");
         }
     }
