@@ -9,6 +9,7 @@ Encore
     .cleanupOutputBeforeBuild()
     // read main.js     -> output as web/build/app.js
     .addEntry('js/app', './assets/js/Application/index.ts')
+    .addEntry('js/test', './assets/js/IFSFront/index.ts')
     .addEntry('js/vendor', ["mustache", "jquery", "jquery-slider"])
 
     .enableTypeScriptLoader(function (typeScriptConfigOptions) {
