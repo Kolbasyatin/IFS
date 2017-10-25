@@ -5,17 +5,20 @@ import {ControlReactionInterface} from "./ControlReactionInterface";
 import {Switcher} from "./Switcher";
 import {MuteButton} from "./MuteButton";
 import {Slider} from "./Slider";
+import {VolumeValue} from "./VolumeValue";
+import {Colleague} from "../Colleague";
 
-export class Control {
-    private _mediator: Mediator;
+export class Control extends Colleague {
+
     private _playButton: PlayButton;
     private _pauseButton: PauseButton;
     private _muteButton: MuteButton;
     private _slider: Slider;
     private _switchers: Switcher[] = [];
+    private _volumeValue: VolumeValue;
 
     constructor(mediator: Mediator) {
-        this._mediator = mediator;
+        super(mediator);
         this._playButton = new PlayButton($('#playsource'));
         this._pauseButton = new PauseButton($('#pausesource'));
         this._slider = new Slider($('#volmaster'));
@@ -23,7 +26,7 @@ export class Control {
             this._switchers.push(new Switcher($(element)));
         });
         this._muteButton = new MuteButton($('#mute'));
-
+        this._volumeValue = new VolumeValue($('#volumevalue'));
         this.init();
     }
 
@@ -31,35 +34,24 @@ export class Control {
         this._playButton.addOnClickSubscriber(this.onPlayClick());
         this._pauseButton.addOnClickSubscriber(this.onPauseClick());
         this._muteButton.addOnClickSubscriber(this.onMuteClick());
+        this._slider.addVolumeSubscriber(this.onVolumeChange());
+        this._slider.start();
         for (const switcher of this._switchers) {
             switcher.addOnClickSubscriber(this.onSwitchRoomClick());
         }
-        this._slider.addVolumeSubscriber(this.onVolumeChange());
-
-    }
-
-    public onSwitchRoomClick() {
-        return () => {
-            /*this._mediator.switchRoom()*/
-            console.log('switched room to mediator');
-            console.log(event);
-        };
 
     }
 
     public onPlayClick() {
         return (event: JQuery.Event) => {
-            console.log('play button');
-            console.log(event);
-            console.log(this);
+            this._mediator.switchRoom();
         };
 
     }
 
     public onPauseClick() {
         return () => {
-            console.log('pause button');
-            console.log(event);
+            this._mediator.switchDefaultRoom();
         };
 
     }
@@ -76,18 +68,30 @@ export class Control {
 
     public onVolumeChange() {
         return (volume: number) => {
-            console.log('volume change');
-            console.log(volume);
-            if(volume) {
-
+            if(!volume) {
+                this._muteButton.onMute()
+            } else {
+                this._muteButton.onUnmute();
             }
+            this._volumeValue.setValue(volume);
         }
     }
 
+    public onSwitchRoomClick() {
+        return (event: JQuery.Event) => {
+            const link: object = event.target;
+            const roomId: string = $(link).data('sourceid');
+            this._mediator.switchRoom(roomId);
+        };
+
+    }
 
     public getReactionsSamples(): ControlReactionInterface[] {
-        const elements: ControlReactionInterface[] = [];
+        let elements: ControlReactionInterface[] = [];
         elements.push(this._playButton);
+        elements.push(this._pauseButton);
+        elements = elements.concat(this._switchers);
+
         return elements;
     }
 

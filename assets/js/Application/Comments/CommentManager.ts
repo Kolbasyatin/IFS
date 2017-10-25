@@ -2,8 +2,6 @@ import {Comment} from "./Comment";
 import {WAMP} from "../WebSocket/WAMP";
 import {Source} from "../Source";
 
-
-
 require('jquery-mousewheel');
 require('malihu-custom-scrollbar-plugin');
 

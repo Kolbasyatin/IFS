@@ -3,7 +3,7 @@ import 'jquery-slider';
 
 export class Slider extends AbstractControlSample {
     private _startVolume: number = 0.6;
-    private _sliderConfig: object = {
+    private _sliderConfig: JQueryUI.SliderOptions = {
         min: 0,
         max: 1,
         value: this._startVolume,
@@ -11,22 +11,21 @@ export class Slider extends AbstractControlSample {
         step: 0.05,
         range: "min",
         animate: true,
-        //Странный глюк. Если не передать в конструктор для change, в дальнейшем на евент не вешается.
-        //При срабатывании create не отдает value
-        change: (e: any, ui: any) => this.setVolume(ui.value),
-        create: () => this.setVolume(this._startVolume),
-        slide: (e: any, ui: any) => this.setVolume(ui.value)
-
+        slide: (e: Event, ui: JQueryUI.SliderOptions) => this.setVolume(ui.value),
+        change: (event: Event, ui: JQueryUI.SliderUIParams) => this.setVolume(ui.value),
+        create: (event: Event) => {this.setVolume($(event.target).slider('value'))}
     };
-    private _rememberedVolume: number = this._startVolume;
-    private _volumeSubscribers: ((volume: number) => void) [] = [];
 
+    private _rememberedVolume: number = this._startVolume;
+    private _volumeSubscribers: ((volume?: number) => void) [] = [];
 
     constructor(container: JQuery) {
         super(container);
-        this._$container.slider(this._sliderConfig);
     }
 
+    public start(): void {
+        this._$container.slider(this._sliderConfig);
+    }
     public muteToggle(): void {
         if(!this.isMuted()) {
             this._rememberedVolume = this._$container.slider('value');
@@ -45,7 +44,7 @@ export class Slider extends AbstractControlSample {
         this._volumeSubscribers.push(subscriber);
     }
 
-    private setVolume(volume: number): void {
+    private setVolume(volume?: number): void {
         for (const subscriber of this._volumeSubscribers) {
             subscriber(volume);
         }
