@@ -1,0 +1,50 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+    <div class="player">
+        <div class="player_title">
+            Выберите спутник:
+        </div>
+        <div class="playerlistcontent">
+            <ul id="playerlist">
+                <li class="first"><a href="#" data-sourceid="mds_voice"
+                                     data-src="http://ice.planeset.ru:8000/mds_voice.mp3"
+                                     title="Модель для сборки - голос">МДС Голос</a>
+                </li>
+                <li class="last"><a href="#" data-sourceid="mds_music" data-src="http://ice.planeset.ru:8000/mds.mp3"
+                                    title="Модель для сборки - музыка">МДС Музыка</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="sound">
+            <div class="volume">
+                <p class="ui-state-default ui-corner-all ui-helper-clearfix  uiicon">
+                    <span class="ui-icon ui-icon-play ui-state-disabled" id="playsource"></span>
+                    <span class="ui-icon ui-icon-pause ui-state-disabled" id="pausesource"></span>
+                    Время в полете: <span id="timeleft">∞</span>
+                </p>
+                <p class="ui-state-default ui-corner-all ui-helper-clearfix uiicon">
+                    <span class="ui-icon ui-icon-volume-on" id="mute"></span>
+                    Уровень громкости <span id="volumevalue">60%</span>
+                </p>
+                <div id="volmaster" class="ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content">
+                    <div class="ui-slider-range ui-corner-all ui-widget-header ui-slider-range-min"
+                         style="width: 60%;"></div>
+                    <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"
+                          style="left: 60%;"></span></div>
+            </div>
+        </div>
+        <div class="break"></div>
+
+        <div class="player_name">
+            <p id="sound_name"></p>
+        </div>
+        <div class="audiodiv">
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('build/js/test.js') }}"></script>
+{% endblock javascripts %}
+
