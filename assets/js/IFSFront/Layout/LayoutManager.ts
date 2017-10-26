@@ -2,6 +2,7 @@ import {LeftCommentsLayout} from "./LeftCommentsLayout";
 import {Mediator} from "../Mediator";
 import {Colleague} from "../Colleague";
 import {CommentHTML} from "../Comment/CommentHTML";
+import {User} from "../../Application/User/User";
 
 export class LayoutManager extends Colleague {
     private _containers: LayoutPublishInterface[] = [];
@@ -13,7 +14,7 @@ export class LayoutManager extends Colleague {
         this._leftCommentLayout =  new LeftCommentsLayout($("#comments"));
     }
 
-    public publish() {
+    public onRoomSwitched(user: User) {
         const comm = new CommentHTML({
             id: 1,
             sourceId: 'mds_voice',

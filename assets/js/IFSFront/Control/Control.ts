@@ -51,7 +51,7 @@ export class Control extends Colleague {
 
     public onPauseClick() {
         return () => {
-            this._mediator.switchDefaultRoom();
+            this._mediator.switchToDefaultRoom();
         };
 
     }

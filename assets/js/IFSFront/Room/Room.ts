@@ -16,6 +16,9 @@ export class Room {
         // this._commentsContainer = new ScrollBarCommentContainer();
     }
 
+    public getId(): string {
+        return this._id;
+    }
     public getComments(): CommentDataInterface[] {
         return this._comments;
     }
