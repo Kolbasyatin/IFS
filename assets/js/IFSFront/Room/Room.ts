@@ -1,7 +1,7 @@
 export class Room {
     private readonly _id: string;
     private _sourceUrl: string;
-    private _comments: CommentDataInterface[] = [];
+    private _rawComments: CommentDataInterface[] = [];
     // private _commentsContainer: ScrollBarCommentContainer;
     // private _lastPage: boolean = false;
     // private _users: any; //Сюда закидывать пользователей авторизованных ?
@@ -19,8 +19,13 @@ export class Room {
     public getId(): string {
         return this._id;
     }
-    public getComments(): CommentDataInterface[] {
-        return this._comments;
+
+    public addRawComments(comments: CommentDataInterface[]) {
+        this._rawComments.concat(comments);
+    }
+
+    public getRawComments(): CommentDataInterface[] {
+        return this._rawComments;
     }
     //
     // public getComments(): Comment[] {

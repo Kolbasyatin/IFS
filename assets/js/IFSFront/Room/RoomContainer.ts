@@ -31,4 +31,8 @@ export class RoomContainer extends Colleague{
         return rooms;
     }
 
+    public getAllRooms(): Room[] {
+        return this._rooms;
+    }
+
 }
