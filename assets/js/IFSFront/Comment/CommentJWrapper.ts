@@ -1,14 +1,18 @@
 import * as Mustache from "mustache";
 import * as moment from "moment";
+import 'jquery-easing';
 
-export class CommentHTML {
+
+export class CommentJWrapper implements ShowInterface {
     private _template: string;
     private _data: CommentDataInterface;
-    // private _effectOptions: object = {
-    //     effect: 'slide',
-    //     easing: 'easeOutBounce',
-    //     duration: 650
-    // };
+    private _$jHTML: JQuery;
+    private _effectOptions: JQueryUI.EffectOptions = {
+        effect: 'slide',
+        easing: 'easeOutBounce',
+        duration: 650,
+        complete: () => {}
+    };
 
     constructor(data: CommentDataInterface, template?: string) {
         this._data = data;
@@ -22,17 +26,20 @@ export class CommentHTML {
         </div>`;
         }
 
-        // this._$jHTML = $(this.renderHtml());
+        this._$jHTML = $(this.renderHtml());
     }
 
-    public getHTML(): string {
-        return this.renderHtml();
+    public getJHTML(): JQuery {
+        return this._$jHTML;
     }
 
-
-
-
-
+    show(applyEffect: boolean = false): void {
+        let effect = {};
+        if(applyEffect) {
+            effect = this._effectOptions;
+        }
+        this._$jHTML.show(effect);
+    }
 
     public updateJComment(data: CommentDataInterface): void {
         // if (this._data !== data) {

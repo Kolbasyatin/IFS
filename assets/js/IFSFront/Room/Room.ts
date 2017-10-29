@@ -21,7 +21,7 @@ export class Room {
     }
 
     public addRawComments(comments: CommentDataInterface[]) {
-        this._rawComments.concat(comments);
+        this._rawComments = this._rawComments.concat(comments);
     }
 
     public getRawComments(): CommentDataInterface[] {

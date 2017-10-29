@@ -8,19 +8,21 @@ export class WAMP extends Colleague{
     private _session: ABSession;
     constructor(mediator: Mediator) {
         super(mediator);
+    }
+
+    public connect(): void {
         let WS: WS = require("gos-ws");
         let webSocket = WS.connect("ws://localhost/stat");
         webSocket.on("socket/connect", session => this.onConnect(session));
         webSocket.on("socket/disconnect", error => this.onDisconnect(error));
     }
+
     private onConnect(session: ABSession): void {
         this._isConnected = true;
         this._session = session;
         this.bindSessionHandlers(session);
         this._mediator.startApplication();
     }
-
-
 
     //Стоит ли заводить отдельный топик под отдельный action с комментариями?
     private bindSessionHandlers(session: ABSession): void {

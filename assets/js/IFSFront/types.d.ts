@@ -9,7 +9,8 @@ interface CommentDataInterface {
 }
 
 interface LayoutPublishInterface {
-    publish(data: string): void;
+    publish(data: JQuery): void;
+    hide(): void;
 }
 
 interface ABSession {
@@ -28,8 +29,12 @@ interface ABSession {
 }
 
 interface WS {
-    connect: (url: string) => WS;
-    on: (type: string, callback: (arg:any)=>void ) => void;
-    fire: (event: any) => void;
-    off: (type: string, listeners: any[]) => void;
+    connect(url: string): WS;
+    on(type: string, callback: (arg:any)=>void ): void;
+    fire(event: any): void;
+    off(type: string, listeners: any[]): void;
+}
+
+interface ShowInterface {
+    show(applyEffect?: boolean): void;
 }

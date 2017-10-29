@@ -15,7 +15,7 @@ export class User extends Colleague{
         return this._$userInformer.data('is-newsmaker') === true;
     }
 
-    public changeRoom(room: Room): void {
+    public goToRoom(room: Room): void {
         this.doChangeRoom(room);
         this._mediator.roomWasChanged();
     }
@@ -25,5 +25,13 @@ export class User extends Colleague{
             this._previousRoom = this._currentRoom;
         }
         this._currentRoom = room;
+    }
+
+    public getRawCommentOfCurrentRoom(): CommentDataInterface[] {
+        if(!this._currentRoom) {
+            throw Error('There is no current room');
+        }
+
+        return this._currentRoom.getRawComments();
     }
 }

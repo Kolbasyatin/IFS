@@ -19,13 +19,22 @@ export class LeftCommentsLayout implements LayoutPublishInterface{
         this._$commentContainer = this._$mCustomScrollContainer.find("#mCSB_1_container");
     }
 
-    publish(data: string): void {
+    publish(data: JQuery): void {
         this._$commentContainer.append(data);
         this.commentContainerUpdate();
     }
 
     private commentContainerUpdate(): void {
         this._$mCustomScrollContainer.mCustomScrollbar('update');
+    }
+
+    public hide(): void {
+        this._$commentContainer.children().hide({
+            effect: 'slide',
+            easing: 'easeInOutBack',
+            duration: 300,
+            complete: () => {}
+        });
     }
 
     private async showNextPage(): Promise<void> {
