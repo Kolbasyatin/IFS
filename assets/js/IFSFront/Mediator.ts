@@ -5,14 +5,16 @@ import {User} from "./User/User";
 import {RoomContainer} from "./Room/RoomContainer";
 import {Room} from "./Room/Room";
 import {WAMP} from "./WebSocket/WAMP";
+import {Player} from "./Player/Player";
 
 export class Mediator {
-
     private _control: Control;
     private _layoutManager: LayoutManager;
     private _user: User;
     private _roomContainer: RoomContainer;
     private _wamp: WAMP;
+    private _player: Player;
+    private _isStarted: boolean;
 
     public setControl(control: Colleague) {
         this._control = <Control>control;
@@ -29,6 +31,9 @@ export class Mediator {
     public setWamp(wamp:WAMP): void {
         this._wamp = wamp;
     }
+    public setPlayer(player: Player): void {
+        this._player = player;
+    }
 
     /** ================== */
     public start(): void {
@@ -37,26 +42,41 @@ export class Mediator {
 
     //Starts on wamp connect
     public async startApplication(): Promise<void> {
+        this._isStarted = true;
         await this.fillRoomFirstPageComment();
         this.switchToDefaultRoom();
+        this.setStartedVolume();
     }
 
     public switchToDefaultRoom(): void {
         const room: Room = this._roomContainer.getDefaultRoom();
         this._user.goToRoom(room);
     }
-
+    /** Invokes by Control Switch Room */
     public switchRoom(roomId: string): void {
         const room: Room = this._roomContainer.getRoomById(roomId);
-        this._user.goToRoom(room);
+        if (room.getId() !== this._user.getCurrentRoomId()) {
+            this._user.goToRoom(room);
+        }
+
+    }
+
+    /** Invokes by Control (play button) */
+    public resumePlay(): void {
+        if (this._player.isPaused()) {
+            this.switchRoom(this._user.getPreviousRoomId());
+        }
+
     }
 
     public onNewComment(comments: CommentDataInterface[]): void {
 
     }
-    /** Fires in User when room is changed **/
-    public roomWasChanged(): void {
+    /** Invoke User when room is changed **/
+    public roomWasChanged(room: Room): void {
         this._layoutManager.updateLayoutWhenRoomChange(this._user);
+        this._player.play(room);
+
     }
     /** Fires when wamp disconnected */
     public stopApplication(): void {
@@ -73,5 +93,33 @@ export class Mediator {
 
     }
 
+    public changeVolume(volume: number): void {
+            this._layoutManager.changeVolumeIndicator(volume);
+            this._player.setVolume(volume);
+    }
+
+    public isApplicationStarted(): boolean {
+        return this._isStarted;
+    }
+
+    private setStartedVolume(): void {
+        this.changeVolume(this._control.getCurrentVolume());
+    }
+
+    /** Invokes by player onPlay event */
+    public playStarting(): void {
+        this._control.playStarting(this._user.getCurrentRoomId());
+        //TODO: create loading
+    }
+
+    /** Invokes by player onPlaying event */
+    public playStarted(): void {
+        this._control.playStarted(this._user.getCurrentRoomId());
+    }
+
+    /** Invokes by player onPaused event */
+    public playStopped(): void {
+        this._control.playStopped(this._user.getPreviousRoomId());
+    }
 
 }

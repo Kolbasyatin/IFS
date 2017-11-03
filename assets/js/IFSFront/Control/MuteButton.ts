@@ -10,7 +10,7 @@ export class MuteButton extends AbstractControlSample {
         this._$container.addClass('ui-icon-volume-on').removeClass('ui-icon-volume-off');
     }
 
-    public onPlay(): void {}
-    public onPause(): void {}
-
+    public onPlayStarted(): void {}
+    public onPlayPaused(): void {}
+    public onPlayStarting(): void {}
 }

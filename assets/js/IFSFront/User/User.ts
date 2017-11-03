@@ -17,7 +17,7 @@ export class User extends Colleague{
 
     public goToRoom(room: Room): void {
         this.doChangeRoom(room);
-        this._mediator.roomWasChanged();
+        this._mediator.roomWasChanged(room);
     }
 
     private doChangeRoom(room: Room): void {
@@ -34,4 +34,13 @@ export class User extends Colleague{
 
         return this._currentRoom.getRawComments();
     }
+
+    public getCurrentRoomId(): string {
+        return this._currentRoom.getId();
+    }
+
+    public getPreviousRoomId(): string {
+        return this._previousRoom.getId();
+    }
+
 }

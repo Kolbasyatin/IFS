@@ -1,7 +1,7 @@
 import {AbstractControlSample} from "./AbstractControlSample";
 import 'jquery-slider';
 
-export class Slider extends AbstractControlSample {
+export class VolumeSlider extends AbstractControlSample {
     private _startVolume: number = 0.6;
     private _sliderConfig: JQueryUI.SliderOptions = {
         min: 0,
@@ -28,7 +28,7 @@ export class Slider extends AbstractControlSample {
     }
     public muteToggle(): void {
         if(!this.isMuted()) {
-            this._rememberedVolume = this._$container.slider('value');
+            this._rememberedVolume = this.getCurrentVolume();
             this._$container.slider('value', 0);
         } else {
             this._$container.slider('value', this._rememberedVolume);
@@ -49,8 +49,11 @@ export class Slider extends AbstractControlSample {
             subscriber(volume);
         }
     }
+    public getCurrentVolume(): number {
+        return this._$container.slider('value');
+    }
 
-    public onPlay(): void {}
-    public onPause(): void {}
+    public onPlayStarted(): void {}
+    public onPlayPaused(): void {}
 
 }

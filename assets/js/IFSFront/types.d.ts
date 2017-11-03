@@ -7,7 +7,9 @@ interface CommentDataInterface {
     type: string;
     timeToShow?: string;
 }
-
+/** @deprecated  Зачем-то ведь я делал этот интерфейс ?
+ * TODO: Посмотреть внимательно
+ * */
 interface LayoutPublishInterface {
     publish(data: JQuery): void;
     hide(): void;
@@ -37,4 +39,35 @@ interface WS {
 
 interface ShowInterface {
     show(applyEffect?: boolean): void;
+}
+
+interface jPlayer {
+    (id?: any, options?: any): any;
+}
+interface JQuery {
+    jPlayer: jPlayer
+    status: jPlayerStatus;
+}
+interface jPlayerStatus {
+    src: string,
+    media: object,
+    paused: boolean,
+    format: object,
+    formatType: string,
+    waitForPlay: boolean,
+    waitForLoad: boolean,
+    srcSet: boolean,
+    video: boolean, // True if playing a video
+    seekPercent: number,
+    currentPercentRelative: number,
+    currentPercentAbsolute: number,
+    currentTime: number,
+    duration: number,
+    remaining: number,
+    videoWidth: number, // Intrinsic width of the video in pixels.
+    videoHeight: number, // Intrinsic height of the video in pixels.
+    readyState: number,
+    networkState: number,
+    playbackRate: number, // Warning - Now both an option and a status property
+    ended: number
 }

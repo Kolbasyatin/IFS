@@ -441,7 +441,7 @@ ul {
   width: 230px;
   height: auto;
   margin: 0 auto;
-  #volmaster {
+  #volume_slider {
     width: 150px;
     margin: 10px 0 0 0;
   }
@@ -464,8 +464,23 @@ ul {
 }
 
 .active {
+  .switcherClass(#6da3e9);
+}
+.starting {
+  .switcherClass(rgba(255, 153, 188, 0.46));
+}
+.paused {
+  .switcherClass(rgba(27, 255, 237, 0.32));
   a {
-    background: #6da3e9;
+    &:hover {
+      background: rgba(29, 156, 135, 0.48) !important;
+    }
+  }
+}
+
+.switcherClass(@class) {
+  a {
+    background: @class;
   }
 }
 

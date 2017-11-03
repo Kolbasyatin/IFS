@@ -1,11 +1,13 @@
 import {AbstractControlSample} from "./AbstractControlSample";
 
 export class PauseButton extends AbstractControlSample {
-    public onPlay(): void {
+    public onPlayStarted(): void {
         this._$container.removeClass('ui-state-disabled');
     }
 
-    public onPause(): void {
+    public onPlayPaused(): void {
         this._$container.addClass('ui-state-disabled')
     }
+
+    public onPlayStarting(sourceId?: string): void {}
 }

@@ -1,7 +1,12 @@
 export class Room {
+    public readonly levels: {[index:string]: number} = {
+        squad: 0,
+        newsMaker: 1
+    };
     private readonly _id: string;
     private _sourceUrl: string;
     private _rawComments: CommentDataInterface[] = [];
+    private _commentAccessLevel: number;
     // private _commentsContainer: ScrollBarCommentContainer;
     // private _lastPage: boolean = false;
     // private _users: any; //Сюда закидывать пользователей авторизованных ?
@@ -9,10 +14,10 @@ export class Room {
     // private _listeners: any;
     // private _playlist: any;
     //
-    constructor(id: string, sourceUrl: string) {
+    constructor(id: string, sourceUrl: string, commentAccessLevel: string = 'squad') {
         this._id = id;
         this._sourceUrl = sourceUrl;
-
+        this._commentAccessLevel = this.levels[commentAccessLevel];
         // this._commentsContainer = new ScrollBarCommentContainer();
     }
 
@@ -26,6 +31,10 @@ export class Room {
 
     public getRawComments(): CommentDataInterface[] {
         return this._rawComments;
+    }
+
+    public getSourceUrl(): string {
+        return this._sourceUrl;
     }
     //
     // public getComments(): Comment[] {

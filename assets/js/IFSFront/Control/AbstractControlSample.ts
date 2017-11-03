@@ -27,8 +27,9 @@ export abstract class AbstractControlSample implements ControlReactionInterface,
         this._onClickSubscribers.push(subscriber);
     }
 
-    public abstract onPlay(): void;
+    public abstract onPlayStarted(sourceId?: string): void;
 
-    public abstract onPause(): void;
+    public abstract onPlayPaused(sourceId?: string): void;
 
+    public abstract onPlayStarting(sourceId?: string): void;
 }
