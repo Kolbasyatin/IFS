@@ -34,23 +34,23 @@ export class LayoutManager extends Colleague {
         // this.updateAnotherELement...
     }
 
+    public updateLayoutOnNewComment(): void {
+
+    }
+
     private updateLeftCommentLayout(user: User): void {
         this.hideCurrentLayout();
-        this.appendDataCommentsToLeftCommentLayout(user);
+        this.appendShowLeftCommentContainer(user.getJComments());
     }
 
     private hideCurrentLayout():void {
         this._leftCommentLayout.hide();
     }
 
-    private appendDataCommentsToLeftCommentLayout(user: User): void {
-        const rawComments = user.getRawCommentOfCurrentRoom();
-        let comments: ShowInterface[] = [];
+    private appendShowLeftCommentContainer(comments: CommentJWrapper[]): void {
 
-        for (let rawComment of rawComments) {
-            const comment = new CommentJWrapper(rawComment);
+        for (let comment of comments) {
             this._leftCommentLayout.publish(comment.getJHTML());
-            comments.push(comment);
         }
 
         const show = (comments: ShowInterface[]): void => {
@@ -63,7 +63,7 @@ export class LayoutManager extends Colleague {
             }, 80);
         };
 
-        show(comments);
+        show(Object.assign([],comments));
     }
 
     private updateCommentButton(user: User) {

@@ -1,3 +1,5 @@
+import {CommentJWrapper} from "../Comment/CommentJWrapper";
+
 export class Room {
     public static readonly levels: {[index:string]: number} = {
         squad: 0,
@@ -6,8 +8,7 @@ export class Room {
     private readonly _id: string;
     private _isRoomDefault: boolean = false;
     private _sourceUrl: string;
-    private _rawComments: CommentDataInterface[] = [];
-    private _JComments: JQuery[];
+    private _JComments: CommentJWrapper[] = [];
     private _commentAccessLevel: number;
     // private _commentsContainer: ScrollBarCommentContainer;
     // private _lastPage: boolean = false;
@@ -29,15 +30,14 @@ export class Room {
         return this._id;
     }
 
-    public addRawComments(comments: CommentDataInterface[]): void {
-        this._rawComments = this._rawComments.concat(comments);
-    }
-    public addRawComment(comment: CommentDataInterface): void  {
-        this._rawComments.unshift(comment);
+    public createComments(comments: CommentDataInterface[]): void {
+        for (let comment of comments) {
+            this.addComment(comment);
+        }
     }
 
-    public getRawComments(): CommentDataInterface[] {
-        return this._rawComments;
+    public addComment(comment: CommentDataInterface): void  {
+        this._JComments.push(new CommentJWrapper(comment));
     }
 
     public getSourceUrl(): string {
@@ -53,9 +53,9 @@ export class Room {
         return this._isRoomDefault;
     }
     //
-    // public getComments(): Comment[] {
-    //     return this._comments;
-    // }
+    public getJComments(): CommentJWrapper[] {
+        return this._JComments;
+    }
     //
     // public getId(): string {
     //     return this._id;

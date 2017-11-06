@@ -54,6 +54,16 @@ export class Mediator {
         this.setStartedVolume();
     }
 
+    /** TODO: Возмоно есть смысл выделить в отдельный функционал работы с данными */
+    public async fillRoomFirstPageComment(): Promise<void> {
+        const rooms: Room[] = this._roomContainer.getAllRooms();
+        for (let room of rooms) {
+            const comments: CommentDataInterface[] = await this._wamp.commentatorCall('getCommentsFirstPageBySource', {source: room.getId()});
+            room.createComments(comments);
+        }
+
+    }
+
     public switchToDefaultRoom(): void {
         const room: Room = this._roomContainer.getDefaultRoom();
         this._user.goToRoom(room);
@@ -74,6 +84,19 @@ export class Mediator {
 
     }
 
+    /** Invokes by WAMP on New comment event */
+    public onNewComment(comments: CommentDataInterface[]): void {
+        this.fillRoomByNewComments(comments);
+        this._layoutManager.updateLayoutOnNewComment(comments);
+    }
+
+    private fillRoomByNewComments(comments: CommentDataInterface[]): void {
+        for (let comment of comments) {
+            let room = this._roomContainer.getRoomById(comment.sourceId);
+            room.addComment(comment);
+        }
+    }
+
     /** Invokes by Control (play button) */
     public resumePlay(): void {
         if (this._player.isPaused()) {
@@ -82,28 +105,12 @@ export class Mediator {
 
     }
 
-    public onNewComment(comments: CommentDataInterface[]): void {
-
-        for (let comment of comments) {
-            let room = this._roomContainer.getRoomById(comment.sourceId);
-            room.addRawComment(comment);
-        }
-    }
-
     /** Fires when wamp disconnected */
     public stopApplication(): void {
         console.log('application stopped!');
     }
 
-    /** TODO: Возмоно есть смысл выделить в отдельный функционал работы с данными */
-    public async fillRoomFirstPageComment(): Promise<void> {
-        const rooms: Room[] = this._roomContainer.getAllRooms();
-        for (let room of rooms) {
-            const comments: CommentDataInterface[] = await this._wamp.commentatorCall('getCommentsFirstPageBySource', {source: room.getId()});
-            room.addRawComments(comments);
-        }
 
-    }
 
     public changeVolume(volume: number): void {
             this._layoutManager.changeVolumeIndicator(volume);

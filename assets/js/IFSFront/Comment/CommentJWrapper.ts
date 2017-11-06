@@ -77,9 +77,9 @@ export class CommentJWrapper implements ShowInterface {
     //     this._$jHTML.fadeOut('easing').remove();
     // }
     //
-    // public getData(): CommentDataInterface {
-    //     return this._data;
-    // }
+    public getRawData(): CommentDataInterface {
+        return this._data;
+    }
     //
     // public getCommentId(): number {
     //     return this._data.id;

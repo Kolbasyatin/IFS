@@ -1,6 +1,7 @@
 import {Room} from "../Room/Room";
 import {Colleague} from "../Colleague";
 import {Mediator} from "../Mediator";
+import {CommentJWrapper} from "../Comment/CommentJWrapper";
 
 export class User extends Colleague{
 
@@ -31,12 +32,12 @@ export class User extends Colleague{
         this._currentRoom = room;
     }
 
-    public getRawCommentOfCurrentRoom(): CommentDataInterface[] {
+    public getJComments(): CommentJWrapper[] {
         if(!this._currentRoom) {
             throw Error('There is no current room');
         }
 
-        return this._currentRoom.getRawComments();
+        return this._currentRoom.getJComments();
     }
 
     public getCurrentRoomId(): string {
