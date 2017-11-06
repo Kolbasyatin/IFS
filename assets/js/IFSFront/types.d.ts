@@ -71,3 +71,23 @@ interface jPlayerStatus {
     playbackRate: number, // Warning - Now both an option and a status property
     ended: number
 }
+
+declare let Routing: Router;
+
+interface Router {
+    generate: (name: string, opt_params?: object, absolute?: boolean) => string;
+    // getInstance
+    // 'setRoutes',
+    // 'getRoutes',
+    // 'setBaseUrl'
+    // 'getBaseUrl'
+    // 'generate',
+    // 'setPrefix',
+    // 'getRoute',
+}
+
+interface TimeDataInterface {
+    year: number;
+    hour: number;
+    minute: number;
+}

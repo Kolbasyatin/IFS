@@ -6,6 +6,7 @@ import {RoomContainer} from "./Room/RoomContainer";
 import {Room} from "./Room/Room";
 import {WAMP} from "./WebSocket/WAMP";
 import {Player} from "./Player/Player";
+import {CommentForm} from "./Comment/CommentForm";
 
 export class Mediator {
     private _control: Control;
@@ -14,6 +15,7 @@ export class Mediator {
     private _roomContainer: RoomContainer;
     private _wamp: WAMP;
     private _player: Player;
+    private _commentForm: CommentForm;
     private _isStarted: boolean;
 
     public setControl(control: Colleague) {
@@ -34,9 +36,13 @@ export class Mediator {
     public setPlayer(player: Player): void {
         this._player = player;
     }
+    public setCommentForm(commentForm: CommentForm) {
+        this._commentForm = commentForm;
+    }
 
     /** ================== */
     public start(): void {
+        this._layoutManager.startTimer();
         this._wamp.connect();
     }
 
@@ -61,6 +67,13 @@ export class Mediator {
 
     }
 
+    /** Invoke User when room is changed **/
+    public roomWasChanged(room: Room): void {
+        this._layoutManager.updateLayoutWhenRoomChange(this._user);
+        this._player.play(room);
+
+    }
+
     /** Invokes by Control (play button) */
     public resumePlay(): void {
         if (this._player.isPaused()) {
@@ -71,13 +84,12 @@ export class Mediator {
 
     public onNewComment(comments: CommentDataInterface[]): void {
 
+        for (let comment of comments) {
+            let room = this._roomContainer.getRoomById(comment.sourceId);
+            room.addRawComment(comment);
+        }
     }
-    /** Invoke User when room is changed **/
-    public roomWasChanged(room: Room): void {
-        this._layoutManager.updateLayoutWhenRoomChange(this._user);
-        this._player.play(room);
 
-    }
     /** Fires when wamp disconnected */
     public stopApplication(): void {
         console.log('application stopped!');
@@ -120,6 +132,15 @@ export class Mediator {
     /** Invokes by player onPaused event */
     public playStopped(): void {
         this._control.playStopped(this._user.getPreviousRoomId());
+    }
+
+    /** Invokes by CommentButton on click */
+    public commentButtonClicked(): void {
+        if (this._user.isAuthenticated()) {
+            this._commentForm.comment(this._user.getCurrentRoomId());
+        } else {
+            this._layoutManager.blinkAuthButton();
+        }
     }
 
 }

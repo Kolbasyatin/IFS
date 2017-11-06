@@ -5,6 +5,7 @@ import {User} from "./User/User";
 import {RoomContainer} from "./Room/RoomContainer";
 import {WAMP} from "./WebSocket/WAMP";
 import {Player} from "./Player/Player";
+import {CommentForm} from "./Comment/CommentForm";
 
 const mediator = new Mediator();
 
@@ -14,6 +15,7 @@ const user = new User(mediator);
 const roomContainer = new RoomContainer(mediator);
 const player = new Player(mediator);
 const wamp = new WAMP(mediator);
+const commentForm = new CommentForm(mediator);
 
 mediator.setLayout(layout);
 mediator.setControl(control);
@@ -21,5 +23,6 @@ mediator.setUser(user);
 mediator.setRoomContainer(roomContainer);
 mediator.setWamp(wamp);
 mediator.setPlayer(player);
+mediator.setCommentForm(commentForm);
 
 mediator.start();

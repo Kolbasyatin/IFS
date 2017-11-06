@@ -25,6 +25,7 @@ export class LeftCommentsLayout extends LayoutSample implements LayoutPublishInt
         this.commentContainerUpdate();
     }
 
+
     private commentContainerUpdate(): void {
         this._$mCustomScrollContainer.mCustomScrollbar('update');
     }

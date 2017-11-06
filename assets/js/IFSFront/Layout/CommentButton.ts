@@ -1,10 +1,12 @@
 
-import {User} from "../User/User";
+import {Colleague} from "../Colleague";
+import {Mediator} from "../Mediator";
 
-export class CommentButton {
+export class CommentButton extends Colleague{
     private _$button: JQuery;
 
-    constructor() {
+    constructor(mediator: Mediator) {
+        super(mediator);
         this._$button = $("#comment_add");
         this.bindHandlers();
     }
@@ -16,22 +18,19 @@ export class CommentButton {
     }
 
     private clickedComment(): void {
-        console.log('clicked Comment! Do comment!')
+        this._mediator.commentButtonClicked();
     }
 
-    public toggleCommentButton(user: User, status: boolean): void {
-        if(user.isNewsMaker()) {
-            this._$button.not(':visible') ? this.showCommentButton(): '';
-            return;
+    public showCommentButton():void {
+        if (this._$button.not(':visible')) {
+            this._$button.fadeIn('easing')
         }
-        status ? this.showCommentButton() : this.hideCommentButton();
     }
 
-    private showCommentButton():void {
-        this._$button.fadeIn('easing')
-    }
+    public hideCommentButton(): void {
+        if (this._$button.is(':visible')) {
+            this._$button.fadeOut('easing');
+        }
 
-    private hideCommentButton(): void {
-        this._$button.fadeOut('easing');
     }
 }

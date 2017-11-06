@@ -1,11 +1,13 @@
 export class Room {
-    public readonly levels: {[index:string]: number} = {
+    public static readonly levels: {[index:string]: number} = {
         squad: 0,
         newsMaker: 1
     };
     private readonly _id: string;
+    private _isRoomDefault: boolean = false;
     private _sourceUrl: string;
     private _rawComments: CommentDataInterface[] = [];
+    private _JComments: JQuery[];
     private _commentAccessLevel: number;
     // private _commentsContainer: ScrollBarCommentContainer;
     // private _lastPage: boolean = false;
@@ -14,10 +16,12 @@ export class Room {
     // private _listeners: any;
     // private _playlist: any;
     //
+
+    //TODO: Проработать внимательно уровни доступа.
     constructor(id: string, sourceUrl: string, commentAccessLevel: string = 'squad') {
         this._id = id;
         this._sourceUrl = sourceUrl;
-        this._commentAccessLevel = this.levels[commentAccessLevel];
+        this._commentAccessLevel = Room.levels[commentAccessLevel];
         // this._commentsContainer = new ScrollBarCommentContainer();
     }
 
@@ -25,8 +29,11 @@ export class Room {
         return this._id;
     }
 
-    public addRawComments(comments: CommentDataInterface[]) {
+    public addRawComments(comments: CommentDataInterface[]): void {
         this._rawComments = this._rawComments.concat(comments);
+    }
+    public addRawComment(comment: CommentDataInterface): void  {
+        this._rawComments.unshift(comment);
     }
 
     public getRawComments(): CommentDataInterface[] {
@@ -35,6 +42,15 @@ export class Room {
 
     public getSourceUrl(): string {
         return this._sourceUrl;
+    }
+
+
+    public setRoomDefault(): void {
+        this._isRoomDefault = true;
+    }
+
+    public isDefault(): boolean {
+        return this._isRoomDefault;
     }
     //
     // public getComments(): Comment[] {

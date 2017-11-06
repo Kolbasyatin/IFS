@@ -1,12 +1,16 @@
 import {Room} from "../Room/Room";
 import {Colleague} from "../Colleague";
+import {Mediator} from "../Mediator";
 
 export class User extends Colleague{
 
     private _currentRoom: Room;
     private _previousRoom: Room;
-
     private _$userInformer: JQuery = $("div#user-info");
+
+    constructor(mediator: Mediator) {
+        super(mediator);
+    }
 
     public isAuthenticated(): boolean {
         return this._$userInformer.data('is-authenticated') === true;
@@ -41,6 +45,14 @@ export class User extends Colleague{
 
     public getPreviousRoomId(): string {
         return this._previousRoom.getId();
+    }
+
+    public getCurrentRoom(): Room {
+        return this._currentRoom;
+    }
+
+    public isCurrentRoomDefault(): boolean {
+        return this._currentRoom.isDefault();
     }
 
 }
