@@ -7,13 +7,6 @@ interface CommentDataInterface {
     type: string;
     timeToShow?: string;
 }
-/** @deprecated  Зачем-то ведь я делал этот интерфейс ?
- * TODO: Посмотреть внимательно
- * */
-interface LayoutPublishInterface {
-    publish(data: JQuery): void;
-    hide(): void;
-}
 
 interface ABSession {
     close: () => void;

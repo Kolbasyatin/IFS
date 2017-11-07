@@ -59,7 +59,7 @@ export class Mediator {
         const rooms: Room[] = this._roomContainer.getAllRooms();
         for (let room of rooms) {
             const comments: CommentDataInterface[] = await this._wamp.commentatorCall('getCommentsFirstPageBySource', {source: room.getId()});
-            room.createComments(comments);
+            this._roomContainer.addCommentsToRooms(comments);
         }
 
     }
@@ -79,22 +79,21 @@ export class Mediator {
 
     /** Invoke User when room is changed **/
     public roomWasChanged(room: Room): void {
-        this._layoutManager.updateLayoutWhenRoomChange(this._user);
+        this._layoutManager.roomWasChanged(this._user);
         this._player.play(room);
 
     }
 
     /** Invokes by WAMP on New comment event */
+    /** TODO: Однозначно отсюда вынесли все это и переделать */
     public onNewComment(comments: CommentDataInterface[]): void {
-        this.fillRoomByNewComments(comments);
-        this._layoutManager.updateLayoutOnNewComment(comments);
+        this.insertNewCommentsInRoom(comments);
+        const currentRoom = this._user.getCurrentRoom();
+        this._layoutManager.onNewCommentsEvent(currentRoom.getNewComments());
     }
 
-    private fillRoomByNewComments(comments: CommentDataInterface[]): void {
-        for (let comment of comments) {
-            let room = this._roomContainer.getRoomById(comment.sourceId);
-            room.addComment(comment);
-        }
+    private insertNewCommentsInRoom(comments: CommentDataInterface[]): void {
+        this._roomContainer.addCommentsToRooms(comments, true);
     }
 
     /** Invokes by Control (play button) */
@@ -117,6 +116,7 @@ export class Mediator {
             this._player.setVolume(volume);
     }
 
+    /** Ivokes in Control when change volume. Prevent error when slider is ready, but application is not */
     public isApplicationStarted(): boolean {
         return this._isStarted;
     }

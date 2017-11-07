@@ -1,17 +1,18 @@
 import {LeftCommentsLayout} from "./LeftCommentsLayout";
 import {Mediator} from "../Mediator";
 import {Colleague} from "../Colleague";
-import {CommentJWrapper} from "../Comment/CommentJWrapper";
+import {JComment} from "../Comment/JComment";
 import {User} from "../User/User";
 import {VolumeIndicator} from "../Control/VolumeIndicator";
 import {CommentButton} from "./CommentButton";
 import {AuthButton} from "./AuthButton";
 import 'jquery-tooltip';
 import {Timer} from "./Time";
+import {Room} from "../Room/Room";
 
 export class LayoutManager extends Colleague {
 
-    private _leftCommentLayout: LayoutPublishInterface;
+    private _leftCommentLayout: LeftCommentsLayout;
     private _volumeIndicator: VolumeIndicator;
     private _commentButton: CommentButton;
     private _authButton: AuthButton;
@@ -27,32 +28,32 @@ export class LayoutManager extends Colleague {
         this.createEffects();
     }
 
-    public updateLayoutWhenRoomChange(user: User): void {
-        this.updateLeftCommentLayout(user);
-        this.updateCommentButton(user);
+    public roomWasChanged(user: User): void {
+        this.updateLeftCommentLayout(user.getCurrentRoom());
+        this.hasToShowCommentButton(user);
         // this.updateAnotherELement...
         // this.updateAnotherELement...
     }
 
-    public updateLayoutOnNewComment(): void {
-
-    }
-
-    private updateLeftCommentLayout(user: User): void {
+    private updateLeftCommentLayout(room: Room): void {
         this.hideCurrentLayout();
-        this.appendShowLeftCommentContainer(user.getJComments());
+        const comments: JComment[] = room.getAllComments();
+        this.appendComments(comments, 'up');
+        this.showComments(comments);
     }
+
 
     private hideCurrentLayout():void {
         this._leftCommentLayout.hide();
     }
 
-    private appendShowLeftCommentContainer(comments: CommentJWrapper[]): void {
-
+    private appendComments(comments: JComment[], direction: string = 'down'): void {
         for (let comment of comments) {
-            this._leftCommentLayout.publish(comment.getJHTML());
+            this._leftCommentLayout.publish(comment.getJHTML(), direction);
         }
+    }
 
+    private showComments(comments: JComment[]): void {
         const show = (comments: ShowInterface[]): void => {
             setTimeout(() => {
                 let comment: ShowInterface | void = comments.pop();
@@ -66,13 +67,18 @@ export class LayoutManager extends Colleague {
         show(Object.assign([],comments));
     }
 
-    private updateCommentButton(user: User) {
+    private hasToShowCommentButton(user: User) {
         this._commentButton.hideCommentButton();
         /**TODO: Грязный хак! возможно стоит ввести уровни доступа к элементам интерфейса */
         if (user.isCurrentRoomDefault() && !user.isNewsMaker()) {
             return;
         }
         this._commentButton.showCommentButton();
+    }
+
+    public onNewCommentsEvent(comments: JComment[]): void {
+        this.appendComments(comments, 'up');
+        this.showComments(comments);
     }
 
     public changeVolumeIndicator(value: number): void {

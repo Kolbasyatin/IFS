@@ -4,7 +4,7 @@ require('jquery-mousewheel');
 require('malihu-custom-scrollbar-plugin');
 
 
-export class LeftCommentsLayout extends LayoutSample implements LayoutPublishInterface{
+export class LeftCommentsLayout extends LayoutSample {
     private _cSBOptions: MCustomScrollbar.CustomScrollbarOptions = {
         theme: 'dark-thin',
         callbacks: {
@@ -20,8 +20,12 @@ export class LeftCommentsLayout extends LayoutSample implements LayoutPublishInt
         this._$commentContainer = this._$mCustomScrollContainer.find("#mCSB_1_container");
     }
 
-    public publish(data: JQuery): void {
-        this._$commentContainer.append(data);
+    public publish(data: JQuery, direction:string = 'down'): void {
+        if(direction === 'up') {
+            this._$commentContainer.prepend(data);
+        } else {
+            this._$commentContainer.append(data);
+        }
         this.commentContainerUpdate();
     }
 

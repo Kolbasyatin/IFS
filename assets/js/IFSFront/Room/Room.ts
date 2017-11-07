@@ -1,4 +1,5 @@
-import {CommentJWrapper} from "../Comment/CommentJWrapper";
+import {JComment} from "../Comment/JComment";
+import {CommentContainer} from "../Comment/CommentContainer";
 
 export class Room {
     public static readonly levels: {[index:string]: number} = {
@@ -8,8 +9,10 @@ export class Room {
     private readonly _id: string;
     private _isRoomDefault: boolean = false;
     private _sourceUrl: string;
-    private _JComments: CommentJWrapper[] = [];
+    private _JComments: JComment[] = [];
+    private _newJComments: JComment[] = [];
     private _commentAccessLevel: number;
+    private _commentContainer: CommentContainer;
     // private _commentsContainer: ScrollBarCommentContainer;
     // private _lastPage: boolean = false;
     // private _users: any; //Сюда закидывать пользователей авторизованных ?
@@ -22,6 +25,7 @@ export class Room {
     constructor(id: string, sourceUrl: string, commentAccessLevel: string = 'squad') {
         this._id = id;
         this._sourceUrl = sourceUrl;
+        this._commentContainer = new CommentContainer();
         this._commentAccessLevel = Room.levels[commentAccessLevel];
         // this._commentsContainer = new ScrollBarCommentContainer();
     }
@@ -30,14 +34,13 @@ export class Room {
         return this._id;
     }
 
-    public createComments(comments: CommentDataInterface[]): void {
-        for (let comment of comments) {
-            this.addComment(comment);
-        }
+    public addComment(jComment: JComment): void  {
+        this._JComments.unshift(jComment);
+
     }
 
-    public addComment(comment: CommentDataInterface): void  {
-        this._JComments.push(new CommentJWrapper(comment));
+    public addNewComment(jComment: JComment): void {
+        this._newJComments.push(jComment);
     }
 
     public getSourceUrl(): string {
@@ -53,9 +56,22 @@ export class Room {
         return this._isRoomDefault;
     }
     //
-    public getJComments(): CommentJWrapper[] {
+    public getAllComments(): JComment[] {
         return this._JComments;
     }
+
+    public getNewComments(): JComment[] {
+        const comments = this._newJComments;
+        this.resetNewComments();
+
+        return comments;
+    }
+
+    private resetNewComments(): void {
+        this._newJComments = [];
+    }
+
+
     //
     // public getId(): string {
     //     return this._id;
