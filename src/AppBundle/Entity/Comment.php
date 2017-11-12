@@ -4,6 +4,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -15,11 +16,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Comment extends Base implements \JsonSerializable
 {
     public const TYPE_COMMENT = 'comment';
+
     public const TYPE_NEWS = 'news';
+
     private const TYPES = [
         self::TYPE_COMMENT,
         self::TYPE_NEWS
     ];
+
     public const ROUTE_TYPES_RESTRICTIONS = self::TYPE_COMMENT . '|' . self::TYPE_NEWS;
     /**
      * @var User

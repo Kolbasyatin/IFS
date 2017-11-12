@@ -66,8 +66,12 @@ export class Mediator {
     public async onNextPageComment(): Promise<void> {
         const currentSource = this._user.getCurrentRoomId();
         const lastCommentId = this._user.getCurrentRoom().getLastComment().getId();
+        console.log(currentSource);
+        console.log(lastCommentId);
         const comments: CommentDataInterface[] = await this._wamp.commentatorCall('getCommentsNewerThanId', {source: currentSource, lastCommentId: lastCommentId});
-        this._roomContainer.addCommentsToAppropriateRooms(comments);
+        console.log(comments);
+        const jComments = this._roomContainer.addCommentsToAppropriateRooms(comments);
+        this._layoutManager.appendAndShowJComments(jComments);
     }
 
     public switchToDefaultRoom(): void {
@@ -102,6 +106,13 @@ export class Mediator {
         this._roomContainer.addCommentsToAppropriateRooms(comments, true);
     }
 
+    public onUpdateComment(comments: CommentDataInterface[]): void {
+        console.log('Реализовать update комментария')
+    }
+
+    public onDeleteComment(commentId: number): void {
+        console.log('Релазизовать удаление коммента');
+    }
 
     /** Invokes by Control (play button) */
     public resumePlay(): void {

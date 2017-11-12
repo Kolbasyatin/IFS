@@ -9,7 +9,7 @@ import {AuthButton} from "./AuthButton";
 import 'jquery-tooltip';
 import {Timer} from "./Time";
 import {Room} from "../Room/Room";
-
+//TODO: Надо рефакторить. Отрисовка комментариев не прозрачная. Нужен новый нормальный механизм.
 export class LayoutManager extends Colleague {
 
     private _leftCommentLayout: LeftCommentsLayout;
@@ -29,17 +29,21 @@ export class LayoutManager extends Colleague {
     }
 
     public roomWasChanged(user: User): void {
-        this.updateLeftCommentLayout(user);
+        this.refreshLeftCommentLayout(user);
         this.hasToShowCommentButton(user);
         // this.updateAnotherELement...
         // this.updateAnotherELement...
     }
 
-    private updateLeftCommentLayout(user: User): void {
+    private refreshLeftCommentLayout(user: User): void {
         this.hideCurrentLayout(user);
         const currentComments: JComment[] = user.getCurrentRoom().getAllComments();
-        this.appendComments(currentComments);
-        this.showComments(currentComments);
+        this.appendAndShowJComments(currentComments);
+    }
+
+    public appendAndShowJComments(jComments: JComment[]): void {
+        this.appendCommentsToLayout(jComments);
+        this.showComments(jComments);
     }
 
 
@@ -53,17 +57,11 @@ export class LayoutManager extends Colleague {
 
     //TODO: По хорошему этот метод надо объединять с updateCommentLayout
     public onNewCommentsEvent(comments: JComment[]): void {
-        this.appendComments(comments, 'up');
+        this.appendCommentsToLayout(comments, 'up');
         this.showComments(comments);
     }
 
-    public onLastCommentsEvent(comments: JComment[]): void {
-        this.appendComments(comments, 'down');
-        this.showComments(comments);
-    }
-
-
-    private appendComments(comments: JComment[], direction: string = 'down'): void {
+    private appendCommentsToLayout(comments: JComment[], direction: string = 'down'): void {
         for (let comment of comments) {
             this._leftCommentLayout.publish(comment.getJHTML(), direction);
         }

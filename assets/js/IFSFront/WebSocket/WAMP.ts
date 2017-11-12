@@ -2,10 +2,11 @@ import * as autobahn from "autobahn";
 import {Colleague} from "../Colleague";
 import {Mediator} from "../Mediator";
 
-export class WAMP extends Colleague{
+export class WAMP extends Colleague {
 
     private _isConnected: boolean;
     private _session: ABSession;
+
     constructor(mediator: Mediator) {
         super(mediator);
     }
@@ -27,11 +28,18 @@ export class WAMP extends Colleague{
     //Стоит ли заводить отдельный топик под отдельный action с комментариями?
     private bindSessionHandlers(session: ABSession): void {
         session.subscribe('comment', (uri, payload: any) => {
-            switch(payload.action)
-            {
-                case 'newcomment':
+            switch (payload.action) {
+                case 'newComment':
                     const newComments: CommentDataInterface[] = JSON.parse(payload.data);
                     this._mediator.onNewComment(newComments);
+                    break;
+                case 'updateComment':
+                    const updatedComments: CommentDataInterface[] = JSON.parse(payload.data);
+                    this._mediator.onUpdateComment(updatedComments);
+                    break;
+                case 'deleteComment':
+                    const deletedCommentId: number = JSON.parse(payload.data);
+                    this._mediator.onDeleteComment(deletedCommentId);
                     break;
             }
         })
@@ -49,7 +57,7 @@ export class WAMP extends Colleague{
         try {
             json = await this._session.call(`commentator/${procedure}`, args);
         }
-        catch(err) {
+        catch (err) {
             console.log(err);
         }
 
@@ -57,9 +65,9 @@ export class WAMP extends Colleague{
     }
 
     private waitForSession(): Promise<void> {
-        return new Promise (resolve => {
+        return new Promise(resolve => {
             let interval = setInterval(() => {
-                if(this._isConnected && this._session) {
+                if (this._isConnected && this._session) {
                     clearInterval(interval);
                     resolve();
                 }
@@ -68,7 +76,6 @@ export class WAMP extends Colleague{
     }
 
 }
-
 
 
 // public onNewCommentAttach(observer: OnNewCommentInterface) {

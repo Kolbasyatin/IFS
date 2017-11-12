@@ -6,10 +6,10 @@ namespace AppBundle\EventListener;
 
 use AppBundle\Entity\Comment;
 use Doctrine\Common\EventSubscriber;
-use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\OnFlushEventArgs;
-use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Events;
+use Gedmo\SoftDeleteable\SoftDeleteableListener;
 use Gos\Bundle\WebSocketBundle\Pusher\Zmq\ZmqPusher;
 
 class CommentSubscriber implements EventSubscriber
@@ -31,6 +31,7 @@ class CommentSubscriber implements EventSubscriber
     {
         return [
             Events::onFlush,
+            SoftDeleteableListener::POST_SOFT_DELETE
         ];
     }
 
@@ -45,6 +46,16 @@ class CommentSubscriber implements EventSubscriber
 
         if (count($comments)) {
             $this->push('newcomment', $comments);
+        }
+
+    }
+
+    public function postSoftDelete(LifecycleEventArgs $args)
+    {
+        $object = $args->getObject();
+        if ($object instanceof Comment) {
+            $id = $object->getId();
+            $this->push('delete', ['id' => $id]);
         }
 
     }

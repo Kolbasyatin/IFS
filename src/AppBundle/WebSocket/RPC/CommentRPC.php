@@ -34,6 +34,7 @@ class CommentRPC implements RpcInterface
     {
         try {
             $comments = $this->commentator->getNewerCommentsThanId($params['source'], $params['lastCommentId']);
+            //TODO: Внимание! Костылище! Суть втом что я затупил и не могу сообразить как мне составить запрос с JOIN и получить
         } catch (\Exception $e) {
             $a = 'b';
         }

@@ -6,6 +6,7 @@ use AppBundle\Entity\Comment;
 use AppBundle\Entity\Source;
 use AppBundle\Entity\User;
 use AppBundle\Form\CommentType;
+use AppBundle\Lib\CommentatorException;
 use AppBundle\Services\Commentator;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -59,5 +60,30 @@ class CommentController extends Controller
         return $this->render('comment/new.html.twig', [
             'form' => $form->createView()
         ]);
+    }
+
+    /**
+     * @param Comment $comment
+     * @param Commentator $commentator
+     * @return JsonResponse
+     * @Route("/delete/{id}", name="comment_delete", options={"expose" = true } )
+     * @Security("has_role('ROLE_COMMENT_DELETE')")
+     */
+    public function deleteAction(Comment $comment = null, Commentator $commentator)
+    {
+        try {
+            $commentator->removeComment($comment);
+            $error = false;
+            $message = 'Comment was deleted successful';
+        } catch (CommentatorException $e) {
+            $error = true;
+            $message = $e->getMessage();
+        }
+
+        return new JsonResponse([
+            'error' => $error,
+            'message' => $message,
+        ]);
+
     }
 }

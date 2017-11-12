@@ -12,7 +12,7 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 
 class CommentRepository extends BaseRepository
 {
-    const COMMENTS_PER_PAGE = 5;
+    const COMMENTS_PER_PAGE = 7;
 
     /**
      * Returns last comment
@@ -67,7 +67,7 @@ class CommentRepository extends BaseRepository
 //        return $this->matching($criteria);
         $qb = $this->createQueryBuilder('comment');
         $qb->where('comment.id < :lastCommentId');
-        $qb = $source ? $this->addFilterCommentsQueryBuilder($qb, $source) : $this->addFilterNewsQueryBuilder($qb);
+        $source ? $this->addFilterCommentsQueryBuilder($qb, $source) : $this->addFilterNewsQueryBuilder($qb);
         $qb->setMaxResults(self::COMMENTS_PER_PAGE);
         $qb->setParameter('lastCommentId', $lastCommentId);
         $qb->addOrderBy('comment.id', 'DESC');
@@ -100,7 +100,7 @@ class CommentRepository extends BaseRepository
 
             $qb = $this->createQueryBuilder('comment');
             /** Тут магия. Выдаем новости если пустой source, но тип комментария news */
-            $qb = $source ? $this->addFilterCommentsQueryBuilder($qb, $source) : $this->addFilterNewsQueryBuilder($qb);
+            $source ? $this->addFilterCommentsQueryBuilder($qb, $source) : $this->addFilterNewsQueryBuilder($qb);
             $qb
                 ->addOrderBy('comment.createdAt', $sort)
                 ->addOrderBy('comment.id', $sort)
@@ -112,23 +112,26 @@ class CommentRepository extends BaseRepository
         return $comments;
     }
 
-    private function addFilterCommentsQueryBuilder(QueryBuilder $qb, string $source): QueryBuilder
+    private function addFilterCommentsQueryBuilder(QueryBuilder $qb, string $source)
     {
-        return $qb
+        $qb
             ->innerJoin('comment.targetSource', 'source')
             ->andWhere('source.humanId = :sourceId')
             ->andWhere('comment.type = :type')
             ->setParameters([
-                'sourceId'=> $source,
+                'sourceId' => $source,
                 'type' => Comment::TYPE_COMMENT
             ]);
     }
 
-    private function addFilterNewsQueryBuilder(QueryBuilder $qb): QueryBuilder
+    private function addFilterNewsQueryBuilder(QueryBuilder $qb)
     {
-        return $qb
+        $qb
+            ->andWhere('comment.targetSource IS NULL')
             ->andWhere('comment.type = :type')
-            ->setParameter('type', Comment::TYPE_NEWS);
+            ->setParameters([
+                'type' => Comment::TYPE_NEWS
+            ]);
     }
 
 
