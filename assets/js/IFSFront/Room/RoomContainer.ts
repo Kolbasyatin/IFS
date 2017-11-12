@@ -20,16 +20,17 @@ export class RoomContainer extends Colleague{
         throw Error("There is no room Found");
     }
 
-    public addCommentsToRooms(comments: CommentDataInterface[], isCommentNew: boolean = false) {
+    public addCommentsToAppropriateRooms(comments: CommentDataInterface[], isCommentNew: boolean = false) {
         for (let comment of comments) {
             let room = this.getRoomById(comment.sourceId);
             let jComment = new JComment(comment);
-            room.addComment(jComment);
             if(isCommentNew) {
                 room.addNewComment(jComment);
+            } else {
+                room.addComment(jComment);
             }
-
         }
+
     }
 
     public getDefaultRoom(): Room {

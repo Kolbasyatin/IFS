@@ -55,5 +55,7 @@ export class VolumeSlider extends AbstractControlSample {
 
     public onPlayStarted(): void {}
     public onPlayPaused(): void {}
+    public onPlayStarting(): void {};
+
 
 }

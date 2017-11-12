@@ -40,6 +40,10 @@ export class User extends Colleague{
         return this._previousRoom.getId();
     }
 
+    public getPreviousRoom(): Room {
+        return this._previousRoom;
+    }
+
     public getCurrentRoom(): Room {
         return this._currentRoom;
     }
@@ -47,5 +51,6 @@ export class User extends Colleague{
     public isCurrentRoomDefault(): boolean {
         return this._currentRoom.isDefault();
     }
+
 
 }

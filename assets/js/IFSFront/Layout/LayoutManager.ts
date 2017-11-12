@@ -20,7 +20,7 @@ export class LayoutManager extends Colleague {
 
     constructor(mediator: Mediator) {
         super(mediator);
-        this._leftCommentLayout =  new LeftCommentsLayout($("#comments"));
+        this._leftCommentLayout =  new LeftCommentsLayout($("#comments"), this.nextPageCallBack());
         this._volumeIndicator = new VolumeIndicator($('#volume_indicator'));
         this._commentButton = new CommentButton(mediator);
         this._authButton = new AuthButton($('ul.auth-ul li'));
@@ -29,23 +29,39 @@ export class LayoutManager extends Colleague {
     }
 
     public roomWasChanged(user: User): void {
-        this.updateLeftCommentLayout(user.getCurrentRoom());
+        this.updateLeftCommentLayout(user);
         this.hasToShowCommentButton(user);
         // this.updateAnotherELement...
         // this.updateAnotherELement...
     }
 
-    private updateLeftCommentLayout(room: Room): void {
-        this.hideCurrentLayout();
-        const comments: JComment[] = room.getAllComments();
+    private updateLeftCommentLayout(user: User): void {
+        this.hideCurrentLayout(user);
+        const currentComments: JComment[] = user.getCurrentRoom().getAllComments();
+        this.appendComments(currentComments);
+        this.showComments(currentComments);
+    }
+
+
+    private hideCurrentLayout(user: User):void {
+        const previousRoom: Room = user.getPreviousRoom();
+        if (previousRoom) {
+            const oldComments = previousRoom.getAllComments();
+            this._leftCommentLayout.hide(oldComments);
+        }
+    }
+
+    //TODO: По хорошему этот метод надо объединять с updateCommentLayout
+    public onNewCommentsEvent(comments: JComment[]): void {
         this.appendComments(comments, 'up');
         this.showComments(comments);
     }
 
-
-    private hideCurrentLayout():void {
-        this._leftCommentLayout.hide();
+    public onLastCommentsEvent(comments: JComment[]): void {
+        this.appendComments(comments, 'down');
+        this.showComments(comments);
     }
+
 
     private appendComments(comments: JComment[], direction: string = 'down'): void {
         for (let comment of comments) {
@@ -59,7 +75,7 @@ export class LayoutManager extends Colleague {
                 let comment: ShowInterface | void = comments.pop();
                 if (comment) {
                     comment.show(true);
-                    show(comments)
+                    show(comments);
                 }
             }, 80);
         };
@@ -76,10 +92,7 @@ export class LayoutManager extends Colleague {
         this._commentButton.showCommentButton();
     }
 
-    public onNewCommentsEvent(comments: JComment[]): void {
-        this.appendComments(comments, 'up');
-        this.showComments(comments);
-    }
+
 
     public changeVolumeIndicator(value: number): void {
         this._volumeIndicator.setValue(value);
@@ -99,6 +112,9 @@ export class LayoutManager extends Colleague {
         this._timer.start();
     }
 
-
-
+    public nextPageCallBack()  {
+        return () => {
+            this._mediator.onNextPageComment();
+        }
+    }
 }

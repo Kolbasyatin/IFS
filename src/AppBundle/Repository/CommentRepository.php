@@ -74,7 +74,6 @@ class CommentRepository extends BaseRepository
         $comments = $qb->getQuery()->getResult();
 
         return $comments;
-
     }
 
     /**

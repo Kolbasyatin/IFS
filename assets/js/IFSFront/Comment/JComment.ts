@@ -43,7 +43,7 @@ export class JComment implements ShowInterface {
         return this._$jHTML;
     }
 
-    show(applyEffect: boolean = false): void {
+    public show(applyEffect: boolean = false): void {
         let effect = {};
         if(applyEffect) {
             effect = this._effectOptions;
@@ -51,18 +51,22 @@ export class JComment implements ShowInterface {
         this._$jHTML.show(effect);
     }
 
+    public hide(): void {
+        this._$jHTML.hide();
+    }
+
+    public getId(): number {
+        return this._data.id;
+    }
+
     public updateJComment(data: CommentDataInterface): void {
-        // if (this._data !== data) {
-        //     this._data = data;
-        //     let oldJComment: JQuery = this._$jHTML;
-        //     let newJComment: JQuery = $(this.renderHtml());
-        //     oldJComment.replaceWith(newJComment);
-        //     this._$jHTML = newJComment;
-        //
-        //     return true;
-        // }
-        //
-        // return false;
+        if (this._data !== data) {
+            this._data = data;
+            let oldJComment: JQuery = this._$jHTML;
+            let newJComment: JQuery = $(this.renderHtml());
+            oldJComment.replaceWith(newJComment);
+            this._$jHTML = newJComment;
+        }
     }
 
 

@@ -37,7 +37,6 @@ export class CommentForm extends Colleague {
     private sendForm(): void {
         if(!this._error) {
             let data: JQuery.PlainObject = this._$form_container.find('form').serializeArray();
-
             let post = $.post(this.generateRoute(), data);
             $.when(post)
                 .done(result => {

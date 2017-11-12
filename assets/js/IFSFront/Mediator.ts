@@ -59,9 +59,15 @@ export class Mediator {
         const rooms: Room[] = this._roomContainer.getAllRooms();
         for (let room of rooms) {
             const comments: CommentDataInterface[] = await this._wamp.commentatorCall('getCommentsFirstPageBySource', {source: room.getId()});
-            this._roomContainer.addCommentsToRooms(comments);
+            this._roomContainer.addCommentsToAppropriateRooms(comments);
         }
+    }
 
+    public async onNextPageComment(): Promise<void> {
+        const currentSource = this._user.getCurrentRoomId();
+        const lastCommentId = this._user.getCurrentRoom().getLastComment().getId();
+        const comments: CommentDataInterface[] = await this._wamp.commentatorCall('getCommentsNewerThanId', {source: currentSource, lastCommentId: lastCommentId});
+        this._roomContainer.addCommentsToAppropriateRooms(comments);
     }
 
     public switchToDefaultRoom(): void {
@@ -85,7 +91,7 @@ export class Mediator {
     }
 
     /** Invokes by WAMP on New comment event */
-    /** TODO: Однозначно отсюда вынесли все это и переделать */
+    /** TODO: Однозначно отсюда вынести все это и переделать */
     public onNewComment(comments: CommentDataInterface[]): void {
         this.insertNewCommentsInRoom(comments);
         const currentRoom = this._user.getCurrentRoom();
@@ -93,8 +99,9 @@ export class Mediator {
     }
 
     private insertNewCommentsInRoom(comments: CommentDataInterface[]): void {
-        this._roomContainer.addCommentsToRooms(comments, true);
+        this._roomContainer.addCommentsToAppropriateRooms(comments, true);
     }
+
 
     /** Invokes by Control (play button) */
     public resumePlay(): void {
@@ -149,5 +156,7 @@ export class Mediator {
             this._layoutManager.blinkAuthButton();
         }
     }
+
+
 
 }
