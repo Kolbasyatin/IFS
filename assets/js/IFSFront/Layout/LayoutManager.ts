@@ -9,6 +9,7 @@ import {AuthButton} from "./AuthButton";
 import 'jquery-tooltip';
 import {Timer} from "./Time";
 import {Room} from "../Room/Room";
+
 //TODO: Надо рефакторить. Отрисовка комментариев не прозрачная. Нужен новый нормальный механизм.
 export class LayoutManager extends Colleague {
 
@@ -28,36 +29,21 @@ export class LayoutManager extends Colleague {
         this.createEffects();
     }
 
+    public onApplicationInit(): void {
+        this._timer.start();
+    }
     /** Room Was Changed */
-    public roomWasChanged(user: User): void {
+    public roomWasChanged(currentRoom: Room): void {
+        this._leftCommentLayout.onRoomChanged(currentRoom);
         // this.refreshLeftCommentLayout(user);
         // this.hasToShowCommentButton(user);
         // this.updateAnotherELement...
         // this.updateAnotherELement...
     }
 
-    private refreshLeftCommentLayout(user: User): void {
-        this.hideCurrentLayout(user);
-        const currentComments: JComment[] = user.getCurrentRoom().getAllComments();
-        this.appendAndShowJComments(currentComments);
-    }
-
-    public appendAndShowJComments(jComments: JComment[]): void {
-        this.appendCommentsToLayout(jComments);
-        this.showComments(jComments);
-    }
-
-
-    private hideCurrentLayout(user: User):void {
-        const previousRoom: Room = user.getPreviousRoom();
-        if (previousRoom) {
-            const oldComments = previousRoom.getAllComments();
-            this._leftCommentLayout.hide(oldComments);
-        }
-    }
-
     //TODO: По хорошему этот метод надо объединять с updateCommentLayout
     public onNewCommentsEvent(comments: JComment[]): void {
+
         this.appendCommentsToLayout(comments, 'up');
         this.showComments(comments);
     }
@@ -107,9 +93,6 @@ export class LayoutManager extends Colleague {
         });
     }
 
-    public startTimer(): void {
-        this._timer.start();
-    }
 
     public nextPageCallBack()  {
         return () => {

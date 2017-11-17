@@ -43,6 +43,7 @@ export class Room {
     }
 
 
+
     public addComment(jComment: JComment): void  {
         this._JComments.push(jComment);
 

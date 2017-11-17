@@ -7,6 +7,7 @@ import {Room} from "./Room/Room";
 import {WAMP} from "./WebSocket/WAMP";
 import {Player} from "./Player/Player";
 import {CommentForm} from "./Comment/CommentForm";
+import {DataManager} from "./Data/DataManager";
 
 export class Mediator {
     private _control: Control;
@@ -16,6 +17,7 @@ export class Mediator {
     private _wamp: WAMP;
     private _player: Player;
     private _commentForm: CommentForm;
+    private _dataManager: DataManager;
     private _isStarted: boolean;
 
     public setControl(control: Colleague) {
@@ -39,20 +41,42 @@ export class Mediator {
     public setCommentForm(commentForm: CommentForm) {
         this._commentForm = commentForm;
     }
+    public setDataManager(dataManager: DataManager) {
+        this._dataManager = dataManager;
+    }
 
     /** ================== */
-    public start(): void {
-        this._layoutManager.startTimer();
+    public init(): void {
+        this._layoutManager.onApplicationInit();
         this._wamp.connect();
     }
 
     //Starts on wamp connect
     public async startApplication(): Promise<void> {
         this._isStarted = true;
-        this.switchToDefaultRoom();
         this.setStartedVolume();
+        this.switchToDefaultRoom();
 
         // await this.fillRoomFirstPageComment();
+    }
+
+    private setStartedVolume(): void {
+        this.changeVolume(this._control.getCurrentVolume());
+    }
+
+    /** TODO: Вынести в отедльный функционал ? */
+    public switchToDefaultRoom(): void {
+        const room: Room = this._roomContainer.getDefaultRoom();
+        this._user.goToRoom(room);
+    }
+
+    /** Invoke User.goToRoom when room is changed **/
+    public roomWasChanged(): void {
+        const currentRoom: Room = this._user.getCurrentRoom();
+
+        this._layoutManager.roomWasChanged(currentRoom);
+        this._player.play(currentRoom);
+
     }
 
     /** TODO: Возмоно есть смысл выделить в отдельный функционал работы с данными */
@@ -75,10 +99,7 @@ export class Mediator {
         this._layoutManager.appendAndShowJComments(jComments);
     }
 
-    public switchToDefaultRoom(): void {
-        const room: Room = this._roomContainer.getDefaultRoom();
-        this._user.goToRoom(room);
-    }
+
 
     /** Invokes by Control Switch Room */
     public switchRoom(roomId: string): void {
@@ -89,12 +110,7 @@ export class Mediator {
 
     }
 
-    /** Invoke User when room is changed **/
-    public roomWasChanged(): void {
-        this._layoutManager.roomWasChanged(this._user);
-        this._player.play(this._user.getCurrentRoom());
 
-    }
 
     /** Invokes by WAMP on New comment event */
     /** TODO: Однозначно отсюда вынести все это и переделать */
@@ -128,11 +144,6 @@ export class Mediator {
     public stopApplication(): void {
         console.log('application stopped!');
     }
-
-    private setStartedVolume(): void {
-        this.changeVolume(this._control.getCurrentVolume());
-    }
-
 
     public changeVolume(volume: number): void {
             this._layoutManager.changeVolumeIndicator(volume);
