@@ -21,11 +21,11 @@ export class User extends Colleague{
     }
 
     public goToRoom(room: Room): void {
-        this.doChangeRoom(room);
-        this._mediator.roomWasChanged(room);
+        this.changeRoom(room);
+        this._mediator.roomWasChanged();
     }
 
-    private doChangeRoom(room: Room): void {
+    private changeRoom(room: Room): void {
         if(this._currentRoom) {
             this._previousRoom = this._currentRoom;
         }

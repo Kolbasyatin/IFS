@@ -28,9 +28,10 @@ export class LayoutManager extends Colleague {
         this.createEffects();
     }
 
+    /** Room Was Changed */
     public roomWasChanged(user: User): void {
-        this.refreshLeftCommentLayout(user);
-        this.hasToShowCommentButton(user);
+        // this.refreshLeftCommentLayout(user);
+        // this.hasToShowCommentButton(user);
         // this.updateAnotherELement...
         // this.updateAnotherELement...
     }

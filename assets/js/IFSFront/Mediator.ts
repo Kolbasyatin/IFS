@@ -49,9 +49,10 @@ export class Mediator {
     //Starts on wamp connect
     public async startApplication(): Promise<void> {
         this._isStarted = true;
-        await this.fillRoomFirstPageComment();
         this.switchToDefaultRoom();
         this.setStartedVolume();
+
+        // await this.fillRoomFirstPageComment();
     }
 
     /** TODO: Возмоно есть смысл выделить в отдельный функционал работы с данными */
@@ -78,6 +79,7 @@ export class Mediator {
         const room: Room = this._roomContainer.getDefaultRoom();
         this._user.goToRoom(room);
     }
+
     /** Invokes by Control Switch Room */
     public switchRoom(roomId: string): void {
         const room: Room = this._roomContainer.getRoomById(roomId);
@@ -88,9 +90,9 @@ export class Mediator {
     }
 
     /** Invoke User when room is changed **/
-    public roomWasChanged(room: Room): void {
+    public roomWasChanged(): void {
         this._layoutManager.roomWasChanged(this._user);
-        this._player.play(room);
+        this._player.play(this._user.getCurrentRoom());
 
     }
 
@@ -127,6 +129,9 @@ export class Mediator {
         console.log('application stopped!');
     }
 
+    private setStartedVolume(): void {
+        this.changeVolume(this._control.getCurrentVolume());
+    }
 
 
     public changeVolume(volume: number): void {
@@ -139,9 +144,6 @@ export class Mediator {
         return this._isStarted;
     }
 
-    private setStartedVolume(): void {
-        this.changeVolume(this._control.getCurrentVolume());
-    }
 
     /** Invokes by player onPlay event */
     public playStarting(): void {
