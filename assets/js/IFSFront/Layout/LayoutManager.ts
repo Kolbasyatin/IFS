@@ -35,10 +35,7 @@ export class LayoutManager extends Colleague {
     /** Room Was Changed */
     public roomWasChanged(currentRoom: Room): void {
         this._leftCommentLayout.onRoomChanged(currentRoom);
-        // this.refreshLeftCommentLayout(user);
-        // this.hasToShowCommentButton(user);
-        // this.updateAnotherELement...
-        // this.updateAnotherELement...
+        //this._someComponent.onRoomChanged(currentRoom); etc
     }
 
     //TODO: По хорошему этот метод надо объединять с updateCommentLayout

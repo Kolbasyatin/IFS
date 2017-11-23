@@ -54,14 +54,19 @@ export class Mediator {
     //Starts on wamp connect
     public async startApplication(): Promise<void> {
         this._isStarted = true;
+        this.roomInitData();
         this.setStartedVolume();
         this.switchToDefaultRoom();
+    }
 
-        // await this.fillRoomFirstPageComment();
+    private roomInitData(): void {
+        this._dataManager.getFirstCommentPage();
     }
 
     private setStartedVolume(): void {
-        this.changeVolume(this._control.getCurrentVolume());
+        const volume = this._control.getCurrentVolume();
+        this._layoutManager.changeVolumeIndicator(volume);
+        this._player.setVolume(volume);
     }
 
     /** TODO: Вынести в отедльный функционал ? */
@@ -73,7 +78,6 @@ export class Mediator {
     /** Invoke User.goToRoom when room is changed **/
     public roomWasChanged(): void {
         const currentRoom: Room = this._user.getCurrentRoom();
-
         this._layoutManager.roomWasChanged(currentRoom);
         this._player.play(currentRoom);
 
@@ -145,10 +149,6 @@ export class Mediator {
         console.log('application stopped!');
     }
 
-    public changeVolume(volume: number): void {
-            this._layoutManager.changeVolumeIndicator(volume);
-            this._player.setVolume(volume);
-    }
 
     /** Ivokes in Control when change volume. Prevent error when slider is ready, but application is not */
     public isApplicationStarted(): boolean {

@@ -26,7 +26,7 @@ export class LeftCommentsLayout extends LayoutSample implements CommentEventsInt
     }
 
     public onRoomChanged(room: Room): void {
-
+        console.log('roomChanged in layout left');
     }
 
 

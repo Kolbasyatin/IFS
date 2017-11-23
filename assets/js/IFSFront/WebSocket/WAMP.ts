@@ -45,12 +45,6 @@ export class WAMP extends Colleague {
         })
     }
 
-    private onDisconnect(error: autobahn.ICloseEventDetails): void {
-        this._isConnected = false;
-        console.log(error);
-        this._mediator.stopApplication();
-    }
-
     public async commentatorCall(procedure: string, args: object = {}): Promise<CommentDataInterface[]> {
         // await this.waitForSession();
         let json;
@@ -64,16 +58,22 @@ export class WAMP extends Colleague {
         return JSON.parse(json);
     }
 
-    private waitForSession(): Promise<void> {
-        return new Promise(resolve => {
-            let interval = setInterval(() => {
-                if (this._isConnected && this._session) {
-                    clearInterval(interval);
-                    resolve();
-                }
-            }, 50);
-        })
+    private onDisconnect(error: autobahn.ICloseEventDetails): void {
+        this._isConnected = false;
+        console.log(error);
+        this._mediator.stopApplication();
     }
+
+    // private waitForSession(): Promise<void> {
+    //     return new Promise(resolve => {
+    //         let interval = setInterval(() => {
+    //             if (this._isConnected && this._session) {
+    //                 clearInterval(interval);
+    //                 resolve();
+    //             }
+    //         }, 50);
+    //     })
+    // }
 
 }
 

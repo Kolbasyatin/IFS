@@ -19,4 +19,8 @@ export class DataManager extends Colleague {
 
         return comments;
     }
+
+    public async fillRoomByCommentPage(): Promise<void> {
+        console.log('alloha');
+    }
 }
