@@ -33,9 +33,14 @@ export class LayoutManager extends Colleague {
         this._timer.start();
     }
     /** Room Was Changed */
-    public roomWasChanged(currentRoom: Room): void {
-        this._leftCommentLayout.onRoomChanged(currentRoom);
-        //this._someComponent.onRoomChanged(currentRoom); etc
+    public roomWasChanged(currentRoom: Room, previousRoom?: Room): void {
+        if(previousRoom) {
+            this._leftCommentLayout.onRoomLeave(previousRoom);
+        }
+        this._leftCommentLayout.onRoomEnter(currentRoom);
+        //this._someComponent.onRoomChanged(currentRoom); etc etc etc
+
+
     }
 
     //TODO: По хорошему этот метод надо объединять с updateCommentLayout

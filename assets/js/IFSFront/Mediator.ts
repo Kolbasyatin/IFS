@@ -54,13 +54,18 @@ export class Mediator {
     //Starts on wamp connect
     public async startApplication(): Promise<void> {
         this._isStarted = true;
-        this.roomInitData();
+        try {
+            await this.roomInitData();
+        } catch (error) {
+            console.log(error);
+            return;
+        }
         this.setStartedVolume();
         this.switchToDefaultRoom();
     }
 
-    private roomInitData(): void {
-        this._dataManager.getFirstCommentPage();
+    private async roomInitData(): Promise<void> {
+        return this._dataManager.initFillRoomByData(this._roomContainer);
     }
 
     private setStartedVolume(): void {
@@ -78,7 +83,8 @@ export class Mediator {
     /** Invoke User.goToRoom when room is changed **/
     public roomWasChanged(): void {
         const currentRoom: Room = this._user.getCurrentRoom();
-        this._layoutManager.roomWasChanged(currentRoom);
+        const previousRoom: Room = this._user.getPreviousRoom();
+        this._layoutManager.roomWasChanged(currentRoom, previousRoom);
         this._player.play(currentRoom);
 
     }

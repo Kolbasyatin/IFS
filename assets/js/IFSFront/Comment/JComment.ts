@@ -36,6 +36,7 @@ export class JComment implements ShowInterface {
             throw new Error("There is no data to render");
         }
         this._data.timeToShow = moment.unix(this._data.dateTime).locale('ru')./*add(settings.timeShift, 'year').*/format('lll');
+
         return Mustache.render(this._template, this._data);
     }
 

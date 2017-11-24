@@ -25,8 +25,16 @@ export class LeftCommentsLayout extends LayoutSample implements CommentEventsInt
         this._nextPageCallback = nextPageCallback;
     }
 
-    public onRoomChanged(room: Room): void {
-        console.log('roomChanged in layout left');
+    public onRoomEnter(room: Room): void {
+        const roomCommentContainer: JQuery = room.getJContainer();
+        this._$commentContainer.append(roomCommentContainer);
+        this.commentContainerUpdate();
+        room.showAllComments();
+    }
+
+    public onRoomLeave(room: Room): void {
+        this._$commentContainer.empty();
+        this.commentContainerUpdate();
     }
 
 

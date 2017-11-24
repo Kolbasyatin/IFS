@@ -10,7 +10,8 @@ export class Room {
     private readonly _id: string;
     private _isRoomDefault: boolean = false;
     private _sourceUrl: string;
-    // private _JComments: JComment[] = [];
+    private _JComments: JComment[] = [];
+    private _JContainer: JQuery;
     // private _newJComments: JComment[] = [];
     // private _commentAccessLevel: number;
     // private _commentContainer: CommentContainer;
@@ -20,6 +21,7 @@ export class Room {
     constructor(id: string, sourceUrl: string, commentAccessLevel: string = 'squad') {
         this._id = id;
         this._sourceUrl = sourceUrl;
+        this._JContainer = $("<div />").attr('id', 'room_container'+this._id);
         // this._commentContainer = new CommentContainer();
         // this._commentAccessLevel = Room.levels[commentAccessLevel];
         // this._commentsContainer = new ScrollBarCommentContainer();
@@ -42,19 +44,23 @@ export class Room {
         return this._isRoomDefault;
     }
 
-
-
     public addComment(jComment: JComment): void  {
         this._JComments.push(jComment);
+        this._JContainer.append(jComment.getJHTML());
 
     }
+
+    public getJContainer(): JQuery {
+        return this._JContainer;
+    }
+
 
     public addNewComment(jComment: JComment): void {
         this._JComments.unshift(jComment);
         this._newJComments.unshift(jComment);
     }
     //
-    public getAllComments(): JComment[] {
+    public getAllJComments(): JComment[] {
         return this._JComments;
     }
 
@@ -71,6 +77,12 @@ export class Room {
 
     public getLastComment(): JComment {
         return this._JComments[this._JComments.length - 1];
+    }
+
+    public showAllComments(): void {
+        for (let comment of this._JComments) {
+            comment.show(true);
+        }
     }
 
 

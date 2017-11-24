@@ -45,17 +45,8 @@ export class WAMP extends Colleague {
         })
     }
 
-    public async commentatorCall(procedure: string, args: object = {}): Promise<CommentDataInterface[]> {
-        // await this.waitForSession();
-        let json;
-        try {
-            json = await this._session.call(`commentator/${procedure}`, args);
-        }
-        catch (err) {
-            console.log(err);
-        }
-
-        return JSON.parse(json);
+    public async commentatorCall(procedure: string, args: object = {}): Promise<string> {
+        return this._session.call(`commentator/${procedure}`, args);
     }
 
     private onDisconnect(error: autobahn.ICloseEventDetails): void {
