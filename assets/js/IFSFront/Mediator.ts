@@ -82,32 +82,29 @@ export class Mediator {
 
     /** Invoke User.goToRoom when room is changed **/
     public roomWasChanged(): void {
-        const currentRoom: Room = this._user.getCurrentRoom();
-        const previousRoom: Room = this._user.getPreviousRoom();
-        this._layoutManager.roomWasChanged(currentRoom, previousRoom);
-        this._player.play(currentRoom);
-
+        this._layoutManager.roomWasChanged(this._user);
+        this._player.play(this._user.getCurrentRoom());
     }
 
     /** TODO: Возмоно есть смысл выделить в отдельный функционал работы с данными */
-    public async fillRoomFirstPageComment(): Promise<void> {
-        const rooms: Room[] = this._roomContainer.getAllRooms();
-        for (let room of rooms) {
-            const comments: CommentDataInterface[] = await this._wamp.commentatorCall('getCommentsFirstPageBySource', {source: room.getId()});
-            this._roomContainer.addCommentsToAppropriateRooms(comments);
-        }
-    }
+    // public async fillRoomFirstPageComment(): Promise<void> {
+    //     const rooms: Room[] = this._roomContainer.getAllRooms();
+    //     for (let room of rooms) {
+    //         const comments: CommentDataInterface[] = await this._wamp.commentatorCall('getCommentsFirstPageBySource', {source: room.getId()});
+    //         this._roomContainer.addCommentsToAppropriateRooms(comments);
+    //     }
+    // }
 
-    public async onNextPageComment(): Promise<void> {
-        const currentSource = this._user.getCurrentRoomId();
-        const lastCommentId = this._user.getCurrentRoom().getLastComment().getId();
-        console.log(currentSource);
-        console.log(lastCommentId);
-        const comments: CommentDataInterface[] = await this._wamp.commentatorCall('getCommentsNewerThanId', {source: currentSource, lastCommentId: lastCommentId});
-        console.log(comments);
-        const jComments = this._roomContainer.addCommentsToAppropriateRooms(comments);
-        this._layoutManager.appendAndShowJComments(jComments);
-    }
+    // public async onNextPageComment(): Promise<void> {
+    //     const currentSource = this._user.getCurrentRoomId();
+    //     const lastCommentId = this._user.getCurrentRoom().getLastComment().getId();
+    //     console.log(currentSource);
+    //     console.log(lastCommentId);
+    //     const comments: CommentDataInterface[] = await this._wamp.commentatorCall('getCommentsNewerThanId', {source: currentSource, lastCommentId: lastCommentId});
+    //     console.log(comments);
+    //     const jComments = this._roomContainer.addCommentsToAppropriateRooms(comments);
+    //     this._layoutManager.appendAndShowJComments(jComments);
+    // }
 
 
 
@@ -124,15 +121,15 @@ export class Mediator {
 
     /** Invokes by WAMP on New comment event */
     /** TODO: Однозначно отсюда вынести все это и переделать */
-    public onNewComment(comments: CommentDataInterface[]): void {
-        this.insertNewCommentsInRoom(comments);
-        const currentRoom = this._user.getCurrentRoom();
-        this._layoutManager.onNewCommentsEvent(currentRoom.getNewComments());
-    }
+    // public onNewComment(comments: CommentDataInterface[]): void {
+    //     this.insertNewCommentsInRoom(comments);
+    //     const currentRoom = this._user.getCurrentRoom();
+    //     this._layoutManager.onNewCommentsEvent(currentRoom.getNewComments());
+    // }
 
-    private insertNewCommentsInRoom(comments: CommentDataInterface[]): void {
-        this._roomContainer.addCommentsToAppropriateRooms(comments, true);
-    }
+    // private insertNewCommentsInRoom(comments: CommentDataInterface[]): void {
+    //     this._roomContainer.addCommentsToAppropriateRooms(comments, true);
+    // }
 
     public onUpdateComment(comments: CommentDataInterface[]): void {
         console.log('Реализовать update комментария')

@@ -33,14 +33,14 @@ export class LayoutManager extends Colleague {
         this._timer.start();
     }
     /** Room Was Changed */
-    public roomWasChanged(currentRoom: Room, previousRoom?: Room): void {
+    public roomWasChanged(user: User): void {
+        const currentRoom: Room = user.getCurrentRoom();
+        const previousRoom: Room = user.getPreviousRoom();
         if(previousRoom) {
             this._leftCommentLayout.onRoomLeave(previousRoom);
         }
-        this._leftCommentLayout.onRoomEnter(currentRoom);
-        //this._someComponent.onRoomChanged(currentRoom); etc etc etc
-
-
+        this._leftCommentLayout.onRoomEnter(currentRoom, user);
+        this.hasToShowCommentButton(currentRoom, user)
     }
 
     //TODO: По хорошему этот метод надо объединять с updateCommentLayout
@@ -70,10 +70,10 @@ export class LayoutManager extends Colleague {
         show(Object.assign([],comments));
     }
 
-    private hasToShowCommentButton(user: User) {
+    private hasToShowCommentButton(room: Room, user: User) {
         this._commentButton.hideCommentButton();
         /**TODO: Грязный хак! возможно стоит ввести уровни доступа к элементам интерфейса */
-        if (user.isCurrentRoomDefault() && !user.isNewsMaker()) {
+        if (room.isDefault() && !user.isNewsMaker()) {
             return;
         }
         this._commentButton.showCommentButton();

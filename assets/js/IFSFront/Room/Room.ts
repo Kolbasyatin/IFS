@@ -85,6 +85,12 @@ export class Room {
         }
     }
 
+    public hideAllComments(): void {
+        for (let comment of this._JComments) {
+            comment.hide();
+        }
+    }
+
 
     //
     // public getId(): string {

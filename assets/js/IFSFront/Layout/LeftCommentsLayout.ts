@@ -33,6 +33,7 @@ export class LeftCommentsLayout extends LayoutSample implements CommentEventsInt
     }
 
     public onRoomLeave(room: Room): void {
+        room.hideAllComments();
         this._$commentContainer.empty();
         this.commentContainerUpdate();
     }

@@ -48,9 +48,4 @@ export class User extends Colleague{
         return this._currentRoom;
     }
 
-    public isCurrentRoomDefault(): boolean {
-        return this._currentRoom.isDefault();
-    }
-
-
 }
