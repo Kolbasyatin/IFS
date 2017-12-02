@@ -48,4 +48,8 @@ export class User extends Colleague{
         return this._currentRoom;
     }
 
+    public getTemplateName(): string {
+        return 'user';
+    }
+
 }

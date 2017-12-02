@@ -45,7 +45,7 @@ class CommentSubscriber implements EventSubscriber
         }
 
         if (count($comments)) {
-            $this->push('newcomment', $comments);
+            $this->push('newComment', $comments);
         }
 
     }

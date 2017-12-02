@@ -28,4 +28,4 @@ mediator.setPlayer(player);
 mediator.setCommentForm(commentForm);
 mediator.setDataManager(dataManager);
 
-mediator.init();
+mediator.fly();

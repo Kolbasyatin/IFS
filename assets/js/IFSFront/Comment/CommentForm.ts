@@ -34,23 +34,24 @@ export class CommentForm extends Colleague {
         this._$dialog.dialog(this._dialogOptions);
     }
 
-    private sendForm(): void {
+    private async sendForm(): Promise<void> {
         if(!this._error) {
-            let data: JQuery.PlainObject = this._$form_container.find('form').serializeArray();
-            let post = $.post(this.generateRoute(), data);
-            $.when(post)
-                .done(result => {
-                    if (result.error === false) {
-                        this.generateCommentedEvent()
-                    } else {
-                        this.generateErrorCommentedEvent();
-                    }
-                })
-                .fail(error => {
-                    console.error(error);
+            try {
+                let data: JQuery.PlainObject = this._$form_container.find('form').serializeArray();
+                let post = $.post(this.generateRoute(), data);
+                const result = await post;
+                if (result.error === false) {
                     this.generateCommentedEvent()
-                })
-                .always(() => this.closeDialog())
+                } else {
+                    this.generateErrorCommentedEvent();
+                }
+            } catch (error) {
+                console.error(error);
+                this.generateErrorCommentedEvent()
+            } finally {
+                this.closeDialog();
+            }
+
         }
 
     }
@@ -75,19 +76,17 @@ export class CommentForm extends Colleague {
         this._$dialog.dialog("close");
     }
 
-    private onOpen(): void {
-        let ajax: JQuery.jqXHR = $.get(this.generateRoute());
-        $.when(ajax).then(
-            data => {
-                this.showContent(data)
-            },
-            error => {
-                console.error(error);
-                this._error = true;
-                this.showContent('У нас что то сломалось.');
-                setTimeout(() => {this.closeDialog()}, 4000)
-            }
-        );
+    private async onOpen(): Promise<void> {
+        try {
+            let ajax: JQuery.jqXHR = $.get(this.generateRoute());
+            const data: string = await ajax;
+            this.showContent(data);
+        } catch (error) {
+            this._error = true;
+            console.log(error);
+            this.showContent('У нас что то сломалось.');
+            setTimeout(() => {this.closeDialog()}, 4000)
+        }
 
 
     }
@@ -103,11 +102,11 @@ export class CommentForm extends Colleague {
     }
 
     private generateCommentedEvent(): void {
-        console.log("Генерим событие на фронте")
+        console.log("Генерим событие на о успешности отправки комента.")
     }
 
     private generateErrorCommentedEvent(): void {
-        console.log("Генерим событие ошибки");
+        console.log("Генерим событие ошибки  из формы");
     }
 
 }

@@ -15,6 +15,7 @@ export class Control extends Colleague {
     private _muteButton: MuteButton;
     private _volumeSlider: VolumeSlider;
     private _switchers: Switcher[] = [];
+    private _reactions: ControlReactionInterface[] = [];
 
     constructor(mediator: Mediator) {
         super(mediator);
@@ -26,6 +27,9 @@ export class Control extends Colleague {
         });
         this._muteButton = new MuteButton($('#mute'));
         this.init();
+        this.buildReactions();
+
+
     }
 
     private init(): void {
@@ -39,6 +43,13 @@ export class Control extends Colleague {
         this._volumeSlider.addVolumeSubscriber(this.onVolumeChange());
 
 
+    }
+
+    private buildReactions(): void {
+        this._reactions.push(this._playButton);
+        this._reactions.push(this._pauseButton);
+        /** TODO: why error if switchers implemets interface? */
+        this._reactions = this._reactions.concat(this._switchers);
     }
 
     public onSwitchRoomClick() {
@@ -69,11 +80,7 @@ export class Control extends Colleague {
             this.sliderMuteToggle();
         };
     }
-
-    public sliderMuteToggle(): void {
-        this._volumeSlider.muteToggle();
-    }
-
+    /** invokes from volumeSlider */
     public onVolumeChange() {
         return (volume: number) => {
             if(!volume) {
@@ -88,16 +95,8 @@ export class Control extends Colleague {
         }
     }
 
-
-
-    public getReactionsSamples(): ControlReactionInterface[] {
-        let elements: ControlReactionInterface[] = [];
-        elements.push(this._playButton);
-        elements.push(this._pauseButton);
-        /** TODO: why error if switchers implemets interface? */
-        elements = elements.concat(this._switchers);
-
-        return elements;
+    public sliderMuteToggle(): void {
+        this._volumeSlider.muteToggle();
     }
 
     public getCurrentVolume(): number {
@@ -106,22 +105,19 @@ export class Control extends Colleague {
 
     /** Three methods code is duplicated. need to be refactoring */
     public playStarting(sourceId: string): void {
-        const elements: ControlReactionInterface[] = this.getReactionsSamples();
-        for (let element of elements) {
+        for (let element of this._reactions) {
             element.onPlayStarting(sourceId);
         }
     }
 
     public playStarted(sourceId: string): void {
-        const elements: ControlReactionInterface[] = this.getReactionsSamples();
-        for (let element of elements) {
+        for (let element of this._reactions) {
             element.onPlayStarted(sourceId);
         }
     }
 
     public playStopped(sourceId: string): void {
-        const elements: ControlReactionInterface[] = this.getReactionsSamples();
-        for (let element of elements) {
+        for (let element of this._reactions) {
             element.onPlayPaused(sourceId);
         }
     }

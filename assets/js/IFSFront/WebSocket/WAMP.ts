@@ -25,7 +25,6 @@ export class WAMP extends Colleague {
         this._mediator.startApplication();
     }
 
-    //Стоит ли заводить отдельный топик под отдельный action с комментариями?
     private bindSessionHandlers(session: ABSession): void {
         session.subscribe('comment', (uri, payload: any) => {
             switch (payload.action) {
@@ -55,64 +54,4 @@ export class WAMP extends Colleague {
         this._mediator.stopApplication();
     }
 
-    // private waitForSession(): Promise<void> {
-    //     return new Promise(resolve => {
-    //         let interval = setInterval(() => {
-    //             if (this._isConnected && this._session) {
-    //                 clearInterval(interval);
-    //                 resolve();
-    //             }
-    //         }, 50);
-    //     })
-    // }
-
 }
-
-
-// public onNewCommentAttach(observer: OnNewCommentInterface) {
-//     this._onNewCommentObservers.push(observer);
-// }
-//
-// public onDeleteCommentAttach(observer: OnDeleteCommentInterface) {
-//     this._onDeleteCommentObservers.push(observer);
-// }
-//
-// public onUpdateCommentAttach(observer: OnUpdateCommentInterface) {
-//     this._onUpdateCommentObservers.push(observer);
-// }
-
-
-// websocket.on("socket/connect", function (session: ABSession) {
-//     //Let's do something
-//     session.subscribe('herald/', function (uri: string, payload: object) {
-//         console.log(uri, payload);
-//     });
-//     session.subscribe('source', function (uri: string, payload: object) {
-//         console.log(uri, payload);
-//     });
-//     session.subscribe('comment', function (uri: string, payload: object) {
-//         console.log(uri, payload);
-//     });
-//
-//     session.publish("herald/", "This is a message");
-//
-//     // session.unsubscribe('herald/',function () {
-//     //     console.log('asdf');
-//     // });
-//
-//
-//     // RPC
-//     session.call("commentator/comment", {"term1": 2, "term2": 5}).then(
-//         function (result: any) {
-//             console.log("RPC Valid!", result);
-//         },
-//         function (error: any, desc: any) {
-//             console.log("RPC Error", error, desc);
-//         }
-//     );
-//
-// });
-//
-// websocket.on("socket/disconnect", function (error: autobahn.ICloseEventDetails) {
-//     console.log("Disconnected for " + error.reason + " with code " + error.code);
-// });

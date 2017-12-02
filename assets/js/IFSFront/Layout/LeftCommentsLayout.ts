@@ -1,13 +1,12 @@
 import {LayoutSample} from "./LayoutSample";
-import {JComment} from "../Comment/JComment";
 import {Room} from "../Room/Room";
-import {CommentEventsInterface} from "../Comment/CommentEventsInterface";
+import {User} from "../User/User";
 
 require('jquery-mousewheel');
 require('malihu-custom-scrollbar-plugin');
 
 
-export class LeftCommentsLayout extends LayoutSample implements CommentEventsInterface {
+export class LeftCommentsLayout extends LayoutSample {
     private _cSBOptions: MCustomScrollbar.CustomScrollbarOptions = {
         theme: 'dark-thin',
         callbacks: {
@@ -18,84 +17,54 @@ export class LeftCommentsLayout extends LayoutSample implements CommentEventsInt
     private _$commentContainer: JQuery;
     private _nextPageCallback: () => void;
 
-    constructor($container: JQuery, nextPageCallback:() => void) {
+    constructor($container: JQuery, nextPageCallback: () => void) {
         super($container);
         this._$mCustomScrollContainer = $container.mCustomScrollbar(this._cSBOptions);
         this._$commentContainer = this._$mCustomScrollContainer.find("#mCSB_1_container");
         this._nextPageCallback = nextPageCallback;
     }
 
-    public onRoomEnter(room: Room): void {
+    public roomWasChanged(user: User): void {
+        const currentRoom: Room = user.getCurrentRoom();
+        const previousRoom: Room = user.getPreviousRoom();
+        (async () => {
+            if (previousRoom) {
+                await this.onRoomLeave(previousRoom);
+            }
+            this.onRoomEnter(currentRoom);
+        })();
+
+    }
+
+    private onRoomEnter(room: Room): void {
         const roomCommentContainer: JQuery = room.getJContainer();
         this._$commentContainer.append(roomCommentContainer);
         this.commentContainerUpdate();
         room.showAllComments();
     }
 
-    public onRoomLeave(room: Room): void {
-        room.hideAllComments();
+    private async onRoomLeave(room: Room): Promise<void> {
+        await room.hideAllComments();
         this._$commentContainer.empty();
         this.commentContainerUpdate();
     }
 
 
-    onNewComment(jHTML: JQuery): void {
-        this.appendCommentUp(jHTML);
-    }
-
-    onEditComment(jHTML: JQuery): void {
-        console.log('left container edited comment');
-    }
-
-    onOldComment(jHTML: JQuery): void {
-        this.appendCommentDown(jHTML);
-    }
-
-    onDeleteComment(jHTML: JQuery): void {
-        console.log('left container deleted comment');
-    }
-
-    private appendCommentUp(jHTML: JQuery): void {
-        this._$commentContainer.prepend(jHTML);
+    public onNewComment(user: User): void {
         this.commentContainerUpdate();
+        const currentRoom = user.getCurrentRoom();
+        currentRoom.showAllComments();
     }
 
-    private appendCommentDown(jHTML: JQuery): void {
-        this._$commentContainer.append(jHTML);
-        this.commentContainerUpdate();
+    public onNextPageEvent(user: User): void {
+        this.onNewComment(user);
     }
 
-
-
-    // public publish(data: JQuery, direction:string = 'down'): void {
-    //     if(direction === 'up') {
-    //         this._$commentContainer.prepend(data);
-    //     } else {
-    //         this._$commentContainer.append(data);
-    //     }
-    //     this.commentContainerUpdate();
-    // }
-
-    // public hide(comments: JComment[]) {
-    //     for (let comment of comments) {
-    //         comment.hide();
-    //         comment.getJHTML().detach();
-    //     }
-    // }
 
     private commentContainerUpdate(): void {
         this._$mCustomScrollContainer.mCustomScrollbar('update');
     }
 
-    // public hide(): void {
-    //     console.log(this._$commentContainer.children());
-    //     this._$commentContainer.children().hide({
-    //         effect: 'slide',
-    //         easing: 'easeInOutBack',
-    //         duration: 300,
-    //         complete: () => {}
-    //     });
-    // }
 
     private async showNextPage(): Promise<void> {
         if (this._nextPageCallback) {

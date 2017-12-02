@@ -46,7 +46,7 @@ export class Mediator {
     }
 
     /** ================== */
-    public init(): void {
+    public fly(): void {
         this._layoutManager.onApplicationInit();
         this._wamp.connect();
     }
@@ -58,14 +58,15 @@ export class Mediator {
             await this.roomInitData();
         } catch (error) {
             console.log(error);
-            return;
+        } finally {
+            this.setStartedVolume();
+            this.switchToDefaultRoom();
         }
-        this.setStartedVolume();
-        this.switchToDefaultRoom();
+
     }
 
     private async roomInitData(): Promise<void> {
-        return this._dataManager.initFillRoomByData(this._roomContainer);
+        return this._dataManager.initFillRoomByData(this._roomContainer, this._user);
     }
 
     private setStartedVolume(): void {
@@ -74,7 +75,6 @@ export class Mediator {
         this._player.setVolume(volume);
     }
 
-    /** TODO: Вынести в отедльный функционал ? */
     public switchToDefaultRoom(): void {
         const room: Room = this._roomContainer.getDefaultRoom();
         this._user.goToRoom(room);
@@ -86,27 +86,13 @@ export class Mediator {
         this._player.play(this._user.getCurrentRoom());
     }
 
-    /** TODO: Возмоно есть смысл выделить в отдельный функционал работы с данными */
-    // public async fillRoomFirstPageComment(): Promise<void> {
-    //     const rooms: Room[] = this._roomContainer.getAllRooms();
-    //     for (let room of rooms) {
-    //         const comments: CommentDataInterface[] = await this._wamp.commentatorCall('getCommentsFirstPageBySource', {source: room.getId()});
-    //         this._roomContainer.addCommentsToAppropriateRooms(comments);
-    //     }
-    // }
+    public onNextPageComment(): void {
+        (async () => {
+            await this._dataManager.onNextPageComment(this._user, this._roomContainer);
+            this._layoutManager.onNextPageEvent(this._user);
+        })();
 
-    // public async onNextPageComment(): Promise<void> {
-    //     const currentSource = this._user.getCurrentRoomId();
-    //     const lastCommentId = this._user.getCurrentRoom().getLastComment().getId();
-    //     console.log(currentSource);
-    //     console.log(lastCommentId);
-    //     const comments: CommentDataInterface[] = await this._wamp.commentatorCall('getCommentsNewerThanId', {source: currentSource, lastCommentId: lastCommentId});
-    //     console.log(comments);
-    //     const jComments = this._roomContainer.addCommentsToAppropriateRooms(comments);
-    //     this._layoutManager.appendAndShowJComments(jComments);
-    // }
-
-
+    }
 
     /** Invokes by Control Switch Room */
     public switchRoom(roomId: string): void {
@@ -117,19 +103,17 @@ export class Mediator {
 
     }
 
-
+    public changeVolume(volume: number): void {
+        this._player.setVolume(volume);
+        this._layoutManager.changeVolumeIndicator(volume);
+    }
 
     /** Invokes by WAMP on New comment event */
-    /** TODO: Однозначно отсюда вынести все это и переделать */
-    // public onNewComment(comments: CommentDataInterface[]): void {
-    //     this.insertNewCommentsInRoom(comments);
-    //     const currentRoom = this._user.getCurrentRoom();
-    //     this._layoutManager.onNewCommentsEvent(currentRoom.getNewComments());
-    // }
+    public onNewComment(comments: CommentDataInterface[]): void {
+        DataManager.addNewComments(comments, this._roomContainer, this._user);
+        this._layoutManager.onNewCommentsEvent(this._user);
+    }
 
-    // private insertNewCommentsInRoom(comments: CommentDataInterface[]): void {
-    //     this._roomContainer.addCommentsToAppropriateRooms(comments, true);
-    // }
 
     public onUpdateComment(comments: CommentDataInterface[]): void {
         console.log('Реализовать update комментария')
@@ -157,7 +141,6 @@ export class Mediator {
     public isApplicationStarted(): boolean {
         return this._isStarted;
     }
-
 
     /** Invokes by player onPlay event */
     public playStarting(): void {
