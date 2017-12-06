@@ -1,4 +1,4 @@
-import {LeftCommentsLayout} from "./LeftCommentsLayout";
+import {LeftComments} from "./LeftComments";
 import {Mediator} from "../Mediator";
 import {Colleague} from "../Colleague";
 import {User} from "../User/User";
@@ -12,7 +12,7 @@ import {VKWidget} from "../Widgets/VKWidget";
 
 export class LayoutManager extends Colleague {
 
-    private _leftCommentLayout: LeftCommentsLayout;
+    private _leftComments: LeftComments;
     private _volumeIndicator: VolumeIndicator;
     private _commentButton: CommentButton;
     private _authButton: AuthButton;
@@ -21,7 +21,7 @@ export class LayoutManager extends Colleague {
 
     constructor(mediator: Mediator) {
         super(mediator);
-        this._leftCommentLayout =  new LeftCommentsLayout($("#comments"), this.nextPageCallBack());
+        this._leftComments =  new LeftComments($("#comments"), this.nextPageCallBack());
         this._volumeIndicator = new VolumeIndicator($('#volume_indicator'));
         this._commentButton = new CommentButton(mediator);
         this._authButton = new AuthButton($('ul.auth-ul li'));
@@ -32,20 +32,23 @@ export class LayoutManager extends Colleague {
 
     public onApplicationInit(): void {
         this._timer.start();
+        /** TODO: widgets must be selectable */
+        /** Widget Manager? */
         this._widget.start();
+        this._widget.show();
     }
     /** Room Was Changed */
     public roomWasChanged(user: User): void {
-        this._leftCommentLayout.roomWasChanged(user);
+        this._leftComments.roomWasChanged(user);
         this.hasToShowCommentButton(user);
     }
 
     public onNewCommentsEvent(user: User): void {
-        this._leftCommentLayout.onNewComment(user);
+        this._leftComments.onNewComment(user);
     }
 
     public onNextPageEvent(user: User): void {
-        this._leftCommentLayout.onNextPageEvent(user);
+        this._leftComments.onNextPageEvent(user);
     }
 
     private hasToShowCommentButton(user: User) {

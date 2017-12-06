@@ -23,7 +23,7 @@ export class VKWidget extends LayoutSample {
 
     }
 
-    public start(): void {
+    public async start(): Promise<void> {
         $script(this._widgetUrl, () => {
             VK.Widgets.Group(
                 this._widgetDiv.attr('id'),

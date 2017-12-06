@@ -23,10 +23,10 @@ export class DataManager extends Colleague {
     private async fillRoomByInitData(room: Room, user: User): Promise<void> {
         let json = await this._wamp.commentatorCall('getCommentsFirstPageBySource', {source: room.getId()});
         const rawComments = JSON.parse(json);
-        DataManager.addOldComments(rawComments, room, user);
+        this.addOldComments(rawComments, room, user);
     }
 
-    public static addOldComments(comments: CommentDataInterface[], room: Room, user: User): void {
+    public addOldComments(comments: CommentDataInterface[], room: Room, user: User): void {
         for (let rawComment of comments) {
             room.addComment(new JComment(rawComment, user.getTemplateName()));
         }
@@ -46,7 +46,7 @@ export class DataManager extends Colleague {
         const json = await this._wamp.commentatorCall('getCommentsNewerThanId', {source: currentSource, lastCommentId: lastCommentId});
         const comments: CommentDataInterface[] = JSON.parse(json);
         let room = roomContainer.getRoomById(currentSource);
-        DataManager.addOldComments(comments, room, user);
+        this.addOldComments(comments, room, user);
     }
 
 

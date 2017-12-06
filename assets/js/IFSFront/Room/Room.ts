@@ -53,20 +53,25 @@ export class Room {
         return this._JContainer;
     }
 
-    public async showAllComments(): Promise<void> {
-        for (let comment of this._JComments) {
-            if(!comment.isShown()) {
-                await this.createPause(85);
-                comment.show(true);
+    public showAllComments(isEffect: boolean = false): void {
+        let count: number = 0;
+        (async () => {
+            for (let comment of this._JComments) {
+                if (!comment.isShown()) {
+                    if (isEffect) {
+                        await this.createPause(Math.max(85 - count * 2, 0));
+                    }
+                    comment.show(isEffect);
+                    count++;
+                }
             }
-        }
+        })();
     }
 
     public async hideAllComments(): Promise<void> {
         let count: number = 0;
         for (let comment of this._JComments) {
             let pauseLength: number = Math.max(25 - count, 0);
-            console.log(pauseLength);
             await this.createPause(pauseLength);
             comment.hide();
             count++;

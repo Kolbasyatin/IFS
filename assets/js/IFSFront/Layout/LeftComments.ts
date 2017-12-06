@@ -6,7 +6,7 @@ require('jquery-mousewheel');
 require('malihu-custom-scrollbar-plugin');
 
 
-export class LeftCommentsLayout extends LayoutSample {
+export class LeftComments extends LayoutSample {
     private _cSBOptions: MCustomScrollbar.CustomScrollbarOptions = {
         theme: 'dark-thin',
         callbacks: {
@@ -39,30 +39,26 @@ export class LeftCommentsLayout extends LayoutSample {
     private onRoomEnter(room: Room): void {
         const roomCommentContainer: JQuery = room.getJContainer();
         this._$commentContainer.append(roomCommentContainer);
-        this.commentContainerUpdate();
-        room.showAllComments();
+        room.showAllComments(true);
     }
 
     private async onRoomLeave(room: Room): Promise<void> {
         await room.hideAllComments();
         this._$commentContainer.empty();
-        this.commentContainerUpdate();
     }
 
 
-    public onNewComment(user: User): void {
-        this.commentContainerUpdate();
-        const currentRoom = user.getCurrentRoom();
-        currentRoom.showAllComments();
+    public onNewComment(user: User, isShowEffect: boolean = true): void {
+            const currentRoom = user.getCurrentRoom();
+            currentRoom.showAllComments(isShowEffect);
     }
 
     public onNextPageEvent(user: User): void {
-        this.onNewComment(user);
-    }
+            this.onNewComment(user, false);
+        setTimeout(() => {
+            this._$container.mCustomScrollbar("scrollTo", "top");
+        }, 400);
 
-
-    private commentContainerUpdate(): void {
-        this._$mCustomScrollContainer.mCustomScrollbar('update');
     }
 
 
