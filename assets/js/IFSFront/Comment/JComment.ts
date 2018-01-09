@@ -65,6 +65,10 @@ export class JComment implements ShowInterface {
         return this._$jHTML.is(":visible");
     }
 
+    public isHidden(): boolean {
+        return !this.isShown();
+    }
+
     public hide(): void {
         this._$jHTML.hide(this._effectOptions);
     }

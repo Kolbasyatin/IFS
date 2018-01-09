@@ -57,7 +57,7 @@ export class Room {
         let count: number = 0;
         (async () => {
             for (let comment of this._JComments) {
-                if (!comment.isShown()) {
+                if (comment.isHidden()) {
                     if (isEffect) {
                         await this.createPause(Math.max(85 - count * 2, 0));
                     }

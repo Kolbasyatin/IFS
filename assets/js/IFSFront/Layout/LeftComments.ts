@@ -49,15 +49,15 @@ export class LeftComments extends LayoutSample {
 
 
     public onNewComment(user: User, isShowEffect: boolean = true): void {
-            const currentRoom = user.getCurrentRoom();
-            currentRoom.showAllComments(isShowEffect);
+        const currentRoom = user.getCurrentRoom();
+        currentRoom.showAllComments(isShowEffect);
     }
 
     public onNextPageEvent(user: User): void {
-            this.onNewComment(user, false);
-        setTimeout(() => {
-            this._$container.mCustomScrollbar("scrollTo", "top");
-        }, 400);
+        this.onNewComment(user, false);
+        // setTimeout(() => {
+        //     this._$container.mCustomScrollbar("scrollTo", "top");
+        // }, 400);
 
     }
 
