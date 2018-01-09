@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Application\Migrations;
 
@@ -8,20 +8,14 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-class Version20171022110706 extends AbstractMigration
+class Version20180109200229 extends AbstractMigration
 {
-    /**
-     * @param Schema $schema
-     */
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
 
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
         // this down() migration is auto-generated, please modify it to your needs
