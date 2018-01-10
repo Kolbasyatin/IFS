@@ -64,7 +64,7 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
         $response->setResponse($content);
         if (!$response->getNickname() && isset($content['response'][0]['screen_name'])) {
             $content['response'][0]['nickname'] = $content['response'][0]['screen_name'];
-            $response->setData($content);
+            $response->setResponse($content);
         }
 
         return $response;
