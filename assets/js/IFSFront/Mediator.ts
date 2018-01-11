@@ -18,7 +18,7 @@ export class Mediator {
     private _player: Player;
     private _commentForm: CommentForm;
     private _dataManager: DataManager;
-    private _isStarted: boolean;
+    private _isStarted: boolean = false;
 
     public setControl(control: Colleague) {
         this._control = <Control>control;
@@ -53,14 +53,16 @@ export class Mediator {
 
     //Starts on wamp connect
     public async startApplication(): Promise<void> {
-        this._isStarted = true;
-        try {
-            await this.roomInitData();
-        } catch (error) {
-            console.log(error);
-        } finally {
-            this.setStartedVolume();
-            this.switchToDefaultRoom();
+        if (!this._isStarted) {
+            this._isStarted = true;
+            try {
+                await this.roomInitData();
+            } catch (error) {
+                console.log(error);
+            } finally {
+                this.setStartedVolume();
+                this.switchToDefaultRoom();
+            }
         }
 
     }
