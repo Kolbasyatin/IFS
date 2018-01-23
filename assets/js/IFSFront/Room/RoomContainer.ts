@@ -20,22 +20,6 @@ export class RoomContainer extends Colleague{
         throw Error("There is no room Found");
     }
 
-    // public addCommentsToAppropriateRooms(comments: CommentDataInterface[], isCommentNew: boolean = false): JComment[] {
-    //     let jComments = [];
-    //     for (let comment of comments) {
-    //         let room = this.getRoomById(comment.sourceId);
-    //         let jComment = new JComment(comment);
-    //         if(isCommentNew) {
-    //             room.addNewComment(jComment);
-    //         } else {
-    //             room.addComment(jComment);
-    //         }
-    //         jComments.push(jComment);
-    //     }
-    //
-    //    return jComments;
-    // }
-
     public getDefaultRoom(): Room {
         return this.getRoomById('');
     }
