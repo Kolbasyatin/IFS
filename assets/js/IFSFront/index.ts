@@ -29,7 +29,3 @@ mediator.setCommentForm(commentForm);
 mediator.setDataManager(dataManager);
 
 mediator.fly();
-
-window.appl = mediator;
-
-

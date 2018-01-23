@@ -14,7 +14,7 @@
 #    - "3306:3306"
 
 postgres-server:
-  image: postgres:latest
+  image: postgres:9.6
   container_name: postgres-server
   volumes:
     - postgres_data:/var/lib/postgresql/data
@@ -95,6 +95,8 @@ mds-php-fpm:
 #    - mds-rabbitmq
 #  env_file:
 #    - ./php-fpm/xdebug-cli.env
+  ports:
+    - "8181:8181"
 
 mds-nginx:
   image: phpdockerio/nginx:latest

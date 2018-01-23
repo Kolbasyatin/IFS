@@ -167,6 +167,8 @@ hwi_oauth:
             client_id:           '%vkontakte_app_id%'
             client_secret:       '%vkontakte_app_secret%'
             scope: "email"
+    http_client:
+        verify_peer: false
 
 doctrine_migrations:
     dir_name: "%kernel.root_dir%/DoctrineMigrations"
