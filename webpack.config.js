@@ -13,7 +13,7 @@ Encore
 
     .enableTypeScriptLoader(function (typeScriptConfigOptions) {
         typeScriptConfigOptions.transpileOnly = true;
-        typeScriptConfigOptions.configFileName = '/assets/js/IFSFront/tsconfig.json';
+        typeScriptConfigOptions.configFileName = 'assets/js/IFSFront/tsconfig.json';
     })
     .addPlugin(
         new webpack.ContextReplacementPlugin(
