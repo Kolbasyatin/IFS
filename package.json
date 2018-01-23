@@ -44,6 +44,7 @@
   },
   "dependencies": {
     "@types/mustache": "^0.8.30",
+    "@types/node": "^9.3.0",
     "es5-shim": "^4.5.9",
     "jplayer": "^2.9.2",
     "mustache": "^2.3.0",
