@@ -14,7 +14,7 @@ export class WAMP extends Colleague {
     public connect(): void {
         let WS: WS = require("gos-ws");
         const location = window.location.hostname;
-        let webSocket = WS.connect(`ws://${location}:8181/stat`);
+        let webSocket = WS.connect(`ws://${location}/stat`);
         webSocket.on("socket/connect", session => this.onConnect(session));
         webSocket.on("socket/disconnect", error => this.onDisconnect(error));
     }
