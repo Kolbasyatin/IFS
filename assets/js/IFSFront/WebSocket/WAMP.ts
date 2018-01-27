@@ -27,22 +27,24 @@ export class WAMP extends Colleague {
     }
 
     private bindSessionHandlers(session: ABSession): void {
-        session.subscribe('comment', (uri, payload: any) => {
-            switch (payload.action) {
-                case 'newComment':
-                    const newComments: CommentDataInterface[] = JSON.parse(payload.data);
-                    this._mediator.onNewComment(newComments);
-                    break;
-                case 'updateComment':
-                    const updatedComments: CommentDataInterface[] = JSON.parse(payload.data);
-                    this._mediator.onUpdateComment(updatedComments);
-                    break;
-                case 'deleteComment':
-                    const deletedCommentId: number = JSON.parse(payload.data);
-                    this._mediator.onDeleteComment(deletedCommentId);
-                    break;
-            }
-        })
+        session
+            .subscribe('comment', (uri, payload: any) => {
+                switch (payload.action) {
+                    case 'newComment':
+                        const newComments: CommentDataInterface[] = JSON.parse(payload.data);
+                        this._mediator.onNewComment(newComments);
+                        break;
+                    case 'updateComment':
+                        const updatedComments: CommentDataInterface[] = JSON.parse(payload.data);
+                        this._mediator.onUpdateComment(updatedComments);
+                        break;
+                    case 'deleteComment':
+                        const deletedCommentId: number = JSON.parse(payload.data);
+                        this._mediator.onDeleteComment(deletedCommentId);
+                        break;
+                }
+            });
+
     }
 
     public async commentatorCall(procedure: string, args: object = {}): Promise<string> {

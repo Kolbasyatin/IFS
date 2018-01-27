@@ -9,6 +9,7 @@ import 'jquery-tooltip';
 import {Timer} from "./Time";
 import {Room} from "../Room/Room";
 import {VKWidget} from "../Widgets/VKWidget";
+import {Listeners} from "./Listeners";
 
 export class LayoutManager extends Colleague {
 
@@ -18,6 +19,7 @@ export class LayoutManager extends Colleague {
     private _authButton: AuthButton;
     private _timer: Timer;
     private _widget: VKWidget;
+    private _listeners: Listeners;
 
     constructor(mediator: Mediator) {
         super(mediator);
@@ -27,6 +29,7 @@ export class LayoutManager extends Colleague {
         this._authButton = new AuthButton($('ul.auth-ul li'));
         this._timer = new Timer($('#curtime'), 1000);
         this._widget = new VKWidget($("#widgets"));
+        this._listeners = new Listeners($("#listeners"));
         this.createEffects();
     }
 
@@ -41,6 +44,10 @@ export class LayoutManager extends Colleague {
     public roomWasChanged(user: User): void {
         this._leftComments.roomWasChanged(user);
         this.hasToShowCommentButton(user);
+        const currentRoom = user.getCurrentRoom();
+        const listeners = currentRoom.getLisneters();
+        this._listeners.updateListeners(listeners);
+        this._listeners.roomWasChanged();
     }
 
     public onNewCommentsEvent(user: User): void {

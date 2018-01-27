@@ -1,6 +1,4 @@
 import {JComment} from "../Comment/JComment";
-import {CommentContainer} from "../Comment/CommentContainer";
-import {CommentContainerInterface} from "../Comment/CommentContainerInterface";
 
 export class Room {
     public static readonly levels: {[index:string]: number} = {
@@ -12,14 +10,13 @@ export class Room {
     private _sourceUrl: string;
     private _JComments: JComment[] = [];
     private _JContainer: JQuery;
-    private _commentsContainer: CommentContainerInterface;
-
+    private _listeners: number;
     //TODO: Проработать внимательно уровни доступа.
     constructor(id: string, sourceUrl: string, commentAccessLevel: string = 'squad') {
         this._id = id;
         this._sourceUrl = sourceUrl;
         this._JContainer = $("<div />").attr('id', 'room_container'+this._id);
-        this._commentsContainer = new CommentContainer();
+        this._listeners = 0;
     }
 
     public getId(): string {
@@ -88,6 +85,14 @@ export class Room {
 
     public getLastComment(): JComment {
         return this._JComments[this._JComments.length - 1];
+    }
+
+    public setListeners(listeners: number): void {
+        this._listeners = listeners;
+    }
+
+    public getLisneters(): number {
+        return this._listeners;
     }
 
 }

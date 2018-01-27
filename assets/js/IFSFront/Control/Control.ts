@@ -28,8 +28,6 @@ export class Control extends Colleague {
         this._muteButton = new MuteButton($('#mute'));
         this.init();
         this.buildReactions();
-
-
     }
 
     private init(): void {
@@ -53,16 +51,18 @@ export class Control extends Colleague {
     }
 
     public onSwitchRoomClick() {
-        return (event: JQuery.Event) => {
-            const link: object = event.target;
-            const roomId: string = $(link).data('sourceid');
-            this._mediator.switchRoom(roomId);
+        return (event?: JQuery.Event) => {
+            if (event) {
+                const link: object = event.target;
+                const roomId: string = $(link).data('sourceid');
+                this._mediator.switchRoom(roomId);
+            }
         };
 
     }
 
     public onPlayClick() {
-        return (event: JQuery.Event) => {
+        return (event?: JQuery.Event) => {
             this._mediator.resumePlay();
         };
 

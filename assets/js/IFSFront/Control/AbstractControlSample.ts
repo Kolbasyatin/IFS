@@ -3,7 +3,7 @@ import {OnClickedSubscriberInterface} from "./OnClickedSubscriberInterface";
 
 export abstract class AbstractControlSample implements ControlReactionInterface, OnClickedSubscriberInterface {
     protected _$container: JQuery;
-    protected _onClickSubscribers: ((event: JQuery.Event) => void) [] = [];
+    protected _onClickSubscribers: ((event?: JQuery.Event) => void) [] = [];
 
     constructor(container: JQuery) {
         this._$container = container;
