@@ -46,8 +46,7 @@ export class LayoutManager extends Colleague {
         this.hasToShowCommentButton(user);
         const currentRoom = user.getCurrentRoom();
         const listeners = currentRoom.getLisneters();
-        this._listeners.updateListeners(listeners);
-        this._listeners.roomWasChanged();
+        this._listeners.roomWasChanged(listeners);
     }
 
     public onNewCommentsEvent(user: User): void {

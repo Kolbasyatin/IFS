@@ -18,7 +18,8 @@ export class Listeners extends LayoutSample{
         }
     }
 
-    public roomWasChanged(): void {
+    public roomWasChanged(listeners: number): void {
+        this.updateListeners(listeners);
         this.fadeInHtml();
     }
 
