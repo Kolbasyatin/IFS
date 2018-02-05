@@ -12,7 +12,8 @@
                         <div class="header_menu">
                             <ul class="auth-ul">
                                 {% if app.user %}
-                                <li class="logged" title="{{ 'logged.title'|trans }}"><a href="#">{{ app.user }}</a></li>
+                                    <li class="logged" title="{{ 'logged.title'|trans }}"><a href="#">{{ app.user }}</a>
+                                    </li>
                                 {% else %}
                                     {#<li><a class="auth-link" href="{{ path('fos_user_security_login') }}">Авторизироваться</a></li>#}
                                     {{ render(controller('HWIOAuthBundle:Connect:connect')) }}
@@ -20,9 +21,9 @@
                             </ul>
                             {#{{ knp_menu_render('top') }}#}
                             {#<ul>#}
-                                {#<li data-title="Часто задаваемые вопросы" data-content="content1">ЧЗД</li>#}
-                                {#<li data-content="content2">Ссылки для плеера</li>#}
-                                {#<li data-content="content3" data-title>Представься! Землянин.</li>#}
+                            {#<li data-title="Часто задаваемые вопросы" data-content="content1">ЧЗД</li>#}
+                            {#<li data-content="content2">Ссылки для плеера</li>#}
+                            {#<li data-content="content3" data-title>Представься! Землянин.</li>#}
                             {#</ul>#}
                         </div>
                     </div>
@@ -30,7 +31,7 @@
                         <a href="/" title=""><img src="{{ asset('assets/template/logo.png') }}" alt=""/></a>
                     </div>
                     {#<div class="auth" id="auth">#}
-                        {#Представься, землянин.#}
+                    {#Представься, землянин.#}
                     {#</div>#}
                     <div class="break"></div>
 
@@ -61,8 +62,8 @@
                     <div class="playerlistcontent">
                         {#{{ knp_menu_render('menu_icecast') }}#}
                         {#<ul id="playerlist">#}
-                            {#<li><a href="#" title="Модель для сборки - голос" data-src="http://ice.planeset.ru:8000/mds_voice.mp3" data-sourceid="mds_voice">Голос МДС</a></li>#}
-                            {#<li><a href="#" title="Модель для сборки - музыка" data-src="http://ice.planeset.ru:8000/mds.mp3" data-sourceid="mds_music">Музыка МДС</a></li>#}
+                        {#<li><a href="#" title="Модель для сборки - голос" data-src="http://ice.planeset.ru:8000/mds_voice.mp3" data-sourceid="mds_voice">Голос МДС</a></li>#}
+                        {#<li><a href="#" title="Модель для сборки - музыка" data-src="http://ice.planeset.ru:8000/mds.mp3" data-sourceid="mds_music">Музыка МДС</a></li>#}
                         {#</ul>#}
 
                         {{ knp_menu_render('main') }}
@@ -124,6 +125,11 @@
                     id="user-info"
                     data-is-authenticated="{{ app.user ? 'true': 'false' }}"
                     data-is-newsmaker="{{ (app.user and is_granted('ROLE_NEWS_NEW'))? 'true': 'false' }}"
+            ></div>
+            <div id="room-info"
+                 data-room-id=""
+                 data-room-url=""
+
             ></div>
             {% block dialogs %}
                 {#<div class="dialog_wrapper">#}

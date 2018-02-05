@@ -1,6 +1,5 @@
 import {LayoutSample} from "./LayoutSample";
 import * as Mustache from "mustache";
-import {User} from "../User/User";
 
 type ListenersData = {[listeners:string]: string}
 

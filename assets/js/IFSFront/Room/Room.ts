@@ -11,8 +11,8 @@ export class Room {
     private _JComments: JComment[] = [];
     private _JContainer: JQuery;
     private _listeners: number;
-    //TODO: Проработать внимательно уровни доступа.
-    constructor(id: string, sourceUrl: string, commentAccessLevel: string = 'squad') {
+
+    constructor(id: string, sourceUrl: string) {
         this._id = id;
         this._sourceUrl = sourceUrl;
         this._JContainer = $("<div />").attr('id', 'room_container'+this._id);
