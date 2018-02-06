@@ -21,6 +21,7 @@
         "friendsofsymfony/jsrouting-bundle": "^1.6",
         "friendsofsymfony/user-bundle": "~2.0",
         "gos/web-socket-bundle": "^1.8",
+        "guzzlehttp/guzzle": "^6.3",
         "hwi/oauth-bundle": "@stable",
         "incenteev/composer-parameter-handler": "^2.0",
         "jahudka/react-mpd": "^1.0",

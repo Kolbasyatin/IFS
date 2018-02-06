@@ -12,6 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use AppBundle\Controller\BaseController as Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -21,7 +22,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @package AppBundle\Controller
  * @Route("/comment")
  */
-class CommentController extends Controller
+class CommentController extends AbstractController
 {
     /**
      * @Route(

@@ -4,16 +4,8 @@
 namespace AppBundle\Controller;
 
 
-use AppBundle\Entity\Comment;
-use AppBundle\Controller\BaseController as Controller;
-use AppBundle\Entity\Source;
-use Jahudka\MPD\Client;
-use Jahudka\MPD\Connection\Native;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Constraints\Ip;
-use Symfony\Component\Validator\Constraints\IpValidator;
 
 class PageController extends Controller
 {
@@ -26,32 +18,35 @@ class PageController extends Controller
     /** @Route("/test", name="test") */
     public function testAction()
     {
-        $config = [
-            'connection' => [
-                'host' => 'ice.planeset.ru',
-                'port' => 6600,
-                'socket' => null
-            ],
-            'options' => [
-                'password' => null
-            ]
-
-        ];
-
-        $connection = new Native($config['connection']);
-        $client = new Client($connection, $config['options']);
-        $client->getCurrentSong()->then(function ($s) {
-            $a = 'b';
-        }, function () {
-            $b = 'c';
-        }, function () {
-            $d = 'e';
-        });
-
-        while (true) {
-            usleep(100000); // sleep 100 ms
-            $connection->receive(); // and see if there's any new data
-        }
+        $dataProvider = $this->get('app.curl.icecast.data.provider.voice');
+        $listeners = $dataProvider->getListeners();
+        $a = 'b';
+//        $config = [
+//            'connection' => [
+//                'host' => 'ice.planeset.ru',
+//                'port' => 6600,
+//                'socket' => null
+//            ],
+//            'options' => [
+//                'password' => null
+//            ]
+//
+//        ];
+//
+//        $connection = new Native($config['connection']);
+//        $client = new Client($connection, $config['options']);
+//        $client->getCurrentSong()->then(function ($s) {
+//            $a = 'b';
+//        }, function () {
+//            $b = 'c';
+//        }, function () {
+//            $d = 'e';
+//        });
+//
+//        while (true) {
+//            usleep(100000); // sleep 100 ms
+//            $connection->receive(); // and see if there's any new data
+//        }
 
 
 //

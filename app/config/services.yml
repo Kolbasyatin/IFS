@@ -60,3 +60,15 @@ services:
 
     AppBundle\Model\Room:
         arguments: []
+
+    app.curl.icecast.data.provider.voice:
+        class: AppBundle\Services\Informer\DataProviders\CurlIceCastDataProvider
+        public: true
+        arguments:
+            $sourceId: 'mds'
+            $url: 'http://ice.planeset.ru:8000/status-json.xsl'
+            $listenUrl: 'http://ice.planeset.ru:8000/mds.mp3'
+
+
+
+
