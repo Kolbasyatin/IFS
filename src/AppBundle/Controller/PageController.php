@@ -7,6 +7,8 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Comment;
 use AppBundle\Controller\BaseController as Controller;
 use AppBundle\Entity\Source;
+use Jahudka\MPD\Client;
+use Jahudka\MPD\Connection\Native;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,6 +26,34 @@ class PageController extends Controller
     /** @Route("/test", name="test") */
     public function testAction()
     {
+        $config = [
+            'connection' => [
+                'host' => 'ice.planeset.ru',
+                'port' => 6600,
+                'socket' => null
+            ],
+            'options' => [
+                'password' => null
+            ]
+
+        ];
+
+        $connection = new Native($config['connection']);
+        $client = new Client($connection, $config['options']);
+        $client->getCurrentSong()->then(function ($s) {
+            $a = 'b';
+        }, function () {
+            $b = 'c';
+        }, function () {
+            $d = 'e';
+        });
+
+        while (true) {
+            usleep(100000); // sleep 100 ms
+            $connection->receive(); // and see if there's any new data
+        }
+
+
 //
 //        $comments = [];
 //        $data = file_get_contents($this->get('kernel')->getRootDir() . '/../systems/comments.xml');

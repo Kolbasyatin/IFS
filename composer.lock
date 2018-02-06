@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "a3a54ceb07dd7fdc99fd1c8b3531500d",
+    "content-hash": "52cbb871dfbca767103448d27e5effa3",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -2068,6 +2068,40 @@
                 "parameters management"
             ],
             "time": "2015-11-10T17:04:01+00:00"
+        },
+        {
+            "name": "jahudka/react-mpd",
+            "version": "v1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jahudka/react-mpd.git",
+                "reference": "e374b5582c56f0241e2efd8dc4ddf8711cad9adc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jahudka/react-mpd/zipball/e374b5582c56f0241e2efd8dc4ddf8711cad9adc",
+                "reference": "e374b5582c56f0241e2efd8dc4ddf8711cad9adc",
+                "shasum": ""
+            },
+            "require": {
+                "evenement/evenement": "^2.0.0",
+                "react/promise": "^2.4.1"
+            },
+            "require-dev": {
+                "react/socket-client": "^0.5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Jahudka\\MPD\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Music Player Daemon client library with ReactPHP bindings",
+            "time": "2016-05-22T01:23:56+00:00"
         },
         {
             "name": "jdorn/sql-formatter",
