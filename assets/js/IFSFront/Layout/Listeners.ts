@@ -13,21 +13,17 @@ export class Listeners extends LayoutSample{
     public updateListeners(listeners: number): void {
         this.show(listeners);
         if(this.isListenersChange(listeners)) {
+            this._listeners = listeners;
             this.fadeInHtml();
         }
     }
 
-    public roomWasChanged(listeners: number): void {
-        this.updateListeners(listeners);
-        this.fadeInHtml();
-    }
-
     private show(listeners: number): void {
-        this._listeners = listeners;
         const html = this.render(this.constructListenerData(listeners));
         this._$container.html(html);
     }
-    public isListenersChange(listeners: number): boolean {
+
+    private isListenersChange(listeners: number): boolean {
         return this._listeners !== listeners;
 
     }

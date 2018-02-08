@@ -125,6 +125,11 @@ export class Mediator {
         console.log('Релазизовать удаление коммента');
     }
 
+    public onListeners(listeners: ListenersDataInterface[]): void {
+        this._dataManager.fillListeners(this._roomContainer, listeners);
+        this._layoutManager.changeListeners(this._user);
+    }
+
     /** Invokes by Control (play button) */
     public resumePlay(): void {
         if (this._player.isPaused()) {

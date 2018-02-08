@@ -84,3 +84,8 @@ interface TimeDataInterface {
     hour: number;
     minute: number;
 }
+
+interface ListenersDataInterface {
+    id: string;
+    listeners: number;
+}

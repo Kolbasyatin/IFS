@@ -8,6 +8,7 @@ import {User} from "../User/User";
 
 export class DataManager extends Colleague {
     private _wamp: WAMP;
+
     constructor(mediator: Mediator, wamp: WAMP) {
         super(mediator);
         this._wamp = wamp;
@@ -32,7 +33,7 @@ export class DataManager extends Colleague {
         }
     }
 
-    public static addNewComments(comments: CommentDataInterface[], roomContainer: RoomContainer, user: User):  void {
+    public static addNewComments(comments: CommentDataInterface[], roomContainer: RoomContainer, user: User): void {
         for (let rawComment of comments) {
             let roomId = rawComment.sourceId;
             let room = roomContainer.getRoomById(roomId);
@@ -43,10 +44,23 @@ export class DataManager extends Colleague {
     public async onNextPageComment(user: User, roomContainer: RoomContainer): Promise<void> {
         const currentSource = user.getCurrentRoomId();
         const lastCommentId = user.getCurrentRoom().getLastComment().getId();
-        const json = await this._wamp.commentatorCall('getCommentsNewerThanId', {source: currentSource, lastCommentId: lastCommentId});
+        const json = await this._wamp.commentatorCall('getCommentsNewerThanId', {
+            source: currentSource,
+            lastCommentId: lastCommentId
+        });
         const comments: CommentDataInterface[] = JSON.parse(json);
         let room = roomContainer.getRoomById(currentSource);
         this.addOldComments(comments, room, user);
+    }
+
+    public fillListeners(roomContainer: RoomContainer, listeners: ListenersDataInterface[]) {
+        for (const listener of listeners) {
+            let room: Room = roomContainer.getRoomById(listener.id);
+            if (room) {
+                room.setListeners(listener.listeners);
+            }
+
+        }
     }
 
 

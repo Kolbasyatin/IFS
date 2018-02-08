@@ -46,8 +46,8 @@ export class WAMP extends Colleague {
             });
         session
             .subscribe('listeners', (uri, payload: any) => {
-                console.log('listeners payload!' + payload.msg);
-                console.log('listeners uri' + uri);
+                const listeners: ListenersDataInterface[] = JSON.parse(payload.listeners);
+                this._mediator.onListeners(listeners);
             })
 
     }

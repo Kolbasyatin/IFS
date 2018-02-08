@@ -34,4 +34,14 @@ class InformManager
         }
         throw new InformerException('No informer found');
     }
+
+    public function getListeners(): array
+    {
+        $listeners = [];
+        foreach ($this->informers as $informer) {
+            $listeners[] = ['id' => $informer->getId(), 'listeners' => $informer->getListeners()];
+        }
+
+        return $listeners;
+    }
 }

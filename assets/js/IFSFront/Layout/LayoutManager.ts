@@ -44,10 +44,19 @@ export class LayoutManager extends Colleague {
     public roomWasChanged(user: User): void {
         this._leftComments.roomWasChanged(user);
         this.hasToShowCommentButton(user);
-        const currentRoom = user.getCurrentRoom();
-        const listeners = currentRoom.getLisneters();
-        this._listeners.roomWasChanged(listeners);
+        this.changeListeners(user);
+        console.log('rwch');
     }
+
+    public changeListeners(user: User): void {
+        const currentRoom = user.getCurrentRoom();
+        /** Тут костыль. Обязательно разобаться почему срабатывает быстрее listeners из Wamp нежели дефолтная комната проставляется */
+        if (currentRoom) {
+            const listeners = currentRoom.getLisneters();
+            this._listeners.updateListeners(listeners);
+        }
+    }
+
 
     public onNewCommentsEvent(user: User): void {
         this._leftComments.onNewComment(user);

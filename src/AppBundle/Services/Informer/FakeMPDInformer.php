@@ -6,8 +6,9 @@ namespace AppBundle\Services\Informer;
 
 class FakeMPDInformer implements InformerInterface
 {
+    const DEFAULT_NAME = '';
     /** @var string */
-    private $id = 'default';
+    private $id;
 
     /** @var InformerInterface[] */
     private $informers;
@@ -15,6 +16,7 @@ class FakeMPDInformer implements InformerInterface
     public function __construct()
     {
         $this->informers = new \SplObjectStorage();
+        $this->id = self::DEFAULT_NAME;
     }
 
     public function addInformer(InformerInterface $informer)

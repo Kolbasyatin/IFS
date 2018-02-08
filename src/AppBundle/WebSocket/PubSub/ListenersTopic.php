@@ -35,14 +35,8 @@ class ListenersTopic implements TopicInterface, PushableTopicInterface
 
     public function onSubscribe(ConnectionInterface $connection, Topic $topic, WampRequest $request)
     {
-        try {
-            $informer = $this->informManager->getInformer('default');
-        } catch (InformerException $e) {
-
-        }
-        $listeners = $informer->getListeners();
-        dump($listeners);
-        $topic->broadcast(['msg' => $listeners]);
+        $listeners = $this->informManager->getListeners();
+        $topic->broadcast(['listeners' => json_encode($listeners)]);
     }
 
     public function onUnSubscribe(ConnectionInterface $connection, Topic $topic, WampRequest $request)
@@ -50,6 +44,14 @@ class ListenersTopic implements TopicInterface, PushableTopicInterface
         // TODO: Implement onUnSubscribe() method.
     }
 
+    /**
+     * @param ConnectionInterface $connection
+     * @param Topic $topic
+     * @param WampRequest $request
+     * @param $event
+     * @param array $exclude
+     * @param array $eligible
+     */
     public function onPublish(
         ConnectionInterface $connection,
         Topic $topic,

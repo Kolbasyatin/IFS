@@ -5,6 +5,7 @@ import {JComment} from "../Comment/JComment";
 
 export class RoomContainer extends Colleague{
     private _rooms: Room[] = [];
+    readonly _defaultRoomName: string = '';
     constructor(mediator: Mediator) {
         super(mediator);
         this._rooms = this.tempRoomConstructor();
@@ -21,14 +22,14 @@ export class RoomContainer extends Colleague{
     }
 
     public getDefaultRoom(): Room {
-        return this.getRoomById('');
+        return this.getRoomById(this._defaultRoomName);
     }
 
     private tempRoomConstructor(): Room[] {
         let rooms = [];
         rooms.push(new Room('mds_voice', 'http://ice.planeset.ru:8000/mds_voice.mp3'));
         rooms.push(new Room('mds_music', 'http://ice.planeset.ru:8000/mds.mp3'));
-        let defaultRoom = new Room('', '');
+        let defaultRoom = new Room(this._defaultRoomName, '');
         defaultRoom.setRoomDefault();
         rooms.push(defaultRoom);
 

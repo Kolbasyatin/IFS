@@ -15,8 +15,8 @@ const control = new Control(mediator);
 const user = new User(mediator);
 const roomContainer = new RoomContainer(mediator);
 const player = new Player(mediator);
-const wamp = new WAMP(mediator);
 const commentForm = new CommentForm(mediator);
+const wamp = new WAMP(mediator);
 const dataManager = new DataManager(mediator, wamp);
 
 mediator.setLayout(layout);
