@@ -6,17 +6,12 @@ app_rpc:
         method:
             pattern: "[a-z_]+"
 
-herald:
-    channel: herald/{message}
-    handler:
-        callback: 'herald.topic'
-
-source:
-    channel: source
-    handler:
-        callback: 'source.topic'
-
 comment:
     channel: comment
     handler:
         callback: 'comment.topic'
+
+listeners:
+    channel: listeners
+    handler:
+        callback: 'listeners.topic'

@@ -44,6 +44,11 @@ export class WAMP extends Colleague {
                         break;
                 }
             });
+        session
+            .subscribe('listeners', (uri, payload: any) => {
+                console.log('listeners payload!' + payload.mds);
+                console.log('listeners uri' + uri);
+            })
 
     }
 

@@ -13,8 +13,6 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 class CurlIceCastDataProvider implements DataProviderInterface
 {
-    /** @var string */
-    private $sourceId;
 
     /** @var Client */
     private $httpClient;
@@ -30,13 +28,11 @@ class CurlIceCastDataProvider implements DataProviderInterface
 
     /**
      * CurlIceCastDataProvider constructor.
-     * @param string $sourceId
      * @param string $url
      * @param string $listenUrl
      */
-    public function __construct(string $sourceId, string $url, string $listenUrl)
+    public function __construct(string $url, string $listenUrl)
     {
-        $this->sourceId = $sourceId;
         $this->httpClient = new Client();
         $this->url = $url;
         $this->listenUrl = $listenUrl;

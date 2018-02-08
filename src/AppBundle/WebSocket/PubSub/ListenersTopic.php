@@ -10,7 +10,7 @@ use Gos\Bundle\WebSocketBundle\Topic\TopicInterface;
 use Ratchet\ConnectionInterface;
 use Ratchet\Wamp\Topic;
 
-class SourceTopic implements TopicInterface, PushableTopicInterface
+class ListenersTopic implements TopicInterface, PushableTopicInterface
 {
     public function onPush(Topic $topic, WampRequest $request, $data, $provider)
     {
@@ -27,14 +27,20 @@ class SourceTopic implements TopicInterface, PushableTopicInterface
         // TODO: Implement onUnSubscribe() method.
     }
 
-    public function onPublish(ConnectionInterface $connection, Topic $topic, WampRequest $request, $event, array $exclude, array $eligible)
-    {
+    public function onPublish(
+        ConnectionInterface $connection,
+        Topic $topic,
+        WampRequest $request,
+        $event,
+        array $exclude,
+        array $eligible
+    ) {
         // TODO: Implement onPublish() method.
     }
 
     public function getName()
     {
-        return 'source.topic';
+        return 'listeners.topic';
     }
 
 }

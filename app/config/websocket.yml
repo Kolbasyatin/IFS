@@ -19,6 +19,7 @@ gos_web_socket:
       - AppBundle\WebSocket\RPC\CommentRPC
     topics:
       - AppBundle\WebSocket\PubSub\CommentTopic
-      - AppBundle\WebSocket\PubSub\SourceTopic
+#      - AppBundle\WebSocket\PubSub\SourceTopic
+      - AppBundle\WebSocket\PubSub\ListenersTopic
     periodic:
       - AppBundle\WebSocket\StreamStatusChecker

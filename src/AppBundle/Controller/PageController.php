@@ -4,6 +4,7 @@
 namespace AppBundle\Controller;
 
 
+use AppBundle\Services\Informer\InformManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -15,11 +16,13 @@ class PageController extends Controller
         return $this->render(':page:index.html.twig');
     }
 
-    /** @Route("/test", name="test") */
-    public function testAction()
+    /** @Route("/test", name="test")
+     * @param InformManager $infoManager
+     */
+    public function testAction(InformManager $infoManager)
     {
-        $dataProvider = $this->get('app.curl.icecast.data.provider.voice');
-        $listeners = $dataProvider->getListeners();
+//        $dataProvider = $this->get('app.informer.manager');
+
         $a = 'b';
 //        $config = [
 //            'connection' => [

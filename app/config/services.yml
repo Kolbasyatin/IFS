@@ -61,13 +61,42 @@ services:
     AppBundle\Model\Room:
         arguments: []
 
-    app.curl.icecast.data.provider.voice:
+    app.curl.icecast.data.provider.music:
         class: AppBundle\Services\Informer\DataProviders\CurlIceCastDataProvider
-        public: true
         arguments:
-            $sourceId: 'mds'
             $url: 'http://ice.planeset.ru:8000/status-json.xsl'
             $listenUrl: 'http://ice.planeset.ru:8000/mds.mp3'
+
+    app.curl.icecast.data.provider.voice:
+        class: AppBundle\Services\Informer\DataProviders\CurlIceCastDataProvider
+        arguments:
+            $url: 'http://ice.planeset.ru:8000/status-json.xsl'
+            $listenUrl: 'http://ice.planeset.ru:8000/mds_voice.mp3'
+
+#TODO: Сделать фабрику для информеров и для провайдеров данных
+    app.mpd.informer.music:
+        class: AppBundle\Services\Informer\MPDInformer
+        arguments:
+            $id: 'mds_music'
+            $dataProvider: '@app.curl.icecast.data.provider.music'
+
+    app.mpd.informer.voice:
+        class: AppBundle\Services\Informer\MPDInformer
+        arguments:
+            $id: 'mds_voice'
+            $dataProvider: '@app.curl.icecast.data.provider.voice'
+
+    app.mpd.informer.default:
+        class: AppBundle\Services\Informer\FakeMPDInformer
+        calls:
+            - [addInformer, ["@app.mpd.informer.music"]]
+            - [addInformer, ["@app.mpd.informer.voice"]]
+
+    AppBundle\Services\Informer\InformManager:
+        calls:
+            - [addInformer, ["@app.mpd.informer.music"]]
+            - [addInformer, ["@app.mpd.informer.voice"]]
+            - [addInformer, ["@app.mpd.informer.default"]]
 
 
 
