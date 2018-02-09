@@ -12,12 +12,14 @@ export class Room {
     private _JContainer: JQuery;
     private _listeners: number;
     private _sourceName: string;
+    private _currentTrackName: string;
 
-    constructor(id: string, sourceUrl: string) {
+    constructor(id: string, sourceUrl: string, sourceName: string) {
         this._id = id;
         this._sourceUrl = sourceUrl;
         this._JContainer = $("<div />").attr('id', 'room_container'+this._id);
         this._listeners = 0;
+        this._sourceName = sourceName;
     }
 
     public getId(): string {
@@ -55,9 +57,7 @@ export class Room {
         return this._JContainer;
     }
 
-    public setSourceName(name: string): void {
-        this._sourceName = name;
-    }
+
 
     public showAllComments(isEffect: boolean = false): void {
         let count: number = 0;
@@ -102,6 +102,15 @@ export class Room {
 
     public getLisneters(): number {
         return this._listeners;
+    }
+
+
+    public setCurrentTrackName(trackName: string): void {
+        this._currentTrackName = trackName;
+    }
+
+    public getCurrentTrackName(): string {
+        return this._currentTrackName;
     }
 
 }

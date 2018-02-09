@@ -130,6 +130,11 @@ export class Mediator {
         this._layoutManager.onListeners(this._user, this._dataManager);
     }
 
+    public onTrack(tracks: TrackInterface[]): void {
+        this._dataManager.fillTrack(tracks);
+        this._layoutManager.onTrack(this._user, this._dataManager);
+    }
+
     /** Invokes by Control (play button) */
     public resumePlay(): void {
         if (this._player.isPaused()) {

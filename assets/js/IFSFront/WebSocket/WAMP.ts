@@ -48,6 +48,11 @@ export class WAMP extends Colleague {
             .subscribe('listeners', (uri, payload: any) => {
                 const listeners: ListenersDataInterface[] = JSON.parse(payload.listeners);
                 this._mediator.onListeners(listeners);
+            });
+        session
+            .subscribe('track', (uri, payload: any) => {
+                const tracks: TrackInterface[] = JSON.parse(payload.tracks);
+                this._mediator.onTrack(tracks);
             })
 
     }

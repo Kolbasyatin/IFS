@@ -15,7 +15,7 @@ use Psr\Log\LoggerInterface;
 use Ratchet\ConnectionInterface;
 use Ratchet\Wamp\Topic;
 
-class ListenersTopic implements TopicInterface, PushableTopicInterface, TopicPeriodicTimerInterface
+class TrackTopic implements TopicInterface, PushableTopicInterface, TopicPeriodicTimerInterface
 {
 
     use TopicPeriodicTimerTrait;
@@ -45,9 +45,9 @@ class ListenersTopic implements TopicInterface, PushableTopicInterface, TopicPer
 
     public function onSubscribe(ConnectionInterface $connection, Topic $topic, WampRequest $request)
     {
-        $listeners = $this->informManager->getListeners();
+        $trackName = $this->informManager->getTrackName();
         /** @var $msg string*/
-        $msg = ['listeners' => json_encode($listeners)];
+        $msg = ['tracks' => json_encode($trackName, JSON_UNESCAPED_UNICODE)];
         $topic->broadcast($msg);
     }
 
@@ -79,17 +79,16 @@ class ListenersTopic implements TopicInterface, PushableTopicInterface, TopicPer
     {
         $this->periodicTimer->addPeriodicTimer(
             $this,
-            'checkListeners',
-            5,
+            'checkTrack',
+            7,
             function () use ($topic) {
                 /** @var $msg string */
                 try {
-                    $listeners = $this->informManager->getListeners();
+                    $trackName = $this->informManager->getTrackName();
                 } catch (\Throwable $e) {
-                    $this->logger->alert('Error in received Listeners. '.$e->getMessage());
+                    $this->logger->alert('Error in received Track. '.$e->getMessage());
                 }
-                $this->listenersStat->doStat($listeners);
-                $msg = ['listeners' => json_encode($listeners)];
+                $msg = ['tracks' => json_encode($trackName, JSON_UNESCAPED_UNICODE)];
                 $topic->broadcast($msg);
             }
         );
@@ -98,7 +97,7 @@ class ListenersTopic implements TopicInterface, PushableTopicInterface, TopicPer
 
     public function getName()
     {
-        return 'listeners.topic';
+        return 'track.topic';
     }
 
 }

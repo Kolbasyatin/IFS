@@ -26,6 +26,9 @@ class CurlIceCastDataProvider implements DataProviderInterface
     /** @var PropertyAccessor */
     private $accessor;
 
+    /** @var Info */
+    private $data;
+
     /**
      * CurlIceCastDataProvider constructor.
      * @param string $url
@@ -59,13 +62,18 @@ class CurlIceCastDataProvider implements DataProviderInterface
 
     private function getData(): Info
     {
-        $info = new Info();
-        $response = $this->httpClient->request('GET', $this->url);
-        if (200 === $response->getStatusCode()) {
-            $json = (string)$response->getBody();
-            $dataArray = json_decode($json, true);
-            $sourceData = $this->splitData($dataArray);
-            $this->parseData($info, $sourceData);
+        if ($this->data && $this->data->isFresh()) {
+            return $this->data;
+        } else {
+            $info = new Info();
+            $response = $this->httpClient->request('GET', $this->url);
+            if (200 === $response->getStatusCode()) {
+                $json = (string)$response->getBody();
+                $dataArray = json_decode($json, true);
+                $sourceData = $this->splitData($dataArray);
+                $this->parseData($info, $sourceData);
+            }
+            $this->data = $info;
         }
 
         return $info;

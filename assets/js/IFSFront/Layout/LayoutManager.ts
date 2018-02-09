@@ -11,6 +11,7 @@ import {Room} from "../Room/Room";
 import {VKWidget} from "../Widgets/VKWidget";
 import {ListenersManager} from "./ListenersManager";
 import {DataManager} from "../Data/DataManager";
+import {TrackManager} from "./TrackManager";
 
 export class LayoutManager extends Colleague {
 
@@ -21,6 +22,7 @@ export class LayoutManager extends Colleague {
     private _timer: Timer;
     private _widget: VKWidget;
     private _listenersManager: ListenersManager;
+    private _trackManager: TrackManager;
 
     constructor(mediator: Mediator) {
         super(mediator);
@@ -31,6 +33,7 @@ export class LayoutManager extends Colleague {
         this._timer = new Timer($('#curtime'), 1000);
         this._widget = new VKWidget($("#widgets"));
         this._listenersManager = new ListenersManager();
+        this._trackManager = new TrackManager();
         this.createEffects();
     }
 
@@ -46,10 +49,15 @@ export class LayoutManager extends Colleague {
         this._leftComments.roomWasChanged(user);
         this.hasToShowCommentButton(user);
         this._listenersManager.roomWasChanged(user);
+        this._trackManager.roomWasChanged(user);
     }
 
     public onListeners(user: User, dataManager: DataManager): void {
         this._listenersManager.onListeners(user, dataManager);
+    }
+
+    public onTrack(user: User,  dataManager: DataManager): void {
+        this._trackManager.onTrack(user, dataManager);
     }
 
     public onNewCommentsEvent(user: User): void {

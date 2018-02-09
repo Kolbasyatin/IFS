@@ -14,6 +14,14 @@ class Info
     private $elapsedTime;
     /** @var string */
     private $sourceName;
+    /** @var \DateTime */
+    private $createdTime;
+
+    public function __construct()
+    {
+        $this->createdTime = new \DateTime("now");
+    }
+
 
     /**
      * @return int
@@ -77,6 +85,11 @@ class Info
     public function setSourceName(string $sourceName): void
     {
         $this->sourceName = $sourceName;
+    }
+
+    public function isFresh(): bool
+    {
+        return false;
     }
 
 

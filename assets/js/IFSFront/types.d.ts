@@ -25,8 +25,11 @@ interface ABSession {
 
 interface WS {
     connect(url: string): WS;
-    on(type: string, callback: (arg:any)=>void ): void;
+
+    on(type: string, callback: (arg: any) => void): void;
+
     fire(event: any): void;
+
     off(type: string, listeners: any[]): void;
 }
 
@@ -37,10 +40,12 @@ interface ShowInterface {
 interface jPlayer {
     (id?: any, options?: any): any;
 }
+
 interface JQuery {
     jPlayer: jPlayer
     status: jPlayerStatus;
 }
+
 interface jPlayerStatus {
     src: string,
     media: object,
@@ -85,8 +90,16 @@ interface TimeDataInterface {
     minute: number;
 }
 
+/** TODO: Для памяти. Тут нужно вынести воощбе name и передавать имя в комнату при инициализации комнат */
+
 interface ListenersDataInterface {
     id: string;
     listeners: number;
     name: string;
+
+}
+
+interface TrackInterface {
+    id: string;
+    track_name: string;
 }

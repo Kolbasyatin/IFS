@@ -60,7 +60,16 @@ export class DataManager extends Colleague {
             let room: Room = this._roomContainer.getRoomById(listener.id);
             if (room) {
                 room.setListeners(listener.listeners);
-                room.setSourceName(listener.name);
+            }
+
+        }
+    }
+
+    public fillTrack(tracks: TrackInterface[]) {
+        for (const track of tracks) {
+            let room: Room = this._roomContainer.getRoomById(track.id);
+            if (room) {
+                room.setCurrentTrackName(track.track_name);
             }
 
         }

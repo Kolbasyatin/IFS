@@ -41,11 +41,23 @@ class InformManager
         foreach ($this->informers as $informer) {
             $listeners[] = [
                 'id' => $informer->getId(),
-                'listeners' => $informer->getListeners(),
-                'name' => $informer->getSourceName()
+                'listeners' => $informer->getListeners()
             ];
         }
 
         return $listeners;
+    }
+
+    public function getTrackName(): array
+    {
+        $tracks = [];
+        foreach ($this->informers as $informer) {
+            $tracks[] = [
+                'id' => $informer->getId(),
+                'track_name' => $informer->getTrackName()
+            ];
+        }
+
+        return $tracks;
     }
 }

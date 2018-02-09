@@ -45,7 +45,7 @@ class FakeMPDInformer implements InformerInterface
         $trackName = '';
 
         foreach ($this->informers as $informer) {
-            $trackName .= $informer->getId() . ':' . $informer->getTrackName() . PHP_EOL;
+            $trackName .= $informer->getSourceName() . ':' . $informer->getTrackName() . PHP_EOL;
         }
 
         return $trackName;
@@ -53,7 +53,7 @@ class FakeMPDInformer implements InformerInterface
 
     public function getSourceName(): ?string
     {
-        return "Всего";
+        return "Шлюз";
     }
 
 

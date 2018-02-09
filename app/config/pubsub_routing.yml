@@ -15,3 +15,8 @@ listeners:
     channel: listeners
     handler:
         callback: 'listeners.topic'
+
+track:
+    channel: track
+    handler:
+        callback: 'track.topic'

@@ -25,14 +25,12 @@ export class ListenersManager {
 
     }
 
-    private updateMainListeners(user: User) {
+    private updateMainListeners(user: User): void {
         const currentRoom: Room = user.getCurrentRoom();
         if (currentRoom) {
             this._listeners.updateListeners(currentRoom.getLisneters());
         }
     }
-
-
 
 
 }
