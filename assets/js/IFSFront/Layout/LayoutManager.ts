@@ -9,7 +9,8 @@ import 'jquery-tooltip';
 import {Timer} from "./Time";
 import {Room} from "../Room/Room";
 import {VKWidget} from "../Widgets/VKWidget";
-import {Listeners} from "./Listeners";
+import {ListenersManager} from "./ListenersManager";
+import {DataManager} from "../Data/DataManager";
 
 export class LayoutManager extends Colleague {
 
@@ -19,7 +20,7 @@ export class LayoutManager extends Colleague {
     private _authButton: AuthButton;
     private _timer: Timer;
     private _widget: VKWidget;
-    private _listeners: Listeners;
+    private _listenersManager: ListenersManager;
 
     constructor(mediator: Mediator) {
         super(mediator);
@@ -29,7 +30,7 @@ export class LayoutManager extends Colleague {
         this._authButton = new AuthButton($('ul.auth-ul li'));
         this._timer = new Timer($('#curtime'), 1000);
         this._widget = new VKWidget($("#widgets"));
-        this._listeners = new Listeners($("#listeners"));
+        this._listenersManager = new ListenersManager();
         this.createEffects();
     }
 
@@ -44,19 +45,12 @@ export class LayoutManager extends Colleague {
     public roomWasChanged(user: User): void {
         this._leftComments.roomWasChanged(user);
         this.hasToShowCommentButton(user);
-        this.changeListeners(user);
-        console.log('rwch');
+        this._listenersManager.roomWasChanged(user);
     }
 
-    public changeListeners(user: User): void {
-        const currentRoom = user.getCurrentRoom();
-        /** Тут костыль. Обязательно разобаться почему срабатывает быстрее listeners из Wamp нежели дефолтная комната проставляется */
-        if (currentRoom) {
-            const listeners = currentRoom.getLisneters();
-            this._listeners.updateListeners(listeners);
-        }
+    public onListeners(user: User, dataManager: DataManager): void {
+        this._listenersManager.onListeners(user, dataManager);
     }
-
 
     public onNewCommentsEvent(user: User): void {
         this._leftComments.onNewComment(user);

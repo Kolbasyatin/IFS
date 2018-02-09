@@ -12,6 +12,8 @@ class Info
     private $trackName;
     /** @var \DatePeriod */
     private $elapsedTime;
+    /** @var string */
+    private $sourceName;
 
     /**
      * @return int
@@ -60,6 +62,24 @@ class Info
     {
         $this->elapsedTime = $elapsedTime;
     }
+
+    /**
+     * @return string
+     */
+    public function getSourceName(): string
+    {
+        return $this->sourceName;
+    }
+
+    /**
+     * @param string $sourceName
+     */
+    public function setSourceName(string $sourceName): void
+    {
+        $this->sourceName = $sourceName;
+    }
+
+
 
 
 }

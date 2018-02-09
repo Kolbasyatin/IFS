@@ -68,7 +68,7 @@ export class Mediator {
     }
 
     private async roomInitData(): Promise<void> {
-        return this._dataManager.initFillRoomByData(this._roomContainer, this._user);
+        return this._dataManager.initFillRoomByData(this._user);
     }
 
     private setStartedVolume(): void {
@@ -90,7 +90,7 @@ export class Mediator {
 
     public onNextPageComment(): void {
         (async () => {
-            await this._dataManager.onNextPageComment(this._user, this._roomContainer);
+            await this._dataManager.onNextPageComment(this._user);
             this._layoutManager.onNextPageEvent(this._user);
         })();
 
@@ -112,7 +112,7 @@ export class Mediator {
 
     /** Invokes by WAMP on New comment event */
     public onNewComment(comments: CommentDataInterface[]): void {
-        DataManager.addNewComments(comments, this._roomContainer, this._user);
+        this._dataManager.addNewComments(comments, this._user);
         this._layoutManager.onNewCommentsEvent(this._user);
     }
 
@@ -126,8 +126,8 @@ export class Mediator {
     }
 
     public onListeners(listeners: ListenersDataInterface[]): void {
-        this._dataManager.fillListeners(this._roomContainer, listeners);
-        this._layoutManager.changeListeners(this._user);
+        this._dataManager.fillListeners(listeners);
+        this._layoutManager.onListeners(this._user, this._dataManager);
     }
 
     /** Invokes by Control (play button) */

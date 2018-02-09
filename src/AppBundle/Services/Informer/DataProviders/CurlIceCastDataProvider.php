@@ -51,6 +51,12 @@ class CurlIceCastDataProvider implements DataProviderInterface
         return $this->getData()->getTrackName();
     }
 
+    public function getSourceName(): ?string
+    {
+        return $this->getData()->getSourceName();
+    }
+
+
     private function getData(): Info
     {
         $info = new Info();
@@ -87,6 +93,7 @@ class CurlIceCastDataProvider implements DataProviderInterface
     {
         $info->setListeners((int)$this->accessor->getValue($data, '[listeners]'));
         $info->setTrackName($this->accessor->getValue($data, '[title]'));
+        $info->setSourceName((string)$this->accessor->getValue($data, '[server_name]'));
     }
 
 }

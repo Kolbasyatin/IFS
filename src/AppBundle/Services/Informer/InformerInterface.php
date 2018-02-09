@@ -11,4 +11,6 @@ interface InformerInterface
     public function getListeners(): ?int;
 
     public function getTrackName(): ?string;
+
+    public function getSourceName(): ?string;
 }

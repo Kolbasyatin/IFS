@@ -88,4 +88,5 @@ interface TimeDataInterface {
 interface ListenersDataInterface {
     id: string;
     listeners: number;
+    name: string;
 }

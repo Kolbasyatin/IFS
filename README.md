@@ -20,3 +20,5 @@ New version <http://mds.planeset.ru>
     docker run -ti --entrypoint=sh --name=name_container new_image_name
 
     
+* При получении слушателей информер обращается два раза. Один раз за количеством,
+другой за именем ресурса. Вынести имя ресурса в переменные информера. 

@@ -39,7 +39,11 @@ class InformManager
     {
         $listeners = [];
         foreach ($this->informers as $informer) {
-            $listeners[] = ['id' => $informer->getId(), 'listeners' => $informer->getListeners()];
+            $listeners[] = [
+                'id' => $informer->getId(),
+                'listeners' => $informer->getListeners(),
+                'name' => $informer->getSourceName()
+            ];
         }
 
         return $listeners;

@@ -11,8 +11,8 @@ export class Listeners extends LayoutSample{
     }
 
     public updateListeners(listeners: number): void {
-        this.show(listeners);
         if(this.isListenersChange(listeners)) {
+            this.show(listeners);
             this._listeners = listeners;
             this.fadeInHtml();
         }
@@ -23,11 +23,6 @@ export class Listeners extends LayoutSample{
         this._$container.html(html);
     }
 
-    private isListenersChange(listeners: number): boolean {
-        return this._listeners !== listeners;
-
-    }
-
     private constructListenerData(listeners: number): ListenersData {
         return {listeners: listeners ? String(listeners) : "&#8734"};
     }
@@ -35,6 +30,11 @@ export class Listeners extends LayoutSample{
     private fadeInHtml(): void {
         this._$container.hide();
         this._$container.fadeIn('ease');
+    }
+
+    private isListenersChange(listeners: number): boolean {
+        return this._listeners !== listeners;
+
     }
 
 

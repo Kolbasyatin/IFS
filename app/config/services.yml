@@ -73,18 +73,21 @@ services:
             $url: 'http://ice.planeset.ru:8000/status-json.xsl'
             $listenUrl: 'http://ice.planeset.ru:8000/mds_voice.mp3'
 
-#TODO: Сделать фабрику для информеров и для провайдеров данных
+#TODO: Сделать фабрику для информеров и для провайдеров данных данные из фабрики
     app.mpd.informer.music:
         class: AppBundle\Services\Informer\MPDInformer
         arguments:
             $id: 'mds_music'
             $dataProvider: '@app.curl.icecast.data.provider.music'
+            $sourceName: 'МДС-Музыка'
 
     app.mpd.informer.voice:
         class: AppBundle\Services\Informer\MPDInformer
         arguments:
             $id: 'mds_voice'
             $dataProvider: '@app.curl.icecast.data.provider.voice'
+            $sourceName: 'МДС-Голос'
+
 
     app.mpd.informer.default:
         class: AppBundle\Services\Informer\FakeMPDInformer

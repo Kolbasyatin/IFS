@@ -11,6 +11,7 @@ export class Room {
     private _JComments: JComment[] = [];
     private _JContainer: JQuery;
     private _listeners: number;
+    private _sourceName: string;
 
     constructor(id: string, sourceUrl: string) {
         this._id = id;
@@ -25,6 +26,10 @@ export class Room {
 
     public getSourceUrl(): string {
         return this._sourceUrl;
+    }
+
+    public getSourceName(): string {
+        return this._sourceName;
     }
 
     public setRoomDefault(): void {
@@ -48,6 +53,10 @@ export class Room {
 
     public getJContainer(): JQuery {
         return this._JContainer;
+    }
+
+    public setSourceName(name: string): void {
+        this._sourceName = name;
     }
 
     public showAllComments(isEffect: boolean = false): void {

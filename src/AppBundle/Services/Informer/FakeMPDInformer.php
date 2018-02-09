@@ -51,5 +51,10 @@ class FakeMPDInformer implements InformerInterface
         return $trackName;
     }
 
+    public function getSourceName(): ?string
+    {
+        return "Всего";
+    }
+
 
 }

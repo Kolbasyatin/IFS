@@ -8,14 +8,16 @@ import {User} from "../User/User";
 
 export class DataManager extends Colleague {
     private _wamp: WAMP;
+    private _roomContainer: RoomContainer;
 
-    constructor(mediator: Mediator, wamp: WAMP) {
+    constructor(mediator: Mediator, wamp: WAMP, roomContainer: RoomContainer) {
         super(mediator);
         this._wamp = wamp;
+        this._roomContainer = roomContainer;
     }
 
-    public async initFillRoomByData(roomContainer: RoomContainer, user: User): Promise<void> {
-        const rooms: Room[] = roomContainer.getAllRooms();
+    public async initFillRoomByData(user: User): Promise<void> {
+        const rooms: Room[] = this._roomContainer.getAllRooms();
         for (let room of rooms) {
             await this.fillRoomByInitData(room, user);
         }
@@ -33,15 +35,15 @@ export class DataManager extends Colleague {
         }
     }
 
-    public static addNewComments(comments: CommentDataInterface[], roomContainer: RoomContainer, user: User): void {
+    public addNewComments(comments: CommentDataInterface[], user: User): void {
         for (let rawComment of comments) {
             let roomId = rawComment.sourceId;
-            let room = roomContainer.getRoomById(roomId);
+            let room = this._roomContainer.getRoomById(roomId);
             room.addNewComment(new JComment(rawComment, user.getTemplateName()));
         }
     }
 
-    public async onNextPageComment(user: User, roomContainer: RoomContainer): Promise<void> {
+    public async onNextPageComment(user: User): Promise<void> {
         const currentSource = user.getCurrentRoomId();
         const lastCommentId = user.getCurrentRoom().getLastComment().getId();
         const json = await this._wamp.commentatorCall('getCommentsNewerThanId', {
@@ -49,18 +51,35 @@ export class DataManager extends Colleague {
             lastCommentId: lastCommentId
         });
         const comments: CommentDataInterface[] = JSON.parse(json);
-        let room = roomContainer.getRoomById(currentSource);
+        let room = this._roomContainer.getRoomById(currentSource);
         this.addOldComments(comments, room, user);
     }
 
-    public fillListeners(roomContainer: RoomContainer, listeners: ListenersDataInterface[]) {
+    public fillListeners(listeners: ListenersDataInterface[]) {
         for (const listener of listeners) {
-            let room: Room = roomContainer.getRoomById(listener.id);
+            let room: Room = this._roomContainer.getRoomById(listener.id);
             if (room) {
                 room.setListeners(listener.listeners);
+                room.setSourceName(listener.name);
             }
 
         }
+    }
+
+    public getTitleListenersData(): ListenersDataInterface[] {
+        let data: ListenersDataInterface[] = [];
+        const rooms = this._roomContainer.getAllRooms();
+        for (let room of rooms) {
+            data.push(
+                {
+                    id: room.getId(),
+                    listeners: room.getLisneters(),
+                    name: room.getSourceName()
+                }
+            )
+        }
+
+        return data;
     }
 
 

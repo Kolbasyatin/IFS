@@ -10,19 +10,19 @@ import {DataManager} from "./Data/DataManager";
 
 const mediator = new Mediator();
 
+const roomContainer = new RoomContainer(mediator);
 const layout = new LayoutManager(mediator);
 const control = new Control(mediator);
 const user = new User(mediator);
-const roomContainer = new RoomContainer(mediator);
 const player = new Player(mediator);
 const commentForm = new CommentForm(mediator);
 const wamp = new WAMP(mediator);
-const dataManager = new DataManager(mediator, wamp);
+const dataManager = new DataManager(mediator, wamp, roomContainer);
 
-mediator.setLayout(layout);
-mediator.setControl(control);
 mediator.setUser(user);
 mediator.setRoomContainer(roomContainer);
+mediator.setControl(control);
+mediator.setLayout(layout);
 mediator.setWamp(wamp);
 mediator.setPlayer(player);
 mediator.setCommentForm(commentForm);

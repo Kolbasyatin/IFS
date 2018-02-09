@@ -21,4 +21,10 @@ class MPDDataProvider implements DataProviderInterface
         // TODO: Implement getTrackName() method.
     }
 
+    public function getSourceName(): ?string
+    {
+        // TODO: Implement getSourceName() method.
+    }
+
+
 }
