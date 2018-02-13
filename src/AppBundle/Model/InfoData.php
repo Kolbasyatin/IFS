@@ -4,8 +4,11 @@
 namespace AppBundle\Model;
 
 
-class Info
+class InfoData
 {
+
+    const DEFAULT_LIFETIME = 2;
+
     /** @var integer */
     private $listeners;
     /** @var string */
@@ -89,7 +92,9 @@ class Info
 
     public function isFresh(): bool
     {
-        return false;
+        $difference = $this->createdTime->diff(new \DateTime("now"))->s;
+
+        return $difference <= self::DEFAULT_LIFETIME;
     }
 
 

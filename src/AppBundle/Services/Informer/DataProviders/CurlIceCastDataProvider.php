@@ -5,7 +5,7 @@ namespace AppBundle\Services\Informer\DataProviders;
 
 
 use AppBundle\Lib\Exceptions\CurlIceCastDataProviderException;
-use AppBundle\Model\Info;
+use AppBundle\Model\InfoData;
 use AppBundle\Services\Informer\DataProviderInterface;
 use GuzzleHttp\Client;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -26,7 +26,7 @@ class CurlIceCastDataProvider implements DataProviderInterface
     /** @var PropertyAccessor */
     private $accessor;
 
-    /** @var Info */
+    /** @var InfoData */
     private $data;
 
     /**
@@ -60,12 +60,12 @@ class CurlIceCastDataProvider implements DataProviderInterface
     }
 
 
-    private function getData(): Info
+    private function getData(): InfoData
     {
         if ($this->data && $this->data->isFresh()) {
             return $this->data;
         } else {
-            $info = new Info();
+            $info = new InfoData();
             $response = $this->httpClient->request('GET', $this->url);
             if (200 === $response->getStatusCode()) {
                 $json = (string)$response->getBody();
@@ -83,9 +83,12 @@ class CurlIceCastDataProvider implements DataProviderInterface
     private function splitData(array $data): array
     {
         $sources = $this->accessor->getValue($data, '[icestats][source]');
-        $result = array_filter($sources, function ($source) {
-            return $source['listenurl'] === $this->listenUrl;
-        });
+        $result = array_filter(
+            $sources,
+            function ($source) {
+                return $source['listenurl'] === $this->listenUrl;
+            }
+        );
         if (!is_array($result)) {
             throw new CurlIceCastDataProviderException('No result');
         }
@@ -94,10 +97,10 @@ class CurlIceCastDataProvider implements DataProviderInterface
     }
 
     /** TODO: Выделить отдельный парсер ? по идее стоит использовать сериализатор.
-     * @param Info $info
+     * @param InfoData $info
      * @param array $data
      */
-    private function parseData(Info $info, array $data): void
+    private function parseData(InfoData $info, array $data): void
     {
         $info->setListeners((int)$this->accessor->getValue($data, '[listeners]'));
         $info->setTrackName($this->accessor->getValue($data, '[title]'));
