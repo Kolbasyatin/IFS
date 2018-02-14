@@ -102,5 +102,8 @@ services:
             - [addInformer, ["@app.mpd.informer.default"]]
 
 
-
+    AppBundle\Lib\MPDClients\Connection:
+        arguments:
+            $host: 'ice.planeset.ru'
+            $port: '6601'
 

@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "IFS ========== Infinite flight ship.",
   "main": "webpack.config.js",
+  "prefer-stable": true,
   "directories": {
     "test": "tests"
   },

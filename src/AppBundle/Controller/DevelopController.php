@@ -4,6 +4,8 @@
 namespace AppBundle\Controller;
 
 
+use AppBundle\Lib\Exceptions\MPDClientException;
+use AppBundle\Lib\MPDClients\MPDClient;
 use AppBundle\Services\Informer\InformManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -16,7 +18,16 @@ class DevelopController extends Controller
      * @Route("/test", name="test")
      * @IsGranted("ROLE_ADMIN")
      */
-    public function index(InformManager $manager) {
+    public function index(InformManager $manager, MPDClient $client) {
+
+        try {
+            $client->status();
+        } catch (MPDClientException $e) {
+            dump($e->getMessage());exit;
+        }
+
+
+
         $data = [];
         $listeners = $manager->getListeners();
         $data['listeners'] = $listeners;
