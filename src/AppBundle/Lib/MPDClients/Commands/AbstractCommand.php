@@ -6,12 +6,27 @@ namespace AppBundle\Lib\MPDClients\Commands;
 
 abstract class AbstractCommand implements CommandInterface
 {
-    protected function filterArguments(...$arguments): string
+    /** @var array */
+    protected $arguments;
+
+    public function __construct(...$arguments)
     {
-        foreach ($arguments as $argument) {
-            $a = 'b';
+        $this->arguments = $arguments;
+    }
+
+    public function getCommand(): string
+    {
+        $arguments = $this->getArgumentsAsString();
+        return static::COMMAND.$arguments.PHP_EOL;
+    }
+
+    protected function getArgumentsAsString(): string
+    {
+        $argumentString = ' ';
+        foreach ($this->arguments as $argument) {
+            $argumentString.=$argument.' ';
         }
 
-        return 'string';
+        return $argumentString;
     }
 }

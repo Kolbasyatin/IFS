@@ -4,7 +4,10 @@
 namespace AppBundle\Lib\MPDClients;
 
 
+use AppBundle\Lib\Exceptions\MPDConnectionException;
+use Socket\Raw\Exception;
 use Socket\Raw\Factory;
+use Socket\Raw\Socket;
 
 class Connection implements ConnectionInterface
 {
@@ -14,7 +17,7 @@ class Connection implements ConnectionInterface
     /** @var int */
     private $port;
 
-    /** @var resource */
+    /** @var Socket */
     private $socket;
 
     public function __construct(string $host, int $port)
@@ -24,20 +27,48 @@ class Connection implements ConnectionInterface
     }
 
 
-    public function send(string $command)
+    /**
+     * @param string $command
+     * @return string
+     * @throws MPDConnectionException
+     */
+    public function send(string $command): string
     {
         $this->connect();
-
+        $this->socket->write($command);
+        return $this->socket->read(1024);
     }
 
-    /** @throws  */
+    /**
+     * @throws MPDConnectionException
+     */
     private function connect(): void {
         if (!$this->socket) {
-            $uri = sprintf('%s:%c', $this->host, $this->port);
-            $sockFactory = new Factory();
-            $socket = $sockFactory->createClient($uri);
-            var_dump($socket->read(1024));exit;
+            $uri = sprintf('%s:%u', $this->host, $this->port);
+
+            try {
+                $sockFactory = new Factory();
+                $socket = $sockFactory->createClient($uri);
+                $this->socket = $socket;
+            } catch (Exception $e) {
+                throw new MPDConnectionException($e->getMessage());
+            }
+            $answer = $socket->read(1024);
+            if (!$this->isConnectionOk($answer)) {
+                $this->close();
+                throw new MPDConnectionException('Server connection failed!');
+            }
         }
+    }
+
+    private function isConnectionOk(string $data): bool
+    {
+        return preg_match('/^ok\b/i', $data);
+    }
+
+    public function close(): void
+    {
+        $this->socket->close();
     }
 
 }

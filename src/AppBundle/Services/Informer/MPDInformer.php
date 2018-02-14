@@ -10,7 +10,9 @@ class MPDInformer implements InformerInterface
     private $id;
 
     /** @var DataProviderInterface */
-    private $dataProvider;
+    private $curlProvider;
+    /** @var DataProviderInterface  */
+    private $mpdProvider;
 
     /** @var string */
     private $sourceName;
@@ -19,12 +21,14 @@ class MPDInformer implements InformerInterface
      * MPDInformer constructor.
      * @param string $id
      * @param string $sourceName
-     * @param DataProviderInterface $dataProvider
+     * @param DataProviderInterface $curlProvider
+     * @param DataProviderInterface $mpdProvider
      */
-    public function __construct(string $id, string $sourceName, DataProviderInterface $dataProvider)
+    public function __construct(string $id, string $sourceName, DataProviderInterface $curlProvider, DataProviderInterface $mpdProvider)
     {
         $this->id = $id;
-        $this->dataProvider = $dataProvider;
+        $this->curlProvider = $curlProvider;
+        $this->mpdProvider = $mpdProvider;
         $this->sourceName = $sourceName;
     }
 
@@ -36,12 +40,12 @@ class MPDInformer implements InformerInterface
 
     public function getListeners(): ?int
     {
-        return $this->dataProvider->getListeners();
+        return $this->curlProvider->getListeners();
     }
 
     public function getTrackName(): ?string
     {
-        return $this->dataProvider->getTrackName();
+        return $this->mpdProvider->getTrackName();
     }
 
     public function getSourceName(): ?string

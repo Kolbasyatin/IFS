@@ -13,4 +13,5 @@ interface InformerInterface
     public function getTrackName(): ?string;
 
     public function getSourceName(): ?string;
+
 }

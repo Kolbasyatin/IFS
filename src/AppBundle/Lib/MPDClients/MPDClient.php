@@ -5,6 +5,7 @@ namespace AppBundle\Lib\MPDClients;
 
 use AppBundle\Lib\Exceptions\CommandFactoryException;
 use AppBundle\Lib\Exceptions\MPDClientException;
+use AppBundle\Lib\Exceptions\MPDConnectionException;
 use AppBundle\Lib\MPDClients\Commands\CommandFactory;
 use AppBundle\Lib\MPDClients\Commands\CommandInterface;
 
@@ -117,35 +118,112 @@ use AppBundle\Lib\MPDClients\Commands\CommandInterface;
  */
 class MPDClient
 {
+    /** @var string */
+    private $password;
 
     /** @var ConnectionInterface */
     private $connection;
 
-    public function __construct(ConnectionInterface $connection)
+    /**
+     * MPDClient constructor.
+     * @param string $host
+     * @param int $port
+     * @param string $password
+     */
+    public function __construct(string $host, int $port, string $password)
     {
-        $this->connection = $connection;
+        $this->connection = new Connection($host, $port);
+        $this->password = $password;
+    }
+
+    /** @throws MPDClientException */
+    private function execute(CommandInterface $command): array
+    {
+        $this->sendPassword();
+        $cmd = $command->getCommand();
+        try {
+            $answer = $this->connection->send($cmd);
+        } catch (MPDConnectionException $e) {
+            throw new MPDClientException('Connection problem. ' . $e->getMessage());
+        }
+
+        if ($this->isError($answer)) {
+            throw new MPDClientException("Error! " . $answer);
+        }
+        $parser = $command->getParser();
+        $result = $parser->parse($answer);
+
+        return $result;
     }
 
 
+    /**
+     * @param string $name
+     * @param $arguments
+     * @return array
+     * @throws MPDClientException
+     */
     public function __call(string $name, $arguments)
     {
         try {
             $command = CommandFactory::createCommand($name, $arguments);
-            $this->execute($command);
+            return $this->execute($command);
         } catch (CommandFactoryException $e) {
             throw new MPDClientException($e->getMessage());
         }
 
     }
 
-    private function execute(CommandInterface $command): ?array
-    {
-        $cmd = $command->getCommand();
-        $answer = $this->connection->send($cmd);
-        $parser = $command->getParser();
-        $result = $parser->parse($answer);
 
-        return $result;
+    /**
+     * @throws MPDClientException
+     */
+    private function sendPassword(): void
+    {
+        if ($this->password) {
+            $cmd = sprintf("password \"%s\" \n", $this->password);
+            $answer = $this->connection->send($cmd);
+            if ($this->isError($answer)) {
+                throw new MPDClientException("Password is wrong!");
+            }
+        }
+
+    }
+
+
+    /**
+     * @throws MPDClientException
+     */
+    public function __destruct()
+    {
+        try {
+            $this->connection->close();
+        } catch (\Exception $e) {
+            throw new MPDClientException("Problem with close connection");
+        }
+    }
+
+    /**
+     * @param string $data
+     * @return bool
+     */
+    private function isError(string $data): bool
+    {
+        $error = (bool) preg_match('/^ACK\s+\[(.*)\]\s+\{(.*)\}\s+(.*)\n$/i', $data, $matches);
+        if ($error) {
+            $this->handleError($matches[1], $matches[2], $matches[3]);
+        }
+        return (bool)$error;
+    }
+
+    /**
+     * @param string $error
+     * @param string $command
+     * @param string $reason
+     */
+    private function handleError(string $error, string $command, string $reason)
+    {
+        /** TODO: Logger */
     }
 
 }

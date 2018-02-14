@@ -21,6 +21,7 @@ services:
         # you can exclude directories or files
         # but if a service is unused, it's removed anyway
         exclude: '../../src/AppBundle/{Entity,Repository,Tests, DataFixtures}'
+        exclude: '../../src/AppBundle/Lib/MPDClients/{Commands,Parsers}'
 
     # controllers are imported separately to make sure they're public
     # and have a tag that allows actions to type-hint services
@@ -61,6 +62,37 @@ services:
     AppBundle\Model\Room:
         arguments: []
 
+
+#TODO: Сделать фабрику для информеров и для провайдеров данных данные из фабрики
+
+    AppBundle\Services\Informer\InformManager:
+        calls:
+            - [addInformer, ["@app.mpd.informer.music"]]
+            - [addInformer, ["@app.mpd.informer.voice"]]
+            - [addInformer, ["@app.mpd.informer.default"]]
+
+    app.mpd.informer.music:
+        class: AppBundle\Services\Informer\MPDInformer
+        arguments:
+            $id: 'mds_music'
+            $curlProvider: '@app.curl.icecast.data.provider.music'
+            $mpdProvider: '@app.mpd.data.provider.music'
+            $sourceName: 'МДС-Музыка'
+
+    app.mpd.informer.voice:
+        class: AppBundle\Services\Informer\MPDInformer
+        arguments:
+            $id: 'mds_voice'
+            $curlProvider: '@app.curl.icecast.data.provider.voice'
+            $mpdProvider: '@app.mpd.data.provider.voice'
+            $sourceName: 'МДС-Голос'
+
+    app.mpd.informer.default:
+        class: AppBundle\Services\Informer\FakeMPDInformer
+        calls:
+            - [addInformer, ["@app.mpd.informer.music"]]
+            - [addInformer, ["@app.mpd.informer.voice"]]
+
     app.curl.icecast.data.provider.music:
         class: AppBundle\Services\Informer\DataProviders\CurlIceCastDataProvider
         arguments:
@@ -73,37 +105,29 @@ services:
             $url: 'http://ice.planeset.ru:8000/status-json.xsl'
             $listenUrl: 'http://ice.planeset.ru:8000/mds_voice.mp3'
 
-#TODO: Сделать фабрику для информеров и для провайдеров данных данные из фабрики
-    app.mpd.informer.music:
-        class: AppBundle\Services\Informer\MPDInformer
+    app.mpd.data.provider.music:
+        class: AppBundle\Services\Informer\DataProviders\MPDDataProvider
         arguments:
-            $id: 'mds_music'
-            $dataProvider: '@app.curl.icecast.data.provider.music'
-            $sourceName: 'МДС-Музыка'
+            $client: '@app.mpd.client.music'
 
-    app.mpd.informer.voice:
-        class: AppBundle\Services\Informer\MPDInformer
+    app.mpd.data.provider.voice:
+        class: AppBundle\Services\Informer\DataProviders\MPDDataProvider
         arguments:
-            $id: 'mds_voice'
-            $dataProvider: '@app.curl.icecast.data.provider.voice'
-            $sourceName: 'МДС-Голос'
+            $client: '@app.mpd.client.voice'
 
-
-    app.mpd.informer.default:
-        class: AppBundle\Services\Informer\FakeMPDInformer
-        calls:
-            - [addInformer, ["@app.mpd.informer.music"]]
-            - [addInformer, ["@app.mpd.informer.voice"]]
-
-    AppBundle\Services\Informer\InformManager:
-        calls:
-            - [addInformer, ["@app.mpd.informer.music"]]
-            - [addInformer, ["@app.mpd.informer.voice"]]
-            - [addInformer, ["@app.mpd.informer.default"]]
-
-
-    AppBundle\Lib\MPDClients\Connection:
+    app.mpd.client.music:
+        class: AppBundle\Lib\MPDClients\MPDClient
+        public: true
         arguments:
             $host: 'ice.planeset.ru'
             $port: '6601'
+            $password: 'Wkm2wD'
+
+    app.mpd.client.voice:
+        class: AppBundle\Lib\MPDClients\MPDClient
+        public: true
+        arguments:
+            $host: 'ice.planeset.ru'
+            $port: '6600'
+            $password: ''
 

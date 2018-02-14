@@ -4,16 +4,16 @@
 namespace AppBundle\Services\Informer\DataProviders;
 
 
-use AppBundle\Lib\MPDClients\MPDClientInterface;
+use AppBundle\Lib\MPDClients\MPDClient;
 use AppBundle\Model\InfoData;
 use AppBundle\Services\Informer\DataProviderInterface;
 
 class MPDDataProvider implements DataProviderInterface
 {
-    /** @var MPDClientInterface */
+    /** @var MPDClient */
     private $mpdClient;
 
-    public function __construct(MPDClientInterface $client)    {
+    public function __construct(MPDClient $client)    {
         $this->mpdClient = $client;
     }
 
@@ -25,7 +25,9 @@ class MPDDataProvider implements DataProviderInterface
 
     public function getTrackName(): ?string
     {
-        $this->getData()->getTrackName();
+        $data = $this->mpdClient->currentSong();
+
+        return $data['Title']??$data['file']??'Ой, что то случилось.';
     }
 
     public function getSourceName(): ?string
