@@ -5,7 +5,7 @@ namespace AppBundle\Services\Informer\DataProviders;
 
 
 use AppBundle\Lib\Exceptions\CurlIceCastDataProviderException;
-use AppBundle\Model\InfoData;
+use AppBundle\Model\MPDStatusHolder;
 use AppBundle\Services\Informer\DataProviderInterface;
 use GuzzleHttp\Client;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -26,7 +26,7 @@ class CurlIceCastDataProvider implements DataProviderInterface
     /** @var PropertyAccessor */
     private $accessor;
 
-    /** @var InfoData */
+    /** @var MPDStatusHolder */
     private $data;
 
     /**
@@ -44,43 +44,69 @@ class CurlIceCastDataProvider implements DataProviderInterface
     }
 
 
+    /**
+     * @return int|null
+     * @throws CurlIceCastDataProviderException
+     */
     public function getListeners(): ?int
     {
         return $this->getData()->getListeners();
     }
 
+    /**
+     * @return null|string
+     * @throws CurlIceCastDataProviderException
+     */
     public function getTrackName(): ?string
     {
         return $this->getData()->getTrackName();
     }
 
+    /**
+     * @return null|string
+     * @throws CurlIceCastDataProviderException
+     */
     public function getSourceName(): ?string
     {
         return $this->getData()->getSourceName();
     }
 
 
-    private function getData(): InfoData
+    /**
+     * @return MPDStatusHolder
+     * @throws CurlIceCastDataProviderException
+     */
+    private function getData(): MPDStatusHolder
     {
         if ($this->data && $this->data->isFresh()) {
             return $this->data;
         } else {
-            $info = new InfoData();
             $response = $this->httpClient->request('GET', $this->url);
             if (200 === $response->getStatusCode()) {
                 $json = (string)$response->getBody();
-                $dataArray = json_decode($json, true);
-                $sourceData = $this->splitData($dataArray);
-                $this->parseData($info, $sourceData);
+                $dataAsArray = json_decode($json, true);
+
+                if (!$dataAsArray) {
+                    throw new CurlIceCastDataProviderException('No result');
+                }
+
+                $sourceData = $this->splitAndGetRequiredSourceData($dataAsArray);
+                $statusHolder = new MPDStatusHolder();
+                $this->parseData($statusHolder, $sourceData);
             }
-            $this->data = $info;
+            $this->data = $statusHolder;
         }
 
-        return $info;
+        return $statusHolder;
 
     }
 
-    private function splitData(array $data): array
+    /**
+     * @param array $data
+     * @return array
+     * @throws CurlIceCastDataProviderException
+     */
+    private function splitAndGetRequiredSourceData(array $data): array
     {
         $sources = $this->accessor->getValue($data, '[icestats][source]');
         $result = array_filter(
@@ -97,10 +123,10 @@ class CurlIceCastDataProvider implements DataProviderInterface
     }
 
     /** TODO: Выделить отдельный парсер ? по идее стоит использовать сериализатор.
-     * @param InfoData $info
+     * @param MPDStatusHolder $info
      * @param array $data
      */
-    private function parseData(InfoData $info, array $data): void
+    private function parseData(MPDStatusHolder $info, array $data): void
     {
         $info->setListeners((int)$this->accessor->getValue($data, '[listeners]'));
         $info->setTrackName($this->accessor->getValue($data, '[title]'));

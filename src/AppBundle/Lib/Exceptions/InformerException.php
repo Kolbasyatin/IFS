@@ -1,7 +1,7 @@
 <?php
 
 
-namespace AppBundle\Lib\Informer;
+namespace AppBundle\Lib\Exceptions;
 
 
 class InformerException extends \Exception

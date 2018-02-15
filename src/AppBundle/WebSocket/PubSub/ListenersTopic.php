@@ -85,12 +85,12 @@ class ListenersTopic implements TopicInterface, PushableTopicInterface, TopicPer
                 /** @var $msg string */
                 try {
                     $listeners = $this->informManager->getListeners();
+                    $this->listenersStat->doStat($listeners);
+                    $msg = ['listeners' => json_encode($listeners)];
+                    $topic->broadcast($msg);
                 } catch (\Throwable $e) {
                     $this->logger->alert('Error in received Listeners. '.$e->getMessage());
                 }
-                $this->listenersStat->doStat($listeners);
-                $msg = ['listeners' => json_encode($listeners)];
-                $topic->broadcast($msg);
             }
         );
     }

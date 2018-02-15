@@ -72,7 +72,7 @@ services:
             - [addInformer, ["@app.mpd.informer.default"]]
 
     app.mpd.informer.music:
-        class: AppBundle\Services\Informer\MPDInformer
+        class: AppBundle\Services\Informer\Informer
         arguments:
             $id: 'mds_music'
             $curlProvider: '@app.curl.icecast.data.provider.music'
@@ -80,7 +80,7 @@ services:
             $sourceName: 'МДС-Музыка'
 
     app.mpd.informer.voice:
-        class: AppBundle\Services\Informer\MPDInformer
+        class: AppBundle\Services\Informer\Informer
         arguments:
             $id: 'mds_voice'
             $curlProvider: '@app.curl.icecast.data.provider.voice'
@@ -130,4 +130,3 @@ services:
             $host: 'ice.planeset.ru'
             $port: '6600'
             $password: ''
-

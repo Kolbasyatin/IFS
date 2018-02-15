@@ -68,7 +68,10 @@ class Connection implements ConnectionInterface
 
     public function close(): void
     {
-        $this->socket->close();
+        if ($this->socket) {
+            $this->socket->close();
+        }
+
     }
 
 }

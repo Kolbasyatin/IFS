@@ -4,8 +4,8 @@
 namespace AppBundle\Services\Informer\DataProviders;
 
 
+use AppBundle\Lib\Exceptions\InformerException;
 use AppBundle\Lib\MPDClients\MPDClient;
-use AppBundle\Model\InfoData;
 use AppBundle\Services\Informer\DataProviderInterface;
 
 class MPDDataProvider implements DataProviderInterface
@@ -18,9 +18,13 @@ class MPDDataProvider implements DataProviderInterface
     }
 
 
+    /**
+     * @return int|null
+     * @throws InformerException
+     */
     public function getListeners(): ?int
     {
-        $this->getData()->getListeners();
+        throw new InformerException('Can not get Listeners in this data provider');
     }
 
     public function getTrackName(): ?string
@@ -32,23 +36,6 @@ class MPDDataProvider implements DataProviderInterface
 
     public function getSourceName(): ?string
     {
-        $this->getData()->getSourceName();
-    }
-
-    private function getData(): ?InfoData
-    {
-        $info = new  InfoData();
-        $data = $this->mpdClient->status();
-
-        return $this->parseInfo($data);
-
-    }
-
-    private function parseInfo(array $data): InfoData
-    {
-        $info = new InfoData();
-
-        return $info;
     }
 
 

@@ -4,7 +4,7 @@
 namespace AppBundle\Services\Informer;
 
 
-class MPDInformer implements InformerInterface
+class Informer implements InformerInterface
 {
     /** @var string */
     private $id;
@@ -18,7 +18,7 @@ class MPDInformer implements InformerInterface
     private $sourceName;
 
     /**
-     * MPDInformer constructor.
+     * Informer constructor.
      * @param string $id
      * @param string $sourceName
      * @param DataProviderInterface $curlProvider
@@ -38,9 +38,11 @@ class MPDInformer implements InformerInterface
         return $this->id;
     }
 
+
     public function getListeners(): ?int
     {
         return $this->curlProvider->getListeners();
+
     }
 
     public function getTrackName(): ?string

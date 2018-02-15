@@ -4,7 +4,9 @@
 namespace AppBundle\Services\Informer;
 
 
-use AppBundle\Lib\Informer\InformerException;
+
+
+use AppBundle\Lib\Exceptions\InformerException;
 
 class InformManager
 {
@@ -24,6 +26,11 @@ class InformManager
     }
 
 
+    /**
+     * @param string $id
+     * @return InformerInterface
+     * @throws InformerException
+     */
     public function getInformer(string $id): InformerInterface
     {
         foreach ($this->informers as $informer) {

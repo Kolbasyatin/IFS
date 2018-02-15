@@ -4,7 +4,7 @@
 namespace AppBundle\Model;
 
 
-class InfoData
+class MPDStatusHolder
 {
 
     const DEFAULT_LIFETIME = 2;
@@ -95,6 +95,16 @@ class InfoData
         $difference = $this->createdTime->diff(new \DateTime("now"))->s;
 
         return $difference <= self::DEFAULT_LIFETIME;
+    }
+
+    public static function createHolder(array $data): self
+    {
+        return new static();
+    }
+
+    public function populate(array $data): void
+    {
+
     }
 
 
