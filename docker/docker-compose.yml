@@ -90,7 +90,6 @@ mds-php-fpm:
     - /tmp/:/tmp/
   links:
     - mds-memcached
-#    - mysql-server
     - postgres-server
 #    - mds-rabbitmq
 #  env_file:

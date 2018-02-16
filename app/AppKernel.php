@@ -7,6 +7,7 @@ use Gos\Bundle\PubSubRouterBundle\GosPubSubRouterBundle;
 use Gos\Bundle\WebSocketBundle\GosWebSocketBundle;
 use HWI\Bundle\OAuthBundle\HWIOAuthBundle;
 use Knp\Bundle\MenuBundle\KnpMenuBundle;
+use Sentry\SentryBundle\SentryBundle;
 use Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -31,7 +32,8 @@ class AppKernel extends Kernel
             new StofDoctrineExtensionsBundle(),
             new FOSJsRoutingBundle(),
             new KnpMenuBundle(),
-            new DoctrineMigrationsBundle()
+            new DoctrineMigrationsBundle(),
+            new SentryBundle(),
 
 
         ];

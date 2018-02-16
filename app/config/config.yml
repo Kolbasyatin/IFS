@@ -177,3 +177,5 @@ doctrine_migrations:
     name: Application Migrations
     organize_migrations: false
 
+sentry:
+    dsn: "%sentry_dns%"

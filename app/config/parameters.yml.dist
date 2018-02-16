@@ -19,3 +19,4 @@ parameters:
     secret: ThisTokenIsNotSoSecretChangeIt
     vkontakte_app_id: yourId
     vkontakte_app_secret: yourSecret
+    sentry_dns: ''
