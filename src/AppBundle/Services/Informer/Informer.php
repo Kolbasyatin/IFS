@@ -4,14 +4,17 @@
 namespace AppBundle\Services\Informer;
 
 
+use AppBundle\Services\Informer\DataProviders\CurlIceCastDataProvider;
+use AppBundle\Services\Informer\DataProviders\MPDDataProvider;
+
 class Informer implements InformerInterface
 {
     /** @var string */
     private $id;
 
-    /** @var DataProviderInterface */
+    /** @var DataProviderInterface|CurlIceCastDataProvider */
     private $curlProvider;
-    /** @var DataProviderInterface  */
+    /** @var DataProviderInterface|MPDDataProvider  */
     private $mpdProvider;
 
     /** @var string */

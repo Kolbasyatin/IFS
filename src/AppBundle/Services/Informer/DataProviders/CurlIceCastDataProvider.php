@@ -93,8 +93,12 @@ class CurlIceCastDataProvider implements DataProviderInterface
                 $sourceData = $this->splitAndGetRequiredSourceData($dataAsArray);
                 $statusHolder = new MPDStatusHolder();
                 $this->parseData($statusHolder, $sourceData);
+
+                $this->data = $statusHolder;
+            } else {
+
             }
-            $this->data = $statusHolder;
+
         }
 
         return $statusHolder;
@@ -112,7 +116,7 @@ class CurlIceCastDataProvider implements DataProviderInterface
         $result = array_filter(
             $sources,
             function ($source) {
-                return $source['listenurl'] === $this->listenUrl;
+                return $this->accessor->getValue($source, '[listenurl]') === $this->listenUrl;
             }
         );
         if (!is_array($result)) {
