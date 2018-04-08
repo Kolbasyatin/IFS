@@ -53,7 +53,7 @@ class MPDStatusHolder
     /**
      * @param string $trackName
      */
-    public function setTrackName(string $trackName): void
+    public function setTrackName(?string $trackName): void
     {
         $this->trackName = $trackName;
     }
