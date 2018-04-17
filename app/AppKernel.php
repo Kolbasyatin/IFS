@@ -5,6 +5,7 @@ use Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle;
 use FOS\JsRoutingBundle\FOSJsRoutingBundle;
 use Gos\Bundle\PubSubRouterBundle\GosPubSubRouterBundle;
 use Gos\Bundle\WebSocketBundle\GosWebSocketBundle;
+use Http\HttplugBundle\HttplugBundle;
 use HWI\Bundle\OAuthBundle\HWIOAuthBundle;
 use Knp\Bundle\MenuBundle\KnpMenuBundle;
 use Sentry\SentryBundle\SentryBundle;
@@ -34,7 +35,7 @@ class AppKernel extends Kernel
             new KnpMenuBundle(),
             new DoctrineMigrationsBundle(),
             new SentryBundle(),
-
+            new HttplugBundle()
 
         ];
 

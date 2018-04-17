@@ -48,21 +48,26 @@ export class Mediator {
     /** ================== */
     public fly(): void {
         this._layoutManager.onApplicationInit();
-        this._wamp.connect();
+        /** Из за ебанных роскомнадзор заблочили все порты. Пока без wamp. */
+        /*this._wamp.connect();*/
+        /** Убрать это потом и вернуть wamp */
+        this.startApplication();
     }
 
     //Starts on wamp connect
-    public async startApplication(): Promise<void> {
+    public startApplication(): void {
         if (!this._isStarted) {
             this._isStarted = true;
-            try {
-                await this.roomInitData();
-            } catch (error) {
-                console.log(error);
-            } finally {
-                this.setStartedVolume();
-                this.switchToDefaultRoom();
-            }
+            // try {
+            //     await this.roomInitData();
+            // } catch (error) {
+            //     console.log(error);
+            // } finally {
+            //     this.setStartedVolume();
+            //     this.switchToDefaultRoom();
+            // }
+            this.setStartedVolume();
+            this.switchToDefaultRoom();
         }
 
     }

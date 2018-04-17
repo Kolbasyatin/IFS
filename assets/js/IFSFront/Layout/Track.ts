@@ -13,9 +13,17 @@ export class Track extends LayoutSample {
     public updateTrackName(trackName: string): void {
         if (this.isTrackNameChanged(trackName)) {
             this._trackName = trackName;
-            const showTrackName = trackName.replace(/\n/, "<br/><br/>");
-            this.show(showTrackName);
-            this.fadeInHtml();
+            try {
+                const showTrackName = trackName.replace(/\n/, "<br/><br/>");
+                this.show(showTrackName);
+            } catch (e) {
+                const showTrackName = 'Имя трека недоступно из за проблем с амазоном (спасибо сами знаете кому)';
+                this.show(showTrackName);
+            } finally {
+                this.fadeInHtml();
+            }
+
+
         }
     }
 
